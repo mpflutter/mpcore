@@ -83,9 +83,11 @@ packages:
   mpkit:
     dependency: "direct main"
     description:
-      path: "../mpkit"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: ab9196ecb7a7718f4db2dd8c1c6fe0e3a5cdf82f
+      url: "https://github.com/mpflutter/mpkit"
+    source: git
     version: "0.0.1"
   node_interop:
     dependency: transitive

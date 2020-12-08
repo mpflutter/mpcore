@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   mpkit: 
-    path: ../mpkit
+    git: https://github.com/mpflutter/mpkit
 
 dev_dependencies:
   vm_service_lib: ^0.3.5
