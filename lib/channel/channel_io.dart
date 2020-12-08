@@ -28,7 +28,6 @@ class MPChannel {
       print('Hot reloading enabled');
       final reloader = HotReloader(vmServiceUrl: uri.toString());
       reloader.addPath('./lib');
-      reloader.addPath('./common');
       reloader.onReload.listen((event) async {
         await minip.handleHotReload();
         print('Reloaded');
@@ -45,7 +44,8 @@ class MPChannel {
     _serverSetupped = true;
     try {
       server = await HttpServer.bind('0.0.0.0', 9898, shared: false);
-      print('Listening 0.0.0.0:9898');
+      print('Serve on 0.0.0.0:9898');
+      print('Use browser open http://0.0.0.0:9898/index.html for dev.');
       await for (var req in server) {
         if (req.uri.path == '/') {
           final socket = await WebSocketTransformer.upgrade(req);
@@ -58,6 +58,13 @@ class MPChannel {
           handlePackageAssetsRequest(req);
         } else if (req.uri.path.startsWith('/assets/')) {
           handleAssetsRequest(req);
+        } else if (req.uri.path.startsWith('/bundle.') ||
+            req.uri.path.startsWith('/index.html') ||
+            req.uri.path.startsWith('/main.dart.js') ||
+            req.uri.path.startsWith('/polyfills.')) {
+          handleScaffoldRequest(req);
+        } else {
+          final _ = req.response.close();
         }
       }
     } catch (e) {
@@ -140,6 +147,30 @@ class MPChannel {
       request.response
         ..statusCode = 200
         ..add(File('./build/web/assets/$fileName').readAsBytesSync())
+        ..close();
+    } else {
+      request.response
+        ..statusCode = 404
+        ..close();
+    }
+  }
+
+  static void handleScaffoldRequest(HttpRequest request) {
+    final fileName = request.uri.path;
+    final mimeType = mime(fileName) ?? 'text/plain; charset=UTF-8';
+    request.response.headers
+      ..set(
+        'Access-Control-Allow-Origin',
+        '*',
+      )
+      ..set(
+        'Content-Type',
+        mimeType,
+      );
+    if (File('./web/' + fileName).existsSync()) {
+      request.response
+        ..statusCode = 200
+        ..add(File('./web/' + fileName).readAsBytesSync())
         ..close();
     } else {
       request.response
