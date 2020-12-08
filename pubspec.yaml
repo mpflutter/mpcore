@@ -13,8 +13,6 @@ dependencies:
     sdk: flutter
   mpkit: 
     git: https://github.com/mpflutter/mpkit
-
-dev_dependencies:
   vm_service_lib: ^0.3.5
   watcher: ^0.9.7
   glob: ^1.1.3
