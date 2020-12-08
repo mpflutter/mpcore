@@ -19,3 +19,7 @@ dev_dependencies:
   watcher: ^0.9.7
   glob: ^1.1.3
   mime_type: ^0.3.2
+
+dependency_overrides:
+  flutter: 
+    git: https://github.com/mpflutter/flutter

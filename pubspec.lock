@@ -38,8 +38,12 @@ packages:
     version: "5.2.1"
   flutter:
     dependency: "direct main"
-    description: flutter
-    source: sdk
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "393f8cf36330fcd384e59243fa0fb1215a72bbfd"
+      url: "https://github.com/mpflutter/flutter"
+    source: git
     version: "0.0.0"
   glob:
     dependency: "direct dev"

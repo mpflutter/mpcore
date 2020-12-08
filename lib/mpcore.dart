@@ -109,16 +109,13 @@ class MPCore {
       return json.encode(vDocument);
     }
     final scaffoldElement = findTarget<Scaffold>(renderView);
-    // if (scaffoldElement != null) {
-    //   final bodyElement = findTarget<ScaffoldBodyBuilder>(scaffoldElement);
-    //   final vBody = VElement.fromFlutterElement(bodyElement);
-    //   final hasListBody = findTarget<Scrollable>(bodyElement) != null;
-    //   final vDocument = VDocument(
-    //     body: vBody,
-    //     isListBody: hasListBody,
-    //   );
-    //   return json.encode(vDocument);
-    // }
+    if (scaffoldElement != null) {
+      final bodyElement = findTarget<ScaffoldBodyBuilder>(scaffoldElement);
+      final vBody = _Element.fromFlutterElement(bodyElement);
+      final hasListBody = findTarget<Scrollable>(bodyElement) != null;
+      final vDocument = _Document(body: vBody, isListBody: hasListBody);
+      return json.encode(vDocument);
+    }
     final minipScaffoldElement = findTarget<MPScaffold>(renderView);
     if (minipScaffoldElement != null) {
       final bodyElement = minipScaffoldElement;
