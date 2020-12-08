@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import '../mpcore.dart';
-import 'channel_io.dart'
-    if (dart.library.js) '../channel/minip_channel_js.dart';
+import 'channel_io.dart' if (dart.library.js) '../channel/channel_js.dart';
 
 class MPNavigatorObserver extends NavigatorObserver {
   static final instance = MPNavigatorObserver();
