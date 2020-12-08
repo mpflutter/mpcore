@@ -113,7 +113,7 @@ class _Element {
   }
 
   static List<_Element> childrenFromFlutterElement(Element element) {
-    List<_Element> els = [];
+    final els = <_Element>[];
     element.visitChildElements((element) {
       els.add(fromFlutterElement(element));
     });

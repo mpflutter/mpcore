@@ -2,13 +2,13 @@ part of '../mpcore.dart';
 
 _Element _encodeDecoratedBox(Element element) {
   final widget = element.widget as DecoratedBox;
-  final Map<String, dynamic> attributes = {};
+  final attributes = <String, dynamic>{};
   if (widget.decoration is BoxDecoration) {
     final decoration = widget.decoration as BoxDecoration;
     if (decoration.color != null) {
       attributes['color'] = decoration.color.value.toString();
     }
-    attributes['decoration'] = Map<String, dynamic>();
+    attributes['decoration'] = <String, dynamic>{};
     if (decoration.borderRadius != null) {
       attributes['decoration']['borderRadius'] =
           decoration.borderRadius.toString();

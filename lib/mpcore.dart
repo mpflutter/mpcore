@@ -55,7 +55,7 @@ class MPCore {
   Element get renderView => WidgetsBinding.instance.renderViewElement;
 
   void connectToHostChannel() async {
-    MPChannel.setupHotReload(this);
+    final _ = MPChannel.setupHotReload(this);
     sendFrame();
   }
 
@@ -87,7 +87,7 @@ class MPCore {
   }
 
   String toJson() {
-    if (renderView == null) return "";
+    if (renderView == null) return '';
     final tabBodyElement = findTarget<MPTabBody>(renderView);
     if (tabBodyElement != null) {
       final hasListBody = findTarget<Scrollable>(

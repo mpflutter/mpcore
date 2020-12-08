@@ -27,11 +27,11 @@ class MPChannel {
       }
       print('Hot reloading enabled');
       final reloader = HotReloader(vmServiceUrl: uri.toString());
-      reloader.addPath("./lib");
-      reloader.addPath("./common");
+      reloader.addPath('./lib');
+      reloader.addPath('./common');
       reloader.onReload.listen((event) async {
         await minip.handleHotReload();
-        print("Reloaded");
+        print('Reloaded');
       });
       await reloader.go();
     }
@@ -44,8 +44,8 @@ class MPChannel {
     }
     _serverSetupped = true;
     try {
-      server = await HttpServer.bind('0.0.0.0', 8888, shared: false);
-      print("Listening 0.0.0.0:8888");
+      server = await HttpServer.bind('0.0.0.0', 9898, shared: false);
+      print('Listening 0.0.0.0:9898');
       await for (var req in server) {
         if (req.uri.path == '/') {
           final socket = await WebSocketTransformer.upgrade(req);
@@ -54,9 +54,9 @@ class MPChannel {
             socket.add(lastMessage);
           }
           socket.listen(handleClientMessage);
-        } else if (req.uri.path.startsWith("/assets/packages/")) {
+        } else if (req.uri.path.startsWith('/assets/packages/')) {
           handlePackageAssetsRequest(req);
-        } else if (req.uri.path.startsWith("/assets/")) {
+        } else if (req.uri.path.startsWith('/assets/')) {
           handleAssetsRequest(req);
         }
       }
@@ -84,10 +84,7 @@ class MPChannel {
     }
 
     final fileName = fileComponents.join('/');
-    String mimeType = mime(fileName);
-    if (mimeType == null) {
-      mimeType = 'text/plain; charset=UTF-8';
-    }
+    final mimeType = mime(fileName) ?? 'text/plain; charset=UTF-8';
     request.response.headers
       ..set(
         'Access-Control-Allow-Origin',
@@ -124,10 +121,7 @@ class MPChannel {
 
   static void handleAssetsRequest(HttpRequest request) {
     final fileName = request.uri.path.replaceFirst('/assets/', '');
-    String mimeType = mime(fileName);
-    if (mimeType == null) {
-      mimeType = 'text/plain; charset=UTF-8';
-    }
+    final mimeType = mime(fileName) ?? 'text/plain; charset=UTF-8';
     request.response.headers
       ..set(
         'Access-Control-Allow-Origin',
@@ -142,10 +136,10 @@ class MPChannel {
         ..statusCode = 200
         ..add(File(fileName).readAsBytesSync())
         ..close();
-    } else if (File("./build/web/assets/$fileName").existsSync()) {
+    } else if (File('./build/web/assets/$fileName').existsSync()) {
       request.response
         ..statusCode = 200
-        ..add(File("./build/web/assets/$fileName").readAsBytesSync())
+        ..add(File('./build/web/assets/$fileName').readAsBytesSync())
         ..close();
     } else {
       request.response
@@ -172,7 +166,9 @@ class MPChannel {
     for (var socket in sockets) {
       try {
         socket.add(message);
-      } catch (e) {}
+      } catch (e) {
+        print(e);
+      }
     }
     lastMessage = message;
     // print(message);

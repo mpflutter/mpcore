@@ -100,7 +100,7 @@ class HotReloader {
   bool get isRunning => _isRunning;
 
   /// Store for registered paths
-  final Set<String> _registeredPaths = Set<String>();
+  final Set<String> _registeredPaths = <String>{};
 
   /// Store for built [HotReloaderPath]s
   final Map<String, HotReloaderPath> _builtPaths = <String, HotReloaderPath>{};

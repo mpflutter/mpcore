@@ -16,7 +16,7 @@ _Element _encodeClipRect(Element element) {
     name: 'clip_r_rect',
     children: _Element.childrenFromFlutterElement(element),
     attributes: {
-      'borderRadius': "",
+      'borderRadius': '',
     },
   );
 }

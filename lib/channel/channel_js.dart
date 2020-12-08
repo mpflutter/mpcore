@@ -39,7 +39,9 @@ class MPChannel {
       if (uriRoute != null) {
         return uriRoute;
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
     return '/';
   }
 }

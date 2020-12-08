@@ -55,7 +55,7 @@ class MPNavigatorObserver extends NavigatorObserver {
 }
 
 class MPChannelBase {
-  static onGestureDetectorTrigger(Map message) {
+  static void onGestureDetectorTrigger(Map message) {
     try {
       final GestureDetector widget =
           gestureDetectorHandlers[message['target']]?.widget;
@@ -68,7 +68,7 @@ class MPChannelBase {
     }
   }
 
-  static onTabBarTrigger(Map message) {
+  static void onTabBarTrigger(Map message) {
     try {
       final TabBar widget = tabBarHandlers[message['target']]?.widget;
       if (widget == null) return;
@@ -80,7 +80,7 @@ class MPChannelBase {
     }
   }
 
-  static onScrollerTrigger(Map message) {
+  static void onScrollerTrigger(Map message) {
     try {
       if (message['event'] == 'onScrollToBottom') {
         ScrollToBottomNotifier.instance.notify();
@@ -90,7 +90,7 @@ class MPChannelBase {
     }
   }
 
-  static onRouterTrigger(Map message) {
+  static void onRouterTrigger(Map message) {
     try {
       if (message['event'] == 'doPop') {
         MPNavigatorObserver.doBacking = true;
