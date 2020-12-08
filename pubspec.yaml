@@ -1,0 +1,21 @@
+name: mpcore
+description: A new Flutter package project.
+version: 0.0.1
+author: /
+homepage: /
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.17.0 <2.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  mpkit: 
+    path: ../mpkit
+
+dev_dependencies:
+  vm_service_lib: ^0.3.5
+  watcher: ^0.9.7
+  glob: ^1.1.3
+  mime_type: ^0.3.2
