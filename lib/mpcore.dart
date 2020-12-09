@@ -124,7 +124,9 @@ class MPCore {
       final hasListBody = findTarget<Scrollable>(bodyElement) != null;
       final vDocument = _Document(
         body: vBody,
-        isListBody: hasListBody,
+        isListBody:
+            (minipScaffoldElement.widget as MPScaffold).isListBody != false &&
+                hasListBody,
       );
       return json.encode(vDocument);
     }

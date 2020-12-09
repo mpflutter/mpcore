@@ -11,10 +11,14 @@ _Element _encodeListView(Element element) {
       children: [],
     );
   }
+  final widget = element.widget as ListView;
   return _Element(
     name: 'list_view',
     children: _Element.childrenFromFlutterElement(
       indexedSemanticeParentElement,
     ),
+    attributes: {
+      'scrollDirection': widget.scrollDirection?.toString(),
+    },
   );
 }

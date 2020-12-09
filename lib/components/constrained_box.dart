@@ -11,6 +11,7 @@ _Element _encodeConstrainedBox(Element element) {
       'maxWidth': widget.constraints.maxWidth.toString(),
       'maxHeight': widget.constraints.maxHeight.toString(),
       'isTight': widget.constraints.isTight,
+      'scrollable': MPCore.findTarget<Scrollable>(element) != null,
     },
   );
 }

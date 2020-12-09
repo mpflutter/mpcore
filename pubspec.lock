@@ -85,7 +85,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: ab9196ecb7a7718f4db2dd8c1c6fe0e3a5cdf82f
+      resolved-ref: "81a61b17a45eff1e83768e6cded14406c3bb0b76"
       url: "https://github.com/mpflutter/mpkit"
     source: git
     version: "0.0.1"
