@@ -80,6 +80,23 @@ class MPChannelBase {
     }
   }
 
+  static void onEditableTextTrigger(Map message) {
+    try {
+      final EditableText widget =
+          editableTextHandlers[message['target']]?.widget;
+      if (widget == null) return;
+      if (message['event'] == 'onSubmitted') {
+        widget.onSubmitted?.call(message['data']);
+      } else if (message['event'] == 'onChanged' && message['data'] is String) {
+        widget.controller?.text = message['data'];
+        widget.controller?.textDirty = false;
+        widget.onChanged?.call(message['data']);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   static void onScrollerTrigger(Map message) {
     try {
       if (message['event'] == 'onScrollToBottom') {

@@ -107,6 +107,8 @@ class _Element {
       return _encodeSliverList(element);
     } else if (element.widget is TabBar) {
       return _encodeTabBar(element);
+    } else if (element.widget is EditableText) {
+      return _encodeEditableText(element);
     } else {
       return _encodeDivBox(element);
     }

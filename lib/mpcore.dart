@@ -40,6 +40,7 @@ part './components/constrained_box.dart';
 part './components/flexible.dart';
 part './components/offstage.dart';
 part './components/sized_box.dart';
+part './components/editable_text.dart';
 
 class MPCore {
   static String getInitialRoute() {
