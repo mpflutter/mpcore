@@ -1,13 +1,13 @@
 part of '../mpcore.dart';
 
-_Element _encodeDivBox(Element element) {
-  final children = _Element.childrenFromFlutterElement(element);
+MPElement _encodeDivBox(Element element) {
+  final children = MPElement.childrenFromFlutterElement(element);
   if (children.length == 1) {
     return children.first;
   } else {
-    return _Element(
+    return MPElement(
       name: 'div',
-      children: _Element.childrenFromFlutterElement(element),
+      children: MPElement.childrenFromFlutterElement(element),
     );
   }
 }

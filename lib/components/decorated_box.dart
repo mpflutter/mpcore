@@ -1,6 +1,6 @@
 part of '../mpcore.dart';
 
-_Element _encodeDecoratedBox(Element element) {
+MPElement _encodeDecoratedBox(Element element) {
   final widget = element.widget as DecoratedBox;
   final attributes = <String, dynamic>{};
   if (widget.decoration is BoxDecoration) {
@@ -42,9 +42,9 @@ _Element _encodeDecoratedBox(Element element) {
       };
     }
   }
-  return _Element(
+  return MPElement(
     name: 'decorated_box',
-    children: _Element.childrenFromFlutterElement(element),
+    children: MPElement.childrenFromFlutterElement(element),
     attributes: attributes,
   );
 }

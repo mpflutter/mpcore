@@ -2,10 +2,10 @@ part of '../mpcore.dart';
 
 Map<int, Element> editableTextHandlers = {};
 
-_Element _encodeEditableText(Element element) {
+MPElement _encodeEditableText(Element element) {
   final widget = element.widget as EditableText;
   editableTextHandlers[element.hashCode] = element;
-  return _Element(
+  return MPElement(
     name: 'editable_text',
     children: [],
     attributes: {

@@ -1,10 +1,10 @@
 part of '../mpcore.dart';
 
-_Element _encodeAlign(Element element) {
+MPElement _encodeAlign(Element element) {
   final widget = element.widget as Align;
-  return _Element(
+  return MPElement(
     name: 'align',
-    children: _Element.childrenFromFlutterElement(element),
+    children: MPElement.childrenFromFlutterElement(element),
     attributes: {'alignment': widget.alignment.toString()},
   );
 }

@@ -1,20 +1,20 @@
 part of '../mpcore.dart';
 
-_Element _encodeClipRRect(Element element) {
+MPElement _encodeClipRRect(Element element) {
   final widget = element.widget as ClipRRect;
-  return _Element(
+  return MPElement(
     name: 'clip_r_rect',
-    children: _Element.childrenFromFlutterElement(element),
+    children: MPElement.childrenFromFlutterElement(element),
     attributes: {
       'borderRadius': widget.borderRadius.toString(),
     },
   );
 }
 
-_Element _encodeClipRect(Element element) {
-  return _Element(
+MPElement _encodeClipRect(Element element) {
+  return MPElement(
     name: 'clip_r_rect',
-    children: _Element.childrenFromFlutterElement(element),
+    children: MPElement.childrenFromFlutterElement(element),
     attributes: {
       'borderRadius': '',
     },

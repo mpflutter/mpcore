@@ -1,6 +1,6 @@
 part of '../mpcore.dart';
 
-_Element _encodePositioned(Element element) {
+MPElement _encodePositioned(Element element) {
   final widget = element.widget as Positioned;
   final attributes = {
     'left': widget.left,
@@ -21,9 +21,9 @@ _Element _encodePositioned(Element element) {
     attributes['right'] = 0;
     attributes['bottom'] = 0;
   }
-  return _Element(
+  return MPElement(
     name: 'positioned',
-    children: _Element.childrenFromFlutterElement(element),
+    children: MPElement.childrenFromFlutterElement(element),
     attributes: attributes,
   );
 }

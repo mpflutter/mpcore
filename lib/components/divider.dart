@@ -1,8 +1,8 @@
 part of '../mpcore.dart';
 
-_Element _encodeDivider(Element element) {
+MPElement _encodeDivider(Element element) {
   final widget = element.widget as Divider;
-  return _Element(
+  return MPElement(
     name: 'divider',
     attributes: {
       'height': (widget.height ?? 16.0).toString(),

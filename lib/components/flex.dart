@@ -1,10 +1,10 @@
 part of '../mpcore.dart';
 
-_Element _encodeFlex(Element element) {
+MPElement _encodeFlex(Element element) {
   final widget = element.widget as Flex;
-  return _Element(
+  return MPElement(
     name: 'flex',
-    children: _Element.childrenFromFlutterElement(element),
+    children: MPElement.childrenFromFlutterElement(element),
     attributes: {
       'direction': widget.direction.toString(),
       'mainAxisAlignment': widget.mainAxisAlignment.toString(),

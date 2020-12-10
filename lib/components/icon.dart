@@ -1,8 +1,8 @@
 part of '../mpcore.dart';
 
-_Element _encodeIcon(Element element) {
+MPElement _encodeIcon(Element element) {
   final widget = element.widget as Icon;
-  return _Element(
+  return MPElement(
     name: 'icon',
     attributes: {
       'icon': {

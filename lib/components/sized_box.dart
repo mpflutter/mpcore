@@ -1,10 +1,10 @@
 part of '../mpcore.dart';
 
-_Element _encodeSizedBox(Element element) {
+MPElement _encodeSizedBox(Element element) {
   final widget = element.widget as SizedBox;
-  return _Element(
+  return MPElement(
     name: 'sized_box',
-    children: _Element.childrenFromFlutterElement(element),
+    children: MPElement.childrenFromFlutterElement(element),
     attributes: {
       'width': widget.width.toString(),
       'height': widget.height.toString(),

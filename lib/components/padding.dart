@@ -1,21 +1,21 @@
 part of '../mpcore.dart';
 
-_Element _encodePadding(Element element) {
+MPElement _encodePadding(Element element) {
   final widget = element.widget as Padding;
-  return _Element(
+  return MPElement(
     name: 'padding',
-    children: _Element.childrenFromFlutterElement(element),
+    children: MPElement.childrenFromFlutterElement(element),
     attributes: {
       'padding': widget.padding.toString(),
     },
   );
 }
 
-_Element _encodeSliverPadding(Element element) {
+MPElement _encodeSliverPadding(Element element) {
   final widget = element.widget as SliverPadding;
-  return _Element(
+  return MPElement(
     name: 'padding',
-    children: _Element.childrenFromFlutterElement(element),
+    children: MPElement.childrenFromFlutterElement(element),
     attributes: {
       'padding': widget.padding.toString(),
     },

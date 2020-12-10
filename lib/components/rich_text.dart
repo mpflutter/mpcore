@@ -1,17 +1,17 @@
 part of '../mpcore.dart';
 
-_Element _encodeRichText(Element element) {
+MPElement _encodeRichText(Element element) {
   final widget = element.widget as RichText;
-  return _Element(name: 'rich_text', children: [
+  return MPElement(name: 'rich_text', children: [
     _encodeTextSpan(widget.text)
   ], attributes: {
     'maxLines': widget.maxLines,
   });
 }
 
-_Element _encodeTextSpan(InlineSpan span) {
+MPElement _encodeTextSpan(InlineSpan span) {
   if (span is TextSpan) {
-    return _Element(
+    return MPElement(
       name: 'text_span',
       children: span.children?.map((e) => _encodeTextSpan(e))?.toList(),
       attributes: {
@@ -20,7 +20,7 @@ _Element _encodeTextSpan(InlineSpan span) {
       },
     );
   } else {
-    return _Element(
+    return MPElement(
       name: 'inline_span',
       attributes: {},
     );

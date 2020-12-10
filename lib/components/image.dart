@@ -1,8 +1,8 @@
 part of '../mpcore.dart';
 
-_Element _encodeImage(Element element) {
+MPElement _encodeImage(Element element) {
   final widget = element.widget as Image;
-  return _Element(
+  return MPElement(
     name: 'image',
     attributes: {
       'src': (() {

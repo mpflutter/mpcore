@@ -11,6 +11,7 @@ import 'package:mpkit/mpkit.dart';
 
 part 'document.dart';
 part 'body.dart';
+part 'plugin.dart';
 part './components/absorb_pointer.dart';
 part './components/custom_scroll_view.dart';
 part './components/gesture_detector.dart';
@@ -49,6 +50,12 @@ class MPCore {
 
   static NavigatorObserver getNavigationObserver() {
     return MPNavigatorObserver.instance;
+  }
+
+  static final _plugins = <MPPlugin>[];
+
+  static void registerPlugin(MPPlugin plugin) {
+    _plugins.add(plugin);
   }
 
   MPCore();
@@ -95,13 +102,13 @@ class MPCore {
               findFirstChild(findTargetKey(Key('tab_body'), tabBodyElement))) !=
           null;
       final vDocument = _Document(
-        header: _Element.fromFlutterElement(
+        header: MPElement.fromFlutterElement(
           findFirstChild(findTargetKey(Key('tab_header'), tabBodyElement)),
         ),
-        tabBar: _Element.fromFlutterElement(
+        tabBar: MPElement.fromFlutterElement(
           findTarget<TabBar>(tabBodyElement),
         ),
-        body: _Element.fromFlutterElement(
+        body: MPElement.fromFlutterElement(
           findFirstChild(findTargetKey(Key('tab_body'), tabBodyElement)),
         ),
         isTabBody: true,
@@ -112,7 +119,7 @@ class MPCore {
     final scaffoldElement = findTarget<Scaffold>(renderView);
     if (scaffoldElement != null) {
       final bodyElement = findTarget<ScaffoldBodyBuilder>(scaffoldElement);
-      final vBody = _Element.fromFlutterElement(bodyElement);
+      final vBody = MPElement.fromFlutterElement(bodyElement);
       final hasListBody = findTarget<Scrollable>(bodyElement) != null;
       final vDocument = _Document(body: vBody, isListBody: hasListBody);
       return json.encode(vDocument);
@@ -120,7 +127,7 @@ class MPCore {
     final minipScaffoldElement = findTarget<MPScaffold>(renderView);
     if (minipScaffoldElement != null) {
       final bodyElement = minipScaffoldElement;
-      final vBody = _Element.fromFlutterElement(bodyElement);
+      final vBody = MPElement.fromFlutterElement(bodyElement);
       final hasListBody = findTarget<Scrollable>(bodyElement) != null;
       final vDocument = _Document(
         body: vBody,

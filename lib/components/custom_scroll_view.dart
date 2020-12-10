@@ -1,15 +1,15 @@
 part of '../mpcore.dart';
 
-_Element _encodeCustomScrollView(Element element) {
+MPElement _encodeCustomScrollView(Element element) {
   final viewportElement = MPCore.findTarget<Viewport>(element);
   if (viewportElement == null) {
-    return _Element(
+    return MPElement(
       name: 'custom_scroll_view',
       children: [],
     );
   }
-  return _Element(
+  return MPElement(
     name: 'custom_scroll_view',
-    children: _Element.childrenFromFlutterElement(viewportElement),
+    children: MPElement.childrenFromFlutterElement(viewportElement),
   );
 }

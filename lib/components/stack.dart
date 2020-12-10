@@ -1,9 +1,9 @@
 part of '../mpcore.dart';
 
-_Element _encodeStack(Element element) {
-  return _Element(
+MPElement _encodeStack(Element element) {
+  return MPElement(
     name: 'stack',
-    children: _Element.childrenFromFlutterElement(element),
+    children: MPElement.childrenFromFlutterElement(element),
     attributes: {},
   );
 }

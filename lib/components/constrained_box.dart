@@ -1,10 +1,10 @@
 part of '../mpcore.dart';
 
-_Element _encodeConstrainedBox(Element element) {
+MPElement _encodeConstrainedBox(Element element) {
   final widget = element.widget as ConstrainedBox;
-  return _Element(
+  return MPElement(
     name: 'constrained_box',
-    children: _Element.childrenFromFlutterElement(element),
+    children: MPElement.childrenFromFlutterElement(element),
     attributes: {
       'minWidth': widget.constraints.minWidth.toString(),
       'minHeight': widget.constraints.minHeight.toString(),

@@ -1,9 +1,9 @@
 part of './mpcore.dart';
 
 class _Document {
-  final _Element header;
-  final _Element tabBar;
-  final _Element body;
+  final MPElement header;
+  final MPElement tabBar;
+  final MPElement body;
   final bool isListBody;
   final bool isTabBody;
 
@@ -26,12 +26,12 @@ class _Document {
   }
 }
 
-class _Element {
+class MPElement {
   final String name;
-  final List<_Element> children;
+  final List<MPElement> children;
   final Map<String, dynamic> attributes;
 
-  _Element({this.name, this.children, this.attributes});
+  MPElement({this.name, this.children, this.attributes});
 
   Map toJson() {
     return {
@@ -41,7 +41,7 @@ class _Element {
     };
   }
 
-  static _Element fromFlutterElement(Element element) {
+  static MPElement fromFlutterElement(Element element) {
     if (element == null) return null;
     if (element.widget is ColoredBox) {
       return _encodeColoredBox(element);
@@ -110,12 +110,18 @@ class _Element {
     } else if (element.widget is EditableText) {
       return _encodeEditableText(element);
     } else {
+      for (final plugin in MPCore._plugins) {
+        final result = plugin.encodeElement(element);
+        if (result != null) {
+          return result;
+        }
+      }
       return _encodeDivBox(element);
     }
   }
 
-  static List<_Element> childrenFromFlutterElement(Element element) {
-    final els = <_Element>[];
+  static List<MPElement> childrenFromFlutterElement(Element element) {
+    final els = <MPElement>[];
     element.visitChildElements((element) {
       els.add(fromFlutterElement(element));
     });

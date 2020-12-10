@@ -2,12 +2,12 @@ part of '../mpcore.dart';
 
 Map<int, Element> gestureDetectorHandlers = {};
 
-_Element _encodeGestureDetector(Element element) {
+MPElement _encodeGestureDetector(Element element) {
   final widget = element.widget as GestureDetector;
   gestureDetectorHandlers[element.hashCode] = element;
-  return _Element(
+  return MPElement(
     name: 'gesture_detector',
-    children: _Element.childrenFromFlutterElement(element),
+    children: MPElement.childrenFromFlutterElement(element),
     attributes: {
       'onTap': widget.onTap != null ? element.hashCode : null,
     },

@@ -1,10 +1,10 @@
 part of '../mpcore.dart';
 
-_Element _encodeFlexible(Element element) {
+MPElement _encodeFlexible(Element element) {
   final widget = element.widget as Flexible;
-  return _Element(
+  return MPElement(
     name: 'flexible',
-    children: _Element.childrenFromFlutterElement(element),
+    children: MPElement.childrenFromFlutterElement(element),
     attributes: {
       'flex': widget.flex,
       'fit': widget.fit.toString(),

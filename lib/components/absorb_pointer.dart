@@ -1,10 +1,10 @@
 part of '../mpcore.dart';
 
-_Element _encodeAbsorbPointer(Element element) {
+MPElement _encodeAbsorbPointer(Element element) {
   final widget = element.widget as AbsorbPointer;
-  return _Element(
+  return MPElement(
     name: 'absorb_pointer',
-    children: _Element.childrenFromFlutterElement(element),
+    children: MPElement.childrenFromFlutterElement(element),
     attributes: {'absorbing': widget.absorbing},
   );
 }

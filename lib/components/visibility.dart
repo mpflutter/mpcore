@@ -1,21 +1,21 @@
 part of '../mpcore.dart';
 
-_Element _encodeVisibility(Element element) {
+MPElement _encodeVisibility(Element element) {
   final widget = element.widget as Visibility;
-  return _Element(
+  return MPElement(
     name: 'visibility',
-    children: _Element.childrenFromFlutterElement(element),
+    children: MPElement.childrenFromFlutterElement(element),
     attributes: {
       'visible': widget.visible,
     },
   );
 }
 
-_Element _encodeSliverVisibility(Element element) {
+MPElement _encodeSliverVisibility(Element element) {
   final widget = element.widget as SliverVisibility;
-  return _Element(
+  return MPElement(
     name: 'visibility',
-    children: _Element.childrenFromFlutterElement(element),
+    children: MPElement.childrenFromFlutterElement(element),
     attributes: {
       'visible': widget.visible,
     },
