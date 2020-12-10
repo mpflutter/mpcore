@@ -3,8 +3,6 @@ import 'dart:html';
 
 import 'dart:convert';
 
-import 'channel_base.dart';
-
 import '../mpcore.dart';
 
 class MPChannel {

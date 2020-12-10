@@ -4,7 +4,6 @@ import 'dart:developer' as dev;
 
 import '../mpcore.dart';
 
-import 'channel_base.dart';
 import 'package:path/path.dart' as path;
 import '../hot_reloader.dart';
 import 'package:mime_type/mime_type.dart';
@@ -191,6 +190,8 @@ class MPChannel {
       MPChannelBase.onRouterTrigger(obj['message']);
     } else if (obj['type'] == 'editable_text') {
       MPChannelBase.onEditableTextTrigger(obj['message']);
+    } else {
+      MPChannelBase.onPluginMessage(obj);
     }
   }
 

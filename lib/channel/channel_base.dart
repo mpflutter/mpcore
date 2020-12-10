@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import '../mpcore.dart';
-import 'channel_io.dart' if (dart.library.js) '../channel/channel_js.dart';
+part of '../mpcore.dart';
 
 class MPNavigatorObserver extends NavigatorObserver {
   static final instance = MPNavigatorObserver();
@@ -118,6 +114,12 @@ class MPChannelBase {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  static void onPluginMessage(Map message) {
+    for (final plugin in MPCore._plugins) {
+      plugin.onClientMessage(message);
     }
   }
 }

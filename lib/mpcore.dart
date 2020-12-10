@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:mpcore/channel/channel_base.dart';
 import 'channel/channel_io.dart'
     if (dart.library.js) './channel/channel_js.dart';
 import 'package:mpkit/mpkit.dart';
@@ -42,6 +41,7 @@ part './components/flexible.dart';
 part './components/offstage.dart';
 part './components/sized_box.dart';
 part './components/editable_text.dart';
+part './channel/channel_base.dart';
 
 class MPCore {
   static String getInitialRoute() {
