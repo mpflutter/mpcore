@@ -26,6 +26,8 @@ class MPChannel {
           MPChannelBase.onRouterTrigger(obj['message']);
         } else if (obj['type'] == 'editable_text') {
           MPChannelBase.onEditableTextTrigger(obj['message']);
+        } else {
+          MPChannelBase.onPluginMessage(obj);
         }
       });
     }
