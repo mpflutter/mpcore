@@ -60,7 +60,7 @@ class MPChannel {
         } else if (req.uri.path.startsWith('/bundle.') ||
             req.uri.path.startsWith('/index.html') ||
             req.uri.path.startsWith('/main.dart.js') ||
-            req.uri.path.startsWith('/polyfills.')) {
+            req.uri.path.startsWith('/static/')) {
           handleScaffoldRequest(req);
         } else {
           final _ = req.response.close();
