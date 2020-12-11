@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:developer' as dev;
 
+import 'package:flutter/material.dart';
+
 import '../mpcore.dart';
 
 import 'package:path/path.dart' as path;
@@ -49,10 +51,8 @@ class MPChannel {
         if (req.uri.path == '/') {
           final socket = await WebSocketTransformer.upgrade(req);
           sockets.add(socket);
-          if (lastMessage != null) {
-            socket.add(lastMessage);
-          }
           socket.listen(handleClientMessage);
+          WidgetsBinding.instance.scheduleFrame();
         } else if (req.uri.path.startsWith('/assets/packages/')) {
           handlePackageAssetsRequest(req);
         } else if (req.uri.path.startsWith('/assets/')) {
