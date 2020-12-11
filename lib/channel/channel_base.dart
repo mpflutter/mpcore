@@ -10,13 +10,13 @@ class MPNavigatorObserver extends NavigatorObserver {
     if (previousRoute == null) return;
     final routeData = json.encode({
       'type': 'route',
-      'message': json.encode({
+      'message': {
         'event': 'didPush',
         'route': {
           'hash': route.hashCode,
           'name': route.settings?.name ?? '/',
         }
-      }),
+      },
     });
     MPChannel.postMesssage(routeData);
     super.didPush(route, previousRoute);
@@ -27,13 +27,13 @@ class MPNavigatorObserver extends NavigatorObserver {
     if (doBacking) return;
     final routeData = json.encode({
       'type': 'route',
-      'message': json.encode({
+      'message': {
         'event': 'didPop',
         'route': {
           'hash': previousRoute.hashCode,
           'name': previousRoute.settings?.name ?? '/',
         }
-      }),
+      },
     });
     MPChannel.postMesssage(routeData);
     super.didPop(route, previousRoute);
@@ -54,7 +54,7 @@ class MPChannelBase {
   static void onGestureDetectorTrigger(Map message) {
     try {
       final GestureDetector widget =
-          gestureDetectorHandlers[message['target']]?.widget;
+          MPCore.findTargetHashCode(message['target'])?.widget;
       if (widget == null) return;
       if (message['event'] == 'onTap') {
         widget.onTap?.call();
@@ -66,7 +66,8 @@ class MPChannelBase {
 
   static void onTabBarTrigger(Map message) {
     try {
-      final TabBar widget = tabBarHandlers[message['target']]?.widget;
+      final TabBar widget =
+          MPCore.findTargetHashCode(message['target'])?.widget;
       if (widget == null) return;
       if (message['event'] == 'onTapIndex') {
         widget.controller.index = message['data'];
@@ -79,7 +80,7 @@ class MPChannelBase {
   static void onEditableTextTrigger(Map message) {
     try {
       final EditableText widget =
-          editableTextHandlers[message['target']]?.widget;
+          MPCore.findTargetHashCode(message['target'])?.widget;
       if (widget == null) return;
       if (message['event'] == 'onSubmitted') {
         widget.onSubmitted?.call(message['data']);

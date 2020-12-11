@@ -80,7 +80,7 @@ class MPCore {
     await nextFrame();
     final frameData = json.encode({
       'type': 'frame_data',
-      'message': toJson(),
+      'message': toDocument(),
     });
     MPChannel.postMesssage(frameData);
     sendFrame();
@@ -94,8 +94,8 @@ class MPCore {
     return completer.future;
   }
 
-  String toJson() {
-    if (renderView == null) return '';
+  _Document toDocument() {
+    if (renderView == null) return null;
     final tabBodyElement = findTarget<MPTabBody>(renderView);
     if (tabBodyElement != null) {
       final hasListBody = findTarget<Scrollable>(
@@ -114,7 +114,7 @@ class MPCore {
         isTabBody: true,
         isListBody: hasListBody,
       );
-      return json.encode(vDocument);
+      return vDocument;
     }
     final scaffoldElement = findTarget<Scaffold>(renderView);
     if (scaffoldElement != null) {
@@ -122,7 +122,7 @@ class MPCore {
       final vBody = MPElement.fromFlutterElement(bodyElement);
       final hasListBody = findTarget<Scrollable>(bodyElement) != null;
       final vDocument = _Document(body: vBody, isListBody: hasListBody);
-      return json.encode(vDocument);
+      return vDocument;
     }
     final minipScaffoldElement = findTarget<MPScaffold>(renderView);
     if (minipScaffoldElement != null) {
@@ -135,7 +135,7 @@ class MPCore {
             (minipScaffoldElement.widget as MPScaffold).isListBody != false &&
                 hasListBody,
       );
-      return json.encode(vDocument);
+      return vDocument;
     }
     return null;
   }
@@ -151,6 +151,25 @@ class MPCore {
         }
       } else {
         final next = findTarget<T>(el, findParent: findParent);
+        if (next != null) {
+          targetElement = next;
+        }
+      }
+    });
+    return targetElement;
+  }
+
+  static Element findTargetHashCode(
+    int hashCode, {
+    Element element,
+  }) {
+    element ??= WidgetsBinding.instance.renderViewElement;
+    Element targetElement;
+    element.visitChildElements((el) {
+      if (el.hashCode == hashCode) {
+        targetElement = el;
+      } else {
+        final next = findTargetHashCode(hashCode, element: el);
         if (next != null) {
           targetElement = next;
         }
