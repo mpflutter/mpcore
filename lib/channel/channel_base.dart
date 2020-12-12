@@ -104,6 +104,14 @@ class MPChannelBase {
     }
   }
 
+  static void onActionTrigger(Map message) {
+    try {
+      MPAction.onActionTrigger(message);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   static void onRouterTrigger(Map message) {
     try {
       if (message['event'] == 'doPop') {
