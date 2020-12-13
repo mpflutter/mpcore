@@ -2,10 +2,16 @@ part of 'mpcore.dart';
 
 class MPTabBody extends StatefulWidget {
   final Widget header;
-  final List<Tab> tabs;
+  final TabController tabController;
+  final Widget tabBar;
   final List<Builder> children;
 
-  MPTabBody({this.header, this.tabs, this.children});
+  MPTabBody({
+    this.header,
+    this.tabController,
+    this.tabBar,
+    this.children,
+  });
 
   @override
   _MPTabBodyState createState() => _MPTabBodyState();
@@ -13,13 +19,10 @@ class MPTabBody extends StatefulWidget {
 
 class _MPTabBodyState extends State<MPTabBody>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
-
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: widget.tabs.length, vsync: this);
-    _tabController.addListener(() {
+    widget.tabController.addListener(() {
       setState(() {});
     });
   }
@@ -33,28 +36,26 @@ class _MPTabBodyState extends State<MPTabBody>
             key: Key('tab_header'),
             child: widget.header,
           ),
-          TabBar(
-            tabs: widget.tabs,
-            controller: _tabController,
-            labelColor: Colors.black,
+          Container(
+            key: Key('tab_bar'),
+            child: widget.tabBar,
           ),
           Expanded(
             key: Key('tab_body'),
-            child: widget.children[_tabController.index],
+            child: widget.children[widget.tabController.index],
           ),
         ],
       );
     } else {
       return Column(
         children: [
-          TabBar(
-            tabs: widget.tabs,
-            controller: _tabController,
-            labelColor: Colors.black,
+          Container(
+            key: Key('tab_bar'),
+            child: widget.tabBar,
           ),
           Expanded(
             key: Key('tab_body'),
-            child: widget.children[_tabController.index],
+            child: widget.children[widget.tabController.index],
           ),
         ],
       );

@@ -108,7 +108,7 @@ class MPCore {
           findFirstChild(findTargetKey(Key('tab_header'), tabBodyElement)),
         ),
         tabBar: MPElement.fromFlutterElement(
-          findTarget<TabBar>(tabBodyElement),
+          findFirstChild(findTargetKey(Key('tab_bar'), tabBodyElement)),
         ),
         body: MPElement.fromFlutterElement(
           findFirstChild(findTargetKey(Key('tab_body'), tabBodyElement)),
@@ -201,6 +201,7 @@ class MPCore {
   }
 
   static Element findFirstChild(Element element) {
+    if (element == null) return null;
     Element targetElement;
     element.visitChildElements((el) {
       targetElement ??= el;
