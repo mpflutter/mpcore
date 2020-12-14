@@ -123,7 +123,10 @@ class MPCore {
       final bodyElement = findTarget<ScaffoldBodyBuilder>(scaffoldElement);
       final vBody = MPElement.fromFlutterElement(bodyElement);
       final hasListBody = findTarget<Scrollable>(bodyElement) != null;
-      final vDocument = _Document(body: vBody, isListBody: hasListBody);
+      final vDocument = _Document(
+          body: vBody,
+          backgroundColor: (scaffoldElement.widget as Scaffold).backgroundColor,
+          isListBody: hasListBody);
       return vDocument;
     }
     final minipScaffoldElement = findTarget<MPScaffold>(renderView);
@@ -133,6 +136,8 @@ class MPCore {
       final hasListBody = findTarget<Scrollable>(bodyElement) != null;
       final vDocument = _Document(
         body: vBody,
+        backgroundColor:
+            (minipScaffoldElement.widget as MPScaffold).backgroundColor,
         isListBody:
             (minipScaffoldElement.widget as MPScaffold).isListBody != false &&
                 hasListBody,

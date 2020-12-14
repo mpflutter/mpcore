@@ -4,6 +4,7 @@ class _Document {
   final MPElement header;
   final MPElement tabBar;
   final MPElement body;
+  final Color backgroundColor;
   final bool isListBody;
   final bool isTabBody;
 
@@ -11,6 +12,7 @@ class _Document {
     this.header,
     this.tabBar,
     this.body,
+    this.backgroundColor,
     this.isListBody,
     this.isTabBody,
   });
@@ -20,6 +22,7 @@ class _Document {
       'header': header,
       'tabBar': tabBar,
       'body': body,
+      'backgroundColor': backgroundColor?.value?.toString(),
       'isListBody': isListBody,
       'isTabBody': isTabBody
     };

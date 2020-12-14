@@ -41,7 +41,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "393f8cf36330fcd384e59243fa0fb1215a72bbfd"
+      resolved-ref: ede646963cebd6027f1718598db6cc4a1fb308ac
       url: "https://github.com/mpflutter/flutter"
     source: git
     version: "0.0.0"
@@ -85,7 +85,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "81a61b17a45eff1e83768e6cded14406c3bb0b76"
+      resolved-ref: d3b826e2a18befbe644281fae5b442b1e06bacf4
       url: "https://github.com/mpflutter/mpkit"
     source: git
     version: "0.0.1"
