@@ -9,8 +9,8 @@ environment:
   flutter: ">=1.17.0 <2.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
+  flutter: 
+    git: https://github.com/mpflutter/flutter
   mpkit: 
     git: https://github.com/mpflutter/mpkit
   vm_service_lib: ^0.3.5
