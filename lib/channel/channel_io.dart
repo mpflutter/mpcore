@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:developer' as dev;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../mpcore.dart';
 
@@ -14,7 +14,6 @@ class MPChannel {
   static bool _serverSetupped = false;
   static HttpServer server;
   static List<WebSocket> sockets = [];
-  static String lastMessage;
 
   static Future setupHotReload(MPCore minip) async {
     if (HotReloader.isHotReloadable) {
@@ -52,6 +51,7 @@ class MPChannel {
           final socket = await WebSocketTransformer.upgrade(req);
           sockets.add(socket);
           socket.listen(handleClientMessage);
+          MPCore.clearOldFrameObject();
           WidgetsBinding.instance.scheduleFrame();
         } else if (req.uri.path.startsWith('/assets/packages/')) {
           handlePackageAssetsRequest(req);
@@ -248,8 +248,6 @@ class MPChannel {
         print(e);
       }
     }
-    lastMessage = message;
-    // print(message);
   }
 
   static String getInitialRoute() {

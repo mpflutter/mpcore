@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'channel/channel_io.dart'
     if (dart.library.js) './channel/channel_js.dart';
 import 'package:mpkit/mpkit.dart';
+import 'package:json_patch/json_patch.dart';
 
 part 'document.dart';
 part 'body.dart';
@@ -64,6 +65,12 @@ class MPCore {
 
   Element get renderView => WidgetsBinding.instance.renderViewElement;
 
+  static Map _oldFrameObject;
+
+  static void clearOldFrameObject() {
+    _oldFrameObject = null;
+  }
+
   void connectToHostChannel() async {
     final _ = MPChannel.setupHotReload(this);
     sendFrame();
@@ -80,12 +87,24 @@ class MPCore {
 
   void sendFrame() async {
     await nextFrame();
-    final frameData = json.encode({
+    final newFrameData = json.encode({
       'type': 'frame_data',
       'message': toDocument(),
     });
-    MPChannel.postMesssage(frameData);
-    sendFrame();
+    final newFrameObject = json.decode(newFrameData);
+    if (_oldFrameObject != null) {
+      final diffFrameObject = JsonPatch.diff(_oldFrameObject, newFrameObject);
+      MPChannel.postMesssage(json.encode({
+        'type': 'frame_diff_data',
+        'message': diffFrameObject,
+      }));
+      sendFrame();
+    } else {
+      final frameData = newFrameData;
+      MPChannel.postMesssage(frameData);
+      sendFrame();
+    }
+    _oldFrameObject = newFrameObject;
   }
 
   Future nextFrame() async {
