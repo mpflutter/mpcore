@@ -92,18 +92,19 @@ class MPCore {
       'message': toDocument(),
     });
     final newFrameObject = json.decode(newFrameData);
-    if (_oldFrameObject != null) {
-      final diffFrameObject = JsonPatch.diff(_oldFrameObject, newFrameObject);
-      MPChannel.postMesssage(json.encode({
-        'type': 'frame_diff_data',
-        'message': diffFrameObject,
-      }));
-      sendFrame();
-    } else {
-      final frameData = newFrameData;
-      MPChannel.postMesssage(frameData);
-      sendFrame();
-    }
+    // In some case, it will cause dead loop.
+    // if (_oldFrameObject != null) {
+    //   final diffFrameObject = JsonPatch.diff(_oldFrameObject, newFrameObject);
+    //   MPChannel.postMesssage(json.encode({
+    //     'type': 'frame_diff_data',
+    //     'message': diffFrameObject,
+    //   }));
+    //   sendFrame();
+    // } else {
+    final frameData = newFrameData;
+    MPChannel.postMesssage(frameData);
+    sendFrame();
+    // }
     _oldFrameObject = newFrameObject;
   }
 
