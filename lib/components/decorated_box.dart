@@ -41,6 +41,28 @@ MPElement _encodeDecoratedBox(Element element) {
         'rightStyle': (decoration.border as Border).right.style.toString(),
       };
     }
+    if (decoration.gradient != null && decoration.gradient is LinearGradient) {
+      final linearGradient = decoration.gradient as LinearGradient;
+      attributes['decoration']['gradient'] = {
+        'classname': 'LinearGradient',
+        'begin': linearGradient.begin.toString(),
+        'end': linearGradient.end.toString(),
+        'colors': linearGradient.colors.map((e) => e.value.toString()).toList(),
+        'stops': linearGradient.stops,
+        'tileMode': linearGradient.tileMode.toString(),
+      };
+    } else if (decoration.gradient != null &&
+        decoration.gradient is RadialGradient) {
+      final linearGradient = decoration.gradient as RadialGradient;
+      attributes['decoration']['gradient'] = {
+        'classname': 'RadialGradient',
+        'center': linearGradient.center.toString(),
+        'radius': linearGradient.radius.toString(),
+        'colors': linearGradient.colors.map((e) => e.value.toString()).toList(),
+        'stops': linearGradient.stops,
+        'tileMode': linearGradient.tileMode.toString(),
+      };
+    }
   }
   return MPElement(
     name: 'decorated_box',
