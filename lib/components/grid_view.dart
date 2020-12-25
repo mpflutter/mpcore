@@ -19,6 +19,7 @@ MPElement _encodeGridView(Element element) {
     ),
     attributes: {
       'scrollDirection': widget.scrollDirection?.toString(),
+      'padding': widget.padding?.toString(),
       'gridDelegate': _encodeGridDelegate(widget.gridDelegate),
     },
   );

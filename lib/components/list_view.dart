@@ -18,6 +18,7 @@ MPElement _encodeListView(Element element) {
       indexedSemanticeParentElement,
     ),
     attributes: {
+      'padding': widget.padding?.toString(),
       'scrollDirection': widget.scrollDirection?.toString(),
     },
   );
