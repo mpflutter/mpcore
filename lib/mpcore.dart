@@ -6,8 +6,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'channel/channel_io.dart'
     if (dart.library.js) './channel/channel_js.dart';
-import 'package:mpkit/mpkit.dart';
-import 'package:json_patch/json_patch.dart';
+import './mpkit/mpkit.dart';
+// import 'package:json_patch/json_patch.dart';
+
+export './mpkit/mpkit.dart';
 
 part 'document.dart';
 part 'body.dart';
