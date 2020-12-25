@@ -24,9 +24,25 @@ MPElement _encodeGridView(Element element) {
   );
 }
 
+MPElement _encodeSliverWaterfallItem(Element element) {
+  final widget = element.widget as SliverWaterfallItem;
+  return MPElement(
+    name: 'sliver_waterfall_item',
+    children: MPElement.childrenFromFlutterElement(element),
+    attributes: {'height': widget.size?.height},
+  );
+}
+
 Map _encodeGridDelegate(dynamic delegate) {
   if (delegate == null) return null;
-  if (delegate is SliverGridDelegateWithFixedCrossAxisCount) {
+  if (delegate is SliverWaterfallDelegate) {
+    return {
+      'classname': 'SliverWaterfallDelegate',
+      'mainAxisSpacing': delegate.mainAxisSpacing,
+      'crossAxisSpacing': delegate.crossAxisSpacing,
+      'crossAxisCount': delegate.crossAxisCount,
+    };
+  } else if (delegate is SliverGridDelegateWithFixedCrossAxisCount) {
     return {
       'classname': 'SliverGridDelegateWithFixedCrossAxisCount',
       'mainAxisSpacing': delegate.mainAxisSpacing,

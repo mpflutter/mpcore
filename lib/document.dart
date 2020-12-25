@@ -64,6 +64,8 @@ class MPElement {
       return _encodeListView(element);
     } else if (element.widget is GridView) {
       return _encodeGridView(element);
+    } else if (element.widget is SliverWaterfallItem) {
+      return _encodeSliverWaterfallItem(element);
     } else if (element.widget is SizedBox) {
       return _encodeSizedBox(element);
     } else if (element.widget is DecoratedBox) {
