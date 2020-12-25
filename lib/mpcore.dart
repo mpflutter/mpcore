@@ -19,6 +19,7 @@ part './components/custom_scroll_view.dart';
 part './components/gesture_detector.dart';
 part './components/opacity.dart';
 part './components/sliver_list.dart';
+part './components/sliver_grid.dart';
 part './components/align.dart';
 part './components/decorated_box.dart';
 part './components/icon.dart';

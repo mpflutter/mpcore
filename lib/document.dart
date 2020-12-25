@@ -112,6 +112,8 @@ class MPElement {
       return _encodeCustomScrollView(element);
     } else if (element.widget is SliverList) {
       return _encodeSliverList(element);
+    } else if (element.widget is SliverGrid) {
+      return _encodeSliverGrid(element);
     } else if (element.widget is TabBar) {
       return _encodeTabBar(element);
     } else if (element.widget is EditableText) {
