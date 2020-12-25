@@ -35,6 +35,7 @@ part './components/transform.dart';
 part './components/colored_box.dart';
 part './components/flex.dart';
 part './components/list_view.dart';
+part './components/grid_view.dart';
 part './components/scroller.dart';
 part './components/visibility.dart';
 part './components/constrained_box.dart';

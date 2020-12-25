@@ -62,6 +62,8 @@ class MPElement {
       return _encodeSliverPadding(element);
     } else if (element.widget is ListView) {
       return _encodeListView(element);
+    } else if (element.widget is GridView) {
+      return _encodeGridView(element);
     } else if (element.widget is SizedBox) {
       return _encodeSizedBox(element);
     } else if (element.widget is DecoratedBox) {
