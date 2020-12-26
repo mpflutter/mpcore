@@ -6,6 +6,7 @@ MPElement _encodePadding(Element element) {
     name: 'padding',
     children: MPElement.childrenFromFlutterElement(element),
     attributes: {
+      'isFull': widget is MPFullPadding,
       'padding': widget.padding.toString(),
     },
   );
