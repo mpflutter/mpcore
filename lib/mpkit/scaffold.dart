@@ -12,3 +12,8 @@ class MPScaffold extends StatelessWidget {
     return body;
   }
 }
+
+class MPOverlayScaffold extends MPScaffold {
+  MPOverlayScaffold({Widget body, Color backgroundColor})
+      : super(body: body, backgroundColor: backgroundColor);
+}

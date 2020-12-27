@@ -25,6 +25,7 @@ part './components/decorated_box.dart';
 part './components/icon.dart';
 part './components/padding.dart';
 part './components/stack.dart';
+part './components/overlay.dart';
 part './components/clip_oval.dart';
 part './components/div_box.dart';
 part './components/ignore_pointer.dart';
@@ -142,33 +143,40 @@ class MPCore {
       );
       return vDocument;
     }
-    final scaffoldElement = findTarget<Scaffold>(renderView);
-    if (scaffoldElement != null) {
-      final bodyElement = findTarget<ScaffoldBodyBuilder>(scaffoldElement);
-      final vBody = MPElement.fromFlutterElement(bodyElement);
-      final hasListBody = findTarget<Scrollable>(bodyElement) != null;
-      final vDocument = _Document(
-          body: vBody,
-          backgroundColor: (scaffoldElement.widget as Scaffold).backgroundColor,
-          isListBody: hasListBody);
-      return vDocument;
+    Element bodyElement;
+    Color bodyBackgroundColor;
+    final scaffoldElements = <Element>[];
+    final overlays = <MPElement>[];
+    findTargets<Scaffold>(renderView, out: scaffoldElements);
+    findTargets<MPScaffold>(renderView, out: scaffoldElements);
+    for (var scaffoldElement in scaffoldElements) {
+      if (scaffoldElement.widget is MPOverlayScaffold) {
+        overlays.add(_encodeOverlay(scaffoldElement));
+      } else {
+        if (scaffoldElement.widget is Scaffold) {
+          bodyElement = findTarget<ScaffoldBodyBuilder>(scaffoldElement);
+          bodyBackgroundColor =
+              (scaffoldElement.widget as Scaffold).backgroundColor;
+        } else if (scaffoldElement.widget is MPScaffold) {
+          bodyElement = scaffoldElement;
+          bodyBackgroundColor =
+              (scaffoldElement.widget as MPScaffold).backgroundColor;
+        }
+      }
     }
-    final minipScaffoldElement = findTarget<MPScaffold>(renderView);
-    if (minipScaffoldElement != null) {
-      final bodyElement = minipScaffoldElement;
+    if (bodyElement != null) {
       final vBody = MPElement.fromFlutterElement(bodyElement);
       final hasListBody = findTarget<Scrollable>(bodyElement) != null;
       final vDocument = _Document(
         body: vBody,
-        backgroundColor:
-            (minipScaffoldElement.widget as MPScaffold).backgroundColor,
-        isListBody:
-            (minipScaffoldElement.widget as MPScaffold).isListBody != false &&
-                hasListBody,
+        backgroundColor: bodyBackgroundColor,
+        overlays: overlays,
+        isListBody: hasListBody,
       );
       return vDocument;
+    } else {
+      return null;
     }
-    return null;
   }
 
   static Element findTarget<T>(Element element, {bool findParent = false}) {
@@ -188,6 +196,21 @@ class MPCore {
       }
     });
     return targetElement;
+  }
+
+  static void findTargets<T>(Element element,
+      {List out, bool findParent = false}) {
+    element.visitChildElements((el) {
+      if (el.widget is T) {
+        if (findParent == true) {
+          out.add(element);
+        } else {
+          out.add(el);
+        }
+      } else {
+        findTargets<T>(el, out: out, findParent: findParent);
+      }
+    });
   }
 
   static Element findTargetHashCode(

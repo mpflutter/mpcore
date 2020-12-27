@@ -4,6 +4,7 @@ class _Document {
   final MPElement header;
   final MPElement tabBar;
   final MPElement body;
+  final List<MPElement> overlays;
   final Color backgroundColor;
   final bool isListBody;
   final bool isTabBody;
@@ -12,6 +13,7 @@ class _Document {
     this.header,
     this.tabBar,
     this.body,
+    this.overlays,
     this.backgroundColor,
     this.isListBody,
     this.isTabBody,
@@ -22,6 +24,7 @@ class _Document {
       'header': header,
       'tabBar': tabBar,
       'body': body,
+      'overlays': overlays,
       'backgroundColor': backgroundColor?.value?.toString(),
       'isListBody': isListBody,
       'isTabBody': isTabBody
