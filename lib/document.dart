@@ -121,6 +121,8 @@ class MPElement {
       return _encodeTabBar(element);
     } else if (element.widget is EditableText) {
       return _encodeEditableText(element);
+    } else if (element.widget is Wrap) {
+      return _encodeWrap(element);
     } else {
       for (final plugin in MPCore._plugins) {
         final result = plugin.encodeElement(element);

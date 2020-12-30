@@ -48,6 +48,7 @@ part './components/offstage.dart';
 part './components/sized_box.dart';
 part './components/editable_text.dart';
 part './components/action.dart';
+part './components/wrap.dart';
 part './components/web_dialogs.dart';
 part './channel/channel_base.dart';
 
