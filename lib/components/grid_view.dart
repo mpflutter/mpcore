@@ -12,6 +12,7 @@ MPElement _encodeGridView(Element element) {
     );
   }
   final widget = element.widget as GridView;
+
   return MPElement(
     name: 'grid_view',
     children: MPElement.childrenFromFlutterElement(
@@ -20,6 +21,11 @@ MPElement _encodeGridView(Element element) {
     attributes: {
       'scrollDirection': widget.scrollDirection?.toString(),
       'padding': widget.padding?.toString(),
+      'width': element
+          .findAncestorWidgetOfExactType<Container>()
+          ?.constraints
+          ?.minWidth
+          ?.toString(),
       'gridDelegate': _encodeGridDelegate(widget.gridDelegate),
     },
   );
