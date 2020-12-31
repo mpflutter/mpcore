@@ -6,6 +6,7 @@ MPElement _encodeRichText(Element element) {
     _encodeTextSpan(widget.text)
   ], attributes: {
     'maxLines': widget.maxLines,
+    'inline': element.findAncestorWidgetOfExactType<MPInlineText>() != null,
   });
 }
 
