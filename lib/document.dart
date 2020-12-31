@@ -123,6 +123,8 @@ class MPElement {
       return _encodeEditableText(element);
     } else if (element.widget is Wrap) {
       return _encodeWrap(element);
+    } else if (element.widget is SliverPersistentHeader) {
+      return _encodeSliverPersistentHeader(element);
     } else {
       for (final plugin in MPCore._plugins) {
         final result = plugin.encodeElement(element);
