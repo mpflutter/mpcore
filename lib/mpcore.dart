@@ -145,7 +145,9 @@ class MPCore {
       );
       return vDocument;
     }
+    Element appBarElement;
     Element bodyElement;
+    Element bottomBarElement;
     Color bodyBackgroundColor;
     final scaffoldElements = <Element>[];
     final overlays = <MPElement>[];
@@ -160,20 +162,22 @@ class MPCore {
           bodyBackgroundColor =
               (scaffoldElement.widget as Scaffold).backgroundColor;
         } else if (scaffoldElement.widget is MPScaffold) {
-          bodyElement = scaffoldElement;
+          appBarElement = findTarget<MPScaffoldAppBar>(scaffoldElement);
+          bodyElement = findTarget<MPScaffoldBody>(scaffoldElement);
+          bottomBarElement = findTarget<MPScaffoldBottomBar>(scaffoldElement);
           bodyBackgroundColor =
               (scaffoldElement.widget as MPScaffold).backgroundColor;
         }
       }
     }
     if (bodyElement != null) {
-      final vBody = MPElement.fromFlutterElement(bodyElement);
-      final hasListBody = findTarget<Scrollable>(bodyElement) != null;
       final vDocument = _Document(
-        body: vBody,
+        header: MPElement.fromFlutterElement(appBarElement),
+        body: MPElement.fromFlutterElement(bodyElement),
+        footer: MPElement.fromFlutterElement(bottomBarElement),
         backgroundColor: bodyBackgroundColor,
         overlays: overlays,
-        isListBody: hasListBody,
+        isListBody: findTarget<Scrollable>(bodyElement) != null,
       );
       return vDocument;
     } else {
