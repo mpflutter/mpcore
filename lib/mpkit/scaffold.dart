@@ -17,7 +17,7 @@ class MPScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
         appBar != null ? MPScaffoldAppBar(child: appBar) : Container(),
         body != null ? MPScaffoldBody(child: body) : Container(),
