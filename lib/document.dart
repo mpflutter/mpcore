@@ -1,20 +1,22 @@
 part of './mpcore.dart';
 
 class _Document {
+  final MPElement appBar;
   final MPElement header;
   final MPElement tabBar;
   final MPElement body;
-  final MPElement footer;
+  final MPElement bottomBar;
   final List<MPElement> overlays;
   final Color backgroundColor;
   final bool isListBody;
   final bool isTabBody;
 
   _Document({
+    this.appBar,
     this.header,
     this.tabBar,
     this.body,
-    this.footer,
+    this.bottomBar,
     this.overlays,
     this.backgroundColor,
     this.isListBody,
@@ -23,10 +25,11 @@ class _Document {
 
   Map toJson() {
     return {
+      'appBar': appBar,
       'header': header,
       'tabBar': tabBar,
       'body': body,
-      'footer': footer,
+      'bottomBar': bottomBar,
       'overlays': overlays,
       'backgroundColor': backgroundColor?.value?.toString(),
       'isListBody': isListBody,

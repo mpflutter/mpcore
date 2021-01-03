@@ -126,25 +126,9 @@ class MPCore {
   _Document toDocument() {
     if (renderView == null) return null;
     final tabBodyElement = findTarget<MPTabBody>(renderView);
-    if (tabBodyElement != null) {
-      final hasListBody = findTarget<Scrollable>(
-              findFirstChild(findTargetKey(Key('tab_body'), tabBodyElement))) !=
-          null;
-      final vDocument = _Document(
-        header: MPElement.fromFlutterElement(
-          findFirstChild(findTargetKey(Key('tab_header'), tabBodyElement)),
-        ),
-        tabBar: MPElement.fromFlutterElement(
-          findFirstChild(findTargetKey(Key('tab_bar'), tabBodyElement)),
-        ),
-        body: MPElement.fromFlutterElement(
-          findFirstChild(findTargetKey(Key('tab_body'), tabBodyElement)),
-        ),
-        isTabBody: true,
-        isListBody: hasListBody,
-      );
-      return vDocument;
-    }
+    Element headerElement;
+    Element tabBarElement;
+    var isTabBody = false;
     Element appBarElement;
     Element bodyElement;
     Element bottomBarElement;
@@ -170,14 +154,26 @@ class MPCore {
         }
       }
     }
+    if (tabBodyElement != null) {
+      headerElement =
+          findFirstChild(findTargetKey(Key('tab_header'), tabBodyElement));
+      tabBarElement =
+          findFirstChild(findTargetKey(Key('tab_bar'), tabBodyElement));
+      bodyElement =
+          findFirstChild(findTargetKey(Key('tab_body'), tabBodyElement));
+      isTabBody = true;
+    }
     if (bodyElement != null) {
       final vDocument = _Document(
-        header: MPElement.fromFlutterElement(appBarElement),
+        appBar: MPElement.fromFlutterElement(appBarElement),
+        header: MPElement.fromFlutterElement(headerElement),
+        tabBar: MPElement.fromFlutterElement(tabBarElement),
         body: MPElement.fromFlutterElement(bodyElement),
-        footer: MPElement.fromFlutterElement(bottomBarElement),
+        bottomBar: MPElement.fromFlutterElement(bottomBarElement),
         backgroundColor: bodyBackgroundColor,
         overlays: overlays,
         isListBody: findTarget<Scrollable>(bodyElement) != null,
+        isTabBody: isTabBody,
       );
       return vDocument;
     } else {
