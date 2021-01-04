@@ -129,6 +129,7 @@ class MPCore {
     Element headerElement;
     Element tabBarElement;
     var isTabBody = false;
+    var isListBody = false;
     Element appBarElement;
     Element bodyElement;
     Element bottomBarElement;
@@ -146,6 +147,9 @@ class MPCore {
           bodyElement = findTarget<ScaffoldBodyBuilder>(scaffoldElement);
           bodyBackgroundColor =
               (scaffoldElement.widget as Scaffold).backgroundColor;
+          if (findTarget<Scrollable>(bodyElement) != null) {
+            isListBody = true;
+          }
         } else if (scaffoldElement.widget is MPScaffold) {
           appBarElement = findTarget<MPScaffoldAppBar>(scaffoldElement);
           bodyElement = findTarget<MPScaffoldBody>(scaffoldElement);
@@ -154,6 +158,12 @@ class MPCore {
               findTarget<MPScaffoldFloatingBody>(scaffoldElement);
           bodyBackgroundColor =
               (scaffoldElement.widget as MPScaffold).backgroundColor;
+          if ((scaffoldElement.widget as MPScaffold).isListBody != null) {
+            isListBody = (scaffoldElement.widget as MPScaffold).isListBody;
+          }
+          if (findTarget<Scrollable>(bodyElement) != null) {
+            isListBody = true;
+          }
         }
       }
     }
@@ -176,7 +186,7 @@ class MPCore {
         bottomBar: MPElement.fromFlutterElement(bottomBarElement),
         backgroundColor: bodyBackgroundColor,
         overlays: overlays,
-        isListBody: findTarget<Scrollable>(bodyElement) != null,
+        isListBody: isListBody,
         isTabBody: isTabBody,
       );
       return vDocument;
