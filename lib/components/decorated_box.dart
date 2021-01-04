@@ -64,6 +64,9 @@ MPElement _encodeDecoratedBox(Element element) {
       };
     }
   }
+  if (widget.position != null) {
+    attributes['position'] = widget.position.toString();
+  }
   return MPElement(
     name: 'decorated_box',
     children: MPElement.childrenFromFlutterElement(element),
