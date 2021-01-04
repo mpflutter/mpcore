@@ -213,9 +213,8 @@ class MPCore {
         } else {
           out.add(el);
         }
-      } else {
-        findTargets<T>(el, out: out, findParent: findParent);
       }
+      findTargets<T>(el, out: out, findParent: findParent);
     });
   }
 
