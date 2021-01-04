@@ -5,6 +5,7 @@ class _Document {
   final MPElement header;
   final MPElement tabBar;
   final MPElement body;
+  final MPElement floatingBody;
   final MPElement bottomBar;
   final List<MPElement> overlays;
   final Color backgroundColor;
@@ -16,6 +17,7 @@ class _Document {
     this.header,
     this.tabBar,
     this.body,
+    this.floatingBody,
     this.bottomBar,
     this.overlays,
     this.backgroundColor,
@@ -29,6 +31,7 @@ class _Document {
       'header': header,
       'tabBar': tabBar,
       'body': body,
+      'floatingBody': floatingBody,
       'bottomBar': bottomBar,
       'overlays': overlays,
       'backgroundColor': backgroundColor?.value?.toString(),

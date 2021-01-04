@@ -72,10 +72,10 @@ class MPCore {
 
   Element get renderView => WidgetsBinding.instance.renderViewElement;
 
-  static Map _oldFrameObject;
+  // static Map _oldFrameObject;
 
   static void clearOldFrameObject() {
-    _oldFrameObject = null;
+    // _oldFrameObject = null;
   }
 
   void connectToHostChannel() async {
@@ -98,7 +98,7 @@ class MPCore {
       'type': 'frame_data',
       'message': toDocument(),
     });
-    final newFrameObject = json.decode(newFrameData);
+    // final newFrameObject = json.decode(newFrameData);
     // In some case, it will cause dead loop.
     // if (_oldFrameObject != null) {
     //   final diffFrameObject = JsonPatch.diff(_oldFrameObject, newFrameObject);
@@ -112,7 +112,7 @@ class MPCore {
     MPChannel.postMesssage(frameData);
     sendFrame();
     // }
-    _oldFrameObject = newFrameObject;
+    // _oldFrameObject = newFrameObject;
   }
 
   Future nextFrame() async {
@@ -132,6 +132,7 @@ class MPCore {
     Element appBarElement;
     Element bodyElement;
     Element bottomBarElement;
+    Element floatingBodyElement;
     Color bodyBackgroundColor;
     final scaffoldElements = <Element>[];
     final overlays = <MPElement>[];
@@ -149,6 +150,8 @@ class MPCore {
           appBarElement = findTarget<MPScaffoldAppBar>(scaffoldElement);
           bodyElement = findTarget<MPScaffoldBody>(scaffoldElement);
           bottomBarElement = findTarget<MPScaffoldBottomBar>(scaffoldElement);
+          floatingBodyElement =
+              findTarget<MPScaffoldFloatingBody>(scaffoldElement);
           bodyBackgroundColor =
               (scaffoldElement.widget as MPScaffold).backgroundColor;
         }
@@ -169,6 +172,7 @@ class MPCore {
         header: MPElement.fromFlutterElement(headerElement),
         tabBar: MPElement.fromFlutterElement(tabBarElement),
         body: MPElement.fromFlutterElement(bodyElement),
+        floatingBody: MPElement.fromFlutterElement(floatingBodyElement),
         bottomBar: MPElement.fromFlutterElement(bottomBarElement),
         backgroundColor: bodyBackgroundColor,
         overlays: overlays,

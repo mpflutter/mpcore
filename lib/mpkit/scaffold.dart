@@ -4,6 +4,7 @@ class MPScaffold extends StatelessWidget {
   final Widget body;
   final Widget appBar;
   final Widget bottomBar;
+  final Widget floatingBody;
   final Color backgroundColor;
   final bool isListBody;
 
@@ -11,6 +12,7 @@ class MPScaffold extends StatelessWidget {
     this.body,
     this.appBar,
     this.bottomBar,
+    this.floatingBody,
     this.backgroundColor,
     this.isListBody,
   });
@@ -22,6 +24,9 @@ class MPScaffold extends StatelessWidget {
         appBar != null ? MPScaffoldAppBar(child: appBar) : Container(),
         body != null ? MPScaffoldBody(child: body) : Container(),
         bottomBar != null ? MPScaffoldBottomBar(child: bottomBar) : Container(),
+        floatingBody != null
+            ? MPScaffoldFloatingBody(child: floatingBody)
+            : Container(),
       ],
     );
   }
@@ -62,6 +67,19 @@ class MPScaffoldBottomBar extends StatelessWidget {
   final Widget child;
 
   MPScaffoldBottomBar({
+    this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return child;
+  }
+}
+
+class MPScaffoldFloatingBody extends StatelessWidget {
+  final Widget child;
+
+  MPScaffoldFloatingBody({
     this.child,
   });
 
