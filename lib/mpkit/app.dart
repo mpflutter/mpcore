@@ -7,6 +7,7 @@ class MPApp extends StatelessWidget {
   final Color color;
   final Map<String, WidgetBuilder> routes;
   final String initialRoute;
+  final RouteFactory onGenerateRoute;
   final List<NavigatorObserver> navigatorObservers;
 
   MPApp({
@@ -14,6 +15,7 @@ class MPApp extends StatelessWidget {
     this.color,
     this.routes,
     this.initialRoute,
+    this.onGenerateRoute,
     this.navigatorObservers,
   });
 
@@ -31,6 +33,7 @@ class MPApp extends StatelessWidget {
         return MPPageRoute<T>(settings: settings, builder: builder);
       },
       onGenerateRoute: (settings) =>
+          onGenerateRoute?.call(settings) ??
           MPPageRoute(builder: (context) => routes[settings.name](context)),
       onGenerateInitialRoutes: (_) {
         return [
