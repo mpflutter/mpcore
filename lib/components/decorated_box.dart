@@ -8,6 +8,28 @@ MPElement _encodeDecoratedBox(Element element) {
     if (decoration.color != null) {
       attributes['color'] = decoration.color.value.toString();
     }
+    if (decoration.image != null && decoration.image.image != null) {
+      attributes['image'] = (() {
+        return {
+          'src': (() {
+            if (decoration.image.image is NetworkImage) {
+              return (decoration.image.image as NetworkImage).url;
+            }
+          })(),
+          'assetName': (() {
+            if (decoration.image.image is AssetImage) {
+              return (decoration.image.image as AssetImage).assetName;
+            }
+          })(),
+          'assetPkg': (() {
+            if (decoration.image.image is AssetImage) {
+              return (decoration.image.image as AssetImage).package;
+            }
+          })(),
+          'fit': decoration.image.fit?.toString(),
+        };
+      })();
+    }
     attributes['decoration'] = <String, dynamic>{};
     if (decoration.borderRadius != null) {
       attributes['decoration']['borderRadius'] =
