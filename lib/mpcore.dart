@@ -125,7 +125,8 @@ class MPCore {
 
   _Document toDocument() {
     if (renderView == null) return null;
-    final tabBodyElement = findTarget<MPTabBody>(renderView);
+    Element activeScaffoldElement;
+    Element tabBodyElement;
     Element headerElement;
     Element tabBarElement;
     var isTabBody = false;
@@ -143,6 +144,7 @@ class MPCore {
       if (scaffoldElement.widget is MPOverlayScaffold) {
         overlays.add(_encodeOverlay(scaffoldElement));
       } else {
+        activeScaffoldElement = scaffoldElement;
         if (scaffoldElement.widget is Scaffold) {
           bodyElement = findTarget<ScaffoldBodyBuilder>(scaffoldElement);
           bodyBackgroundColor =
@@ -166,6 +168,9 @@ class MPCore {
           }
         }
       }
+    }
+    if (activeScaffoldElement != null) {
+      tabBodyElement = findTarget<MPTabBody>(activeScaffoldElement);
     }
     if (tabBodyElement != null) {
       headerElement =
