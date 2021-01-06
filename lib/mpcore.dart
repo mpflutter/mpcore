@@ -125,6 +125,7 @@ class MPCore {
 
   _Document toDocument() {
     if (renderView == null) return null;
+    String name;
     Element activeScaffoldElement;
     Element tabBodyElement;
     Element headerElement;
@@ -153,6 +154,7 @@ class MPCore {
             isListBody = true;
           }
         } else if (scaffoldElement.widget is MPScaffold) {
+          name = (scaffoldElement.widget as MPScaffold).name;
           appBarElement = findTarget<MPScaffoldAppBar>(scaffoldElement);
           bodyElement = findTarget<MPScaffoldBody>(scaffoldElement);
           bottomBarElement = findTarget<MPScaffoldBottomBar>(scaffoldElement);
@@ -183,6 +185,7 @@ class MPCore {
     }
     if (bodyElement != null) {
       final vDocument = _Document(
+        name: name,
         appBar: MPElement.fromFlutterElement(appBarElement),
         header: MPElement.fromFlutterElement(headerElement),
         tabBar: MPElement.fromFlutterElement(tabBarElement),

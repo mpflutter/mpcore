@@ -37,8 +37,9 @@ class MPApp extends StatelessWidget {
           MPPageRoute(builder: (context) => routes[settings.name](context)),
       onGenerateInitialRoutes: (_) {
         return [
-          MPPageRoute(
-              builder: (context) => routes[(initialRoute ?? '/')](context))
+          onGenerateRoute?.call(RouteSettings(name: initialRoute ?? '/')) ??
+              MPPageRoute(
+                  builder: (context) => routes[(initialRoute ?? '/')](context))
         ];
       },
     );

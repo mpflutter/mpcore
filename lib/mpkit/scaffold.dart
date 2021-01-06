@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 class MPScaffold extends StatelessWidget {
+  final String name;
   final Widget body;
   final Widget appBar;
   final Widget bottomBar;
@@ -9,6 +10,7 @@ class MPScaffold extends StatelessWidget {
   final bool isListBody;
 
   MPScaffold({
+    this.name,
     this.body,
     this.appBar,
     this.bottomBar,

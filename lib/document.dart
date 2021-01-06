@@ -1,6 +1,7 @@
 part of './mpcore.dart';
 
 class _Document {
+  final String name;
   final MPElement appBar;
   final MPElement header;
   final MPElement tabBar;
@@ -13,6 +14,7 @@ class _Document {
   final bool isTabBody;
 
   _Document({
+    this.name,
     this.appBar,
     this.header,
     this.tabBar,
@@ -27,6 +29,7 @@ class _Document {
 
   Map toJson() {
     return {
+      'name': name,
       'appBar': appBar,
       'header': header,
       'tabBar': tabBar,
