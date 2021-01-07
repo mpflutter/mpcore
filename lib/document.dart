@@ -137,6 +137,8 @@ class MPElement {
       return _encodeWrap(element);
     } else if (element.widget is SliverPersistentHeader) {
       return _encodeSliverPersistentHeader(element);
+    } else if (element.widget is MPWebView) {
+      return _encodeMPWebView(element);
     } else {
       for (final plugin in MPCore._plugins) {
         final result = plugin.encodeElement(element);
