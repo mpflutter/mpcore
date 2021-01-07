@@ -1,4 +1,4 @@
-part of '../mpcore.dart';
+part of './mpkit_encoder.dart';
 
 MPElement _encodeMPWebView(Element element) {
   final widget = element.widget as MPWebView;

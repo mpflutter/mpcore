@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'channel/channel_io.dart'
     if (dart.library.js) './channel/channel_js.dart';
 import './mpkit/mpkit.dart';
+import 'mpkit/encoder/mpkit_encoder.dart';
 // import 'package:json_patch/json_patch.dart';
 
 export './mpkit/mpkit.dart';
@@ -49,7 +50,6 @@ part './components/sized_box.dart';
 part './components/editable_text.dart';
 part './components/action.dart';
 part './components/wrap.dart';
-part './components/web_view.dart';
 part './components/sliver_persistent_header.dart';
 part './components/web_dialogs.dart';
 part './channel/channel_base.dart';
@@ -126,18 +126,8 @@ class MPCore {
 
   _Document toDocument() {
     if (renderView == null) return null;
-    String name;
     Element activeScaffoldElement;
-    Element tabBodyElement;
-    Element headerElement;
-    Element tabBarElement;
-    var isTabBody = false;
-    var isListBody = false;
-    Element appBarElement;
     Element bodyElement;
-    Element bottomBarElement;
-    Element floatingBodyElement;
-    Color bodyBackgroundColor;
     final scaffoldElements = <Element>[];
     final overlays = <MPElement>[];
     findTargets<Scaffold>(renderView, out: scaffoldElements);
@@ -147,56 +137,17 @@ class MPCore {
         overlays.add(_encodeOverlay(scaffoldElement));
       } else {
         activeScaffoldElement = scaffoldElement;
-        if (scaffoldElement.widget is Scaffold) {
-          bodyElement = findTarget<ScaffoldBodyBuilder>(scaffoldElement);
-          bodyBackgroundColor =
-              (scaffoldElement.widget as Scaffold).backgroundColor;
-          if (findTarget<Scrollable>(bodyElement) != null) {
-            isListBody = true;
-          }
-        } else if (scaffoldElement.widget is MPScaffold) {
-          name = (scaffoldElement.widget as MPScaffold).name;
-          appBarElement = findTarget<MPScaffoldAppBar>(scaffoldElement);
-          bodyElement = findTarget<MPScaffoldBody>(scaffoldElement);
-          bottomBarElement = findTarget<MPScaffoldBottomBar>(scaffoldElement);
-          floatingBodyElement =
-              findTarget<MPScaffoldFloatingBody>(scaffoldElement);
-          bodyBackgroundColor =
-              (scaffoldElement.widget as MPScaffold).backgroundColor;
-          if ((scaffoldElement.widget as MPScaffold).isListBody != null) {
-            isListBody = (scaffoldElement.widget as MPScaffold).isListBody;
-          }
-          if (findTarget<Scrollable>(bodyElement) != null) {
-            isListBody = true;
-          }
-        }
+        // if (scaffoldElement.widget is Scaffold) {
+        //   bodyElement = findTarget<ScaffoldBodyBuilder>(scaffoldElement);
+        // }
       }
     }
     if (activeScaffoldElement != null) {
-      tabBodyElement = findTarget<MPTabBody>(activeScaffoldElement);
-    }
-    if (tabBodyElement != null) {
-      headerElement =
-          findFirstChild(findTargetKey(Key('tab_header'), tabBodyElement));
-      tabBarElement =
-          findFirstChild(findTargetKey(Key('tab_bar'), tabBodyElement));
-      bodyElement =
-          findFirstChild(findTargetKey(Key('tab_body'), tabBodyElement));
-      isTabBody = true;
-    }
-    if (bodyElement != null) {
       final vDocument = _Document(
-        name: name,
-        appBar: MPElement.fromFlutterElement(appBarElement),
-        header: MPElement.fromFlutterElement(headerElement),
-        tabBar: MPElement.fromFlutterElement(tabBarElement),
-        body: MPElement.fromFlutterElement(bodyElement),
-        floatingBody: MPElement.fromFlutterElement(floatingBodyElement),
-        bottomBar: MPElement.fromFlutterElement(bottomBarElement),
-        backgroundColor: bodyBackgroundColor,
+        scaffold: activeScaffoldElement != null
+            ? MPElement.fromFlutterElement(activeScaffoldElement)
+            : null,
         overlays: overlays,
-        isListBody: isListBody,
-        isTabBody: isTabBody,
       );
       return vDocument;
     } else {

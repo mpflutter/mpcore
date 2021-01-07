@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 class MPScaffold extends StatelessWidget {
   final String name;
   final Widget body;
-  final Widget appBar;
+  final PreferredSizeWidget appBar;
   final Widget bottomBar;
   final Widget floatingBody;
   final Color backgroundColor;
@@ -53,7 +53,7 @@ class MPScaffoldBody extends StatelessWidget {
 }
 
 class MPScaffoldAppBar extends StatelessWidget {
-  final Widget child;
+  final PreferredSizeWidget child;
 
   MPScaffoldAppBar({
     this.child,

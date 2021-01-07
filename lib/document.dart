@@ -1,45 +1,18 @@
 part of './mpcore.dart';
 
 class _Document {
-  final String name;
-  final MPElement appBar;
-  final MPElement header;
-  final MPElement tabBar;
-  final MPElement body;
-  final MPElement floatingBody;
-  final MPElement bottomBar;
+  final MPElement scaffold;
   final List<MPElement> overlays;
-  final Color backgroundColor;
-  final bool isListBody;
-  final bool isTabBody;
 
   _Document({
-    this.name,
-    this.appBar,
-    this.header,
-    this.tabBar,
-    this.body,
-    this.floatingBody,
-    this.bottomBar,
+    this.scaffold,
     this.overlays,
-    this.backgroundColor,
-    this.isListBody,
-    this.isTabBody,
   });
 
   Map toJson() {
     return {
-      'name': name,
-      'appBar': appBar,
-      'header': header,
-      'tabBar': tabBar,
-      'body': body,
-      'floatingBody': floatingBody,
-      'bottomBar': bottomBar,
+      'scaffold': scaffold,
       'overlays': overlays,
-      'backgroundColor': backgroundColor?.value?.toString(),
-      'isListBody': isListBody,
-      'isTabBody': isTabBody
     };
   }
 }
@@ -137,9 +110,11 @@ class MPElement {
       return _encodeWrap(element);
     } else if (element.widget is SliverPersistentHeader) {
       return _encodeSliverPersistentHeader(element);
-    } else if (element.widget is MPWebView) {
-      return _encodeMPWebView(element);
     } else {
+      final mpKitResult = MPKitEncoder.fromFlutterElement(element);
+      if (mpKitResult != null) {
+        return mpKitResult;
+      }
       for (final plugin in MPCore._plugins) {
         final result = plugin.encodeElement(element);
         if (result != null) {
