@@ -21,6 +21,10 @@ class MPScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (MediaQuery.of(context).size.width < 10 ||
+        MediaQuery.of(context).size.height < 10) {
+      return Container();
+    }
     return Stack(
       children: [
         appBar != null ? MPScaffoldAppBar(child: appBar) : Container(),
