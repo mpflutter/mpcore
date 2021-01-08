@@ -1,6 +1,8 @@
 part of './mpkit_encoder.dart';
 
 MPElement _encodeMPScaffold(Element element) {
+  final stackedScaffold =
+      element.findAncestorWidgetOfExactType<MPScaffold>() != null;
   final widget = element.widget as MPScaffold;
   final name = widget.name;
   final tabBodyElement = MPCore.findTarget<MPTabBody>(element);
@@ -26,6 +28,9 @@ MPElement _encodeMPScaffold(Element element) {
   if (isListBody == null &&
       MPCore.findTarget<Scrollable>(bodyElement) != null) {
     isListBody = true;
+  }
+  if (stackedScaffold) {
+    return MPElement.fromFlutterElement(bodyElement);
   }
   return MPElement(
     name: 'mp_scaffold',

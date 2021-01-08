@@ -136,6 +136,10 @@ class MPCore {
       if (scaffoldElement.widget is MPOverlayScaffold) {
         overlays.add(_encodeOverlay(scaffoldElement));
       } else {
+        if (scaffoldElement.findAncestorWidgetOfExactType<MPScaffold>() !=
+            null) {
+          continue;
+        }
         activeScaffoldElement = scaffoldElement;
         // if (scaffoldElement.widget is Scaffold) {
         //   bodyElement = findTarget<ScaffoldBodyBuilder>(scaffoldElement);
