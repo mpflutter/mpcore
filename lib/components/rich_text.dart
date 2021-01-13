@@ -7,6 +7,7 @@ MPElement _encodeRichText(Element element) {
   ], attributes: {
     'maxLines': widget.maxLines,
     'inline': element.findAncestorWidgetOfExactType<MPInlineText>() != null,
+    'textAlign': widget.textAlign?.toString(),
   });
 }
 
