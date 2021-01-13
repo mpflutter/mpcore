@@ -9,6 +9,7 @@ MPElement _encodeSliverGrid(Element element) {
     return MPElement(
       name: 'sliver_grid',
       children: [],
+      attributes: {},
     );
   }
   final widget = element.widget as SliverGrid;

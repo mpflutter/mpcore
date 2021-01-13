@@ -9,6 +9,7 @@ MPElement _encodeListView(Element element) {
     return MPElement(
       name: 'list_view',
       children: [],
+      attributes: {},
     );
   }
   final widget = element.widget as ListView;

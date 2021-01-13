@@ -9,6 +9,7 @@ MPElement _encodeGridView(Element element) {
     return MPElement(
       name: 'grid_view',
       children: [],
+      attributes: {},
     );
   }
   final widget = element.widget as GridView;

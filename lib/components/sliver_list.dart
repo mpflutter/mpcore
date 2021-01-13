@@ -9,6 +9,7 @@ MPElement _encodeSliverList(Element element) {
     return MPElement(
       name: 'sliver_list',
       children: [],
+      attributes: {},
     );
   }
   return MPElement(
@@ -16,5 +17,6 @@ MPElement _encodeSliverList(Element element) {
     children: MPElement.childrenFromFlutterElement(
       indexedSemanticeParentElement,
     ),
+    attributes: {},
   );
 }

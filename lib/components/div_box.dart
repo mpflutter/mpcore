@@ -8,6 +8,7 @@ MPElement _encodeDivBox(Element element) {
     return MPElement(
       name: 'div',
       children: MPElement.childrenFromFlutterElement(element),
+      attributes: {},
     );
   }
 }
