@@ -64,6 +64,25 @@ class MPChannelBase {
     }
   }
 
+  static void onRichTextTrigger(Map message) {
+    try {
+      final RichText widget =
+          MPCore.findTargetHashCode(message['target'])?.widget;
+      if (widget == null) return;
+      if (message['event'] == 'onTap') {
+        final span = MPCore.findTargetTextSpanHashCode(
+          message['subTarget'],
+          element: widget.text,
+        );
+        if (span != null && span.recognizer is TapGestureRecognizer) {
+          (span.recognizer as TapGestureRecognizer).onTap?.call();
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   static void onTabBarTrigger(Map message) {
     try {
       final TabBar widget =

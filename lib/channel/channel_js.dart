@@ -18,6 +18,8 @@ class MPChannel {
         final obj = json.decode(data);
         if (obj['type'] == 'gesture_detector') {
           MPChannelBase.onGestureDetectorTrigger(obj['message']);
+        } else if (obj['type'] == 'rich_text') {
+          MPChannelBase.onRichTextTrigger(obj['message']);
         } else if (obj['type'] == 'tab_bar') {
           MPChannelBase.onTabBarTrigger(obj['message']);
         } else if (obj['type'] == 'scroller') {

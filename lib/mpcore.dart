@@ -3,6 +3,7 @@ library mpcore;
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'channel/channel_io.dart'
     if (dart.library.js) './channel/channel_js.dart';
@@ -199,7 +200,7 @@ class MPCore {
     element ??= WidgetsBinding.instance.renderViewElement;
     Element targetElement;
     element.visitChildElements((el) {
-      if (el.hashCode == hashCode) {
+      if (el.hashCode == hashCode || el.widget.hashCode == hashCode) {
         targetElement = el;
       } else {
         final next = findTargetHashCode(hashCode, element: el);
@@ -209,6 +210,25 @@ class MPCore {
       }
     });
     return targetElement;
+  }
+
+  static TextSpan findTargetTextSpanHashCode(
+    int hashCode, {
+    InlineSpan element,
+  }) {
+    if (element.hashCode == hashCode) {
+      return element;
+    } else {
+      TextSpan next;
+      element.children?.forEach((span) {
+        next ??= findTargetTextSpanHashCode(hashCode, element: span);
+      });
+      if (next != null) {
+        return next;
+      } else {
+        return null;
+      }
+    }
   }
 
   static Element findTargetKey(Key key, Element element,

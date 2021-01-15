@@ -3,7 +3,7 @@ part of '../mpcore.dart';
 MPElement _encodeRichText(Element element) {
   final widget = element.widget as RichText;
   return MPElement(name: 'rich_text', children: [
-    _encodeTextSpan(widget.text)
+    _encodeSpan(widget.text, element)
   ], attributes: {
     'maxLines': widget.maxLines,
     'inline': element.findAncestorWidgetOfExactType<MPInlineText>() != null,
@@ -11,15 +11,40 @@ MPElement _encodeRichText(Element element) {
   });
 }
 
-MPElement _encodeTextSpan(InlineSpan span) {
+MPElement _encodeSpan(InlineSpan span, Element richTextElement) {
   if (span is TextSpan) {
     return MPElement(
       name: 'text_span',
-      children: span.children?.map((e) => _encodeTextSpan(e))?.toList(),
+      children:
+          span.children?.map((e) => _encodeSpan(e, richTextElement))?.toList(),
       attributes: {
         'text': span.text,
         'style': _encodeTextStyle(span.style),
+        'onTap_el': (() {
+          if (span.recognizer is TapGestureRecognizer) {
+            return richTextElement.hashCode;
+          }
+        })(),
+        'onTap_span': (() {
+          if (span.recognizer is TapGestureRecognizer) {
+            return span.hashCode;
+          }
+        })(),
       },
+    );
+  } else if (span is WidgetSpan) {
+    final targetElement = MPCore.findTargetHashCode(span.child.hashCode,
+        element: richTextElement);
+    if (targetElement == null) {
+      return MPElement(
+        name: 'inline_span',
+        attributes: {},
+      );
+    }
+    return MPElement(
+      name: 'widget_span',
+      children: [MPElement.fromFlutterElement(targetElement)],
+      attributes: {},
     );
   } else {
     return MPElement(
