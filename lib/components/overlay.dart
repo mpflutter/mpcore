@@ -4,7 +4,7 @@ MPElement _encodeOverlay(Element scaffoldElement) {
   Element bodyElement;
   Color bodyBackgroundColor;
   if (scaffoldElement.widget is MPOverlayScaffold) {
-    bodyElement = scaffoldElement;
+    bodyElement = MPCore.findTarget<MPScaffoldBody>(scaffoldElement);
     bodyBackgroundColor =
         (scaffoldElement.widget as MPOverlayScaffold).backgroundColor;
   }
@@ -13,6 +13,7 @@ MPElement _encodeOverlay(Element scaffoldElement) {
     children: MPElement.childrenFromFlutterElement(bodyElement),
     attributes: {
       'backgroundColor': bodyBackgroundColor?.value?.toString(),
+      'onBackgroundTap': scaffoldElement.hashCode,
     },
   );
 }

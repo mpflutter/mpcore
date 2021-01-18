@@ -39,8 +39,13 @@ class MPScaffold extends StatelessWidget {
 }
 
 class MPOverlayScaffold extends MPScaffold {
-  MPOverlayScaffold({Widget body, Color backgroundColor})
-      : super(body: body, backgroundColor: backgroundColor);
+  final Function onBackgroundTap;
+
+  MPOverlayScaffold({
+    Widget body,
+    Color backgroundColor,
+    this.onBackgroundTap,
+  }) : super(body: body, backgroundColor: backgroundColor);
 }
 
 class MPScaffoldBody extends StatelessWidget {

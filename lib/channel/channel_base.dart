@@ -64,6 +64,19 @@ class MPChannelBase {
     }
   }
 
+  static void onOverlayTrigger(Map message) {
+    try {
+      final MPOverlayScaffold widget =
+          MPCore.findTargetHashCode(message['target'])?.widget;
+      if (widget == null) return;
+      if (message['event'] == 'onBackgroundTap') {
+        widget.onBackgroundTap?.call();
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   static void onRichTextTrigger(Map message) {
     try {
       final RichText widget =

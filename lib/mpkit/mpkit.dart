@@ -8,3 +8,4 @@ export 'full_padding.dart';
 export 'package:flutter/widgets.dart';
 export 'inline_text.dart';
 export 'web_view.dart';
+export 'dialog.dart';
