@@ -161,6 +161,9 @@ class MPCore {
   }
 
   static Element findTarget<T>(Element element, {bool findParent = false}) {
+    if (element == null) {
+      return null;
+    }
     Element targetElement;
     element.visitChildElements((el) {
       if (el.widget is T) {

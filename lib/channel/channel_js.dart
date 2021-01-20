@@ -2,6 +2,7 @@
 import 'dart:html';
 
 import 'dart:convert';
+import 'dart:js' as js;
 
 import '../mpcore.dart';
 
@@ -13,29 +14,38 @@ class MPChannel {
   static void postMesssage(String message) {
     if (!messageHandlerSetted) {
       messageHandlerSetted = true;
-      window.addEventListener('message', (event) {
-        final data = (event as MessageEvent).data;
-        final obj = json.decode(data);
-        if (obj['type'] == 'gesture_detector') {
-          MPChannelBase.onGestureDetectorTrigger(obj['message']);
-        } else if (obj['type'] == 'overlay') {
-          MPChannelBase.onOverlayTrigger(obj['message']);
-        } else if (obj['type'] == 'rich_text') {
-          MPChannelBase.onRichTextTrigger(obj['message']);
-        } else if (obj['type'] == 'tab_bar') {
-          MPChannelBase.onTabBarTrigger(obj['message']);
-        } else if (obj['type'] == 'scroller') {
-          MPChannelBase.onScrollerTrigger(obj['message']);
-        } else if (obj['type'] == 'router') {
-          MPChannelBase.onRouterTrigger(obj['message']);
-        } else if (obj['type'] == 'editable_text') {
-          MPChannelBase.onEditableTextTrigger(obj['message']);
-        } else if (obj['type'] == 'action') {
-          MPChannelBase.onActionTrigger(obj['message']);
-        } else {
-          MPChannelBase.onPluginMessage(obj);
+      js.context.callMethod('addEventListener', [
+        'message',
+        (event) {
+          final data = (() {
+            if (event is MessageEvent) {
+              return event.data;
+            } else if (event is js.JsObject) {
+              return event['data'];
+            }
+          })();
+          final obj = json.decode(data);
+          if (obj['type'] == 'gesture_detector') {
+            MPChannelBase.onGestureDetectorTrigger(obj['message']);
+          } else if (obj['type'] == 'overlay') {
+            MPChannelBase.onOverlayTrigger(obj['message']);
+          } else if (obj['type'] == 'rich_text') {
+            MPChannelBase.onRichTextTrigger(obj['message']);
+          } else if (obj['type'] == 'tab_bar') {
+            MPChannelBase.onTabBarTrigger(obj['message']);
+          } else if (obj['type'] == 'scroller') {
+            MPChannelBase.onScrollerTrigger(obj['message']);
+          } else if (obj['type'] == 'router') {
+            MPChannelBase.onRouterTrigger(obj['message']);
+          } else if (obj['type'] == 'editable_text') {
+            MPChannelBase.onEditableTextTrigger(obj['message']);
+          } else if (obj['type'] == 'action') {
+            MPChannelBase.onActionTrigger(obj['message']);
+          } else {
+            MPChannelBase.onPluginMessage(obj);
+          }
         }
-      });
+      ]);
     }
     window.top.postMessage(message, '*');
   }
