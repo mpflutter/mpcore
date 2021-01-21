@@ -39,11 +39,9 @@ packages:
   flutter:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: ede646963cebd6027f1718598db6cc4a1fb308ac
-      url: "https://github.com/mpflutter/flutter"
-    source: git
+      path: "/Users/saiakirahui/Documents/mpflutter/flutter"
+      relative: false
+    source: path
     version: "0.0.0"
   glob:
     dependency: "direct main"
@@ -87,15 +85,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.2"
-  mpkit:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: d3b826e2a18befbe644281fae5b442b1e06bacf4
-      url: "https://github.com/mpflutter/mpkit"
-    source: git
-    version: "0.0.1"
   node_interop:
     dependency: transitive
     description:

@@ -12,6 +12,7 @@ import 'mpkit/encoder/mpkit_encoder.dart';
 // import 'package:json_patch/json_patch.dart';
 
 export './mpkit/mpkit.dart';
+export './taro/taro.dart';
 
 part 'document.dart';
 part 'body.dart';
@@ -128,7 +129,6 @@ class MPCore {
   _Document toDocument() {
     if (renderView == null) return null;
     Element activeScaffoldElement;
-    Element bodyElement;
     final scaffoldElements = <Element>[];
     final overlays = <MPElement>[];
     findTargets<Scaffold>(renderView, out: scaffoldElements);
@@ -223,6 +223,7 @@ class MPCore {
       return element;
     } else {
       TextSpan next;
+      // ignore: deprecated_member_use
       element.children?.forEach((span) {
         next ??= findTargetTextSpanHashCode(hashCode, element: span);
       });
