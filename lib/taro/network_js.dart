@@ -15,6 +15,7 @@ class TaroNetwork {
         'method': request.method,
         'header': request.headers,
         'responseType': 'arraybuffer',
+        'body': request.body,
         'success': (response) {
           if (response['statusCode'] >= 400) {
             completer.completeError(TaroHttpResponse(
