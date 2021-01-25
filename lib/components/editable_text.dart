@@ -5,6 +5,8 @@ MPElement _encodeEditableText(Element element) {
   return MPElement(
     name: 'editable_text',
     children: [],
+    // ignore: invalid_use_of_protected_member
+    constraints: element.findRenderObject()?.constraints,
     attributes: {
       'style': widget.style != null ? _encodeTextStyle(widget.style) : null,
       'value': widget.controller?.textDirty == true

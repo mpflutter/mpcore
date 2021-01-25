@@ -9,6 +9,8 @@ MPElement _encodeListView(Element element) {
     return MPElement(
       name: 'list_view',
       children: [],
+      // ignore: invalid_use_of_protected_member
+      constraints: element.findRenderObject()?.constraints,
       attributes: {},
     );
   }
@@ -18,6 +20,8 @@ MPElement _encodeListView(Element element) {
     children: MPElement.childrenFromFlutterElement(
       indexedSemanticeParentElement,
     ),
+    // ignore: invalid_use_of_protected_member
+    constraints: element.findRenderObject()?.constraints,
     attributes: {
       'padding': widget.padding?.toString(),
       'scrollDirection': widget.scrollDirection?.toString(),

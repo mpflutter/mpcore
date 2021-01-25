@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'channel/channel_io.dart'
     if (dart.library.js) './channel/channel_js.dart';
 import './mpkit/mpkit.dart';

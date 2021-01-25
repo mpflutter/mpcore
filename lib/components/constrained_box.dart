@@ -5,12 +5,9 @@ MPElement _encodeConstrainedBox(Element element) {
   return MPElement(
     name: 'constrained_box',
     children: MPElement.childrenFromFlutterElement(element),
+    // ignore: invalid_use_of_protected_member
+    constraints: element.findRenderObject()?.constraints,
     attributes: {
-      'minWidth': widget.constraints.minWidth.toString(),
-      'minHeight': widget.constraints.minHeight.toString(),
-      'maxWidth': widget.constraints.maxWidth.toString(),
-      'maxHeight': widget.constraints.maxHeight.toString(),
-      'isTight': widget.constraints.isTight,
       'scrollable': MPCore.findTarget<Scrollable>(element) != null,
     },
   );

@@ -5,8 +5,9 @@ MPElement _encodePadding(Element element) {
   return MPElement(
     name: 'padding',
     children: MPElement.childrenFromFlutterElement(element),
+    // ignore: invalid_use_of_protected_member
+    constraints: element.findRenderObject()?.constraints,
     attributes: {
-      'isFull': widget is MPFullPadding,
       'padding': widget.padding.toString(),
     },
   );
@@ -17,6 +18,8 @@ MPElement _encodeSliverPadding(Element element) {
   return MPElement(
     name: 'padding',
     children: MPElement.childrenFromFlutterElement(element),
+    // ignore: invalid_use_of_protected_member
+    constraints: element.findRenderObject()?.constraints,
     attributes: {
       'padding': widget.padding.toString(),
     },

@@ -5,6 +5,8 @@ MPElement _encodeWrap(Element element) {
   return MPElement(
     name: 'wrap',
     children: MPElement.childrenFromFlutterElement(element),
+    // ignore: invalid_use_of_protected_member
+    constraints: element.findRenderObject()?.constraints,
     attributes: {
       'direction': widget.direction?.toString(),
       'alignment': widget.alignment?.toString(),

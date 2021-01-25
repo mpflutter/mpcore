@@ -20,16 +20,34 @@ class _Document {
 class MPElement {
   final String name;
   final List<MPElement> children;
+  final Constraints constraints;
   final Map<String, dynamic> attributes;
 
-  MPElement({this.name, this.children, this.attributes});
+  MPElement({this.name, this.children, this.constraints, this.attributes});
 
   Map toJson() {
     return {
       'name': name,
       'children': children,
+      'constraints': _encodeConstraints(),
       'attributes': attributes,
     };
+  }
+
+  Map _encodeConstraints() {
+    if (constraints != null && constraints is BoxConstraints) {
+      return {
+        'minWidth': (constraints as BoxConstraints).minWidth.toString(),
+        'minHeight': (constraints as BoxConstraints).minHeight.toString(),
+        'maxWidth': (constraints as BoxConstraints).maxWidth.toString(),
+        'maxHeight': (constraints as BoxConstraints).maxHeight.toString(),
+        'hasTightWidth': (constraints as BoxConstraints).hasTightWidth,
+        'hasTightHeight': (constraints as BoxConstraints).hasTightHeight,
+        'isTight': (constraints as BoxConstraints).isTight,
+      };
+    } else {
+      return null;
+    }
   }
 
   static MPElement fromFlutterElement(Element element) {

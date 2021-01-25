@@ -21,9 +21,10 @@ MPElement _encodePositioned(Element element) {
     attributes['right'] = 0;
     attributes['bottom'] = 0;
   }
+  final children = MPElement.childrenFromFlutterElement(element);
   return MPElement(
     name: 'positioned',
-    children: MPElement.childrenFromFlutterElement(element),
+    children: children,
     attributes: attributes,
   );
 }

@@ -6,12 +6,16 @@ MPElement _encodeCustomScrollView(Element element) {
     return MPElement(
       name: 'custom_scroll_view',
       children: [],
+      // ignore: invalid_use_of_protected_member
+      constraints: element.findRenderObject()?.constraints,
       attributes: {},
     );
   }
   return MPElement(
     name: 'custom_scroll_view',
     children: MPElement.childrenFromFlutterElement(viewportElement),
+    // ignore: invalid_use_of_protected_member
+    constraints: element.findRenderObject()?.constraints,
     attributes: {},
   );
 }
