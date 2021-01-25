@@ -23,6 +23,14 @@ MPElement _encodeListView(Element element) {
     // ignore: invalid_use_of_protected_member
     constraints: element.findRenderObject()?.constraints,
     attributes: {
+      'isRoot': (() {
+        if (widget.scrollDirection == Axis.vertical &&
+            element.findAncestorWidgetOfExactType<Scrollable>() == null) {
+          return true;
+        } else {
+          return false;
+        }
+      })(),
       'padding': widget.padding?.toString(),
       'scrollDirection': widget.scrollDirection?.toString(),
     },

@@ -57,7 +57,11 @@ class MPScaffoldBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return child;
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      child: child,
+    );
   }
 }
 
@@ -83,7 +87,14 @@ class MPScaffoldBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return child;
+    if (child == null) {
+      return child;
+    }
+    return Container(
+      constraints:
+          BoxConstraints.tightFor(width: MediaQuery.of(context).size.width),
+      child: child,
+    );
   }
 }
 
