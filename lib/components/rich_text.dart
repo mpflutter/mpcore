@@ -1,13 +1,42 @@
 part of '../mpcore.dart';
 
+void _onMeasuredText(List values) {
+  values.forEach((element) {
+    if (element is Map) {
+      final measureId = element['measureId'];
+      final size = Size(
+        (element['size']['width'] as num).toDouble(),
+        (element['size']['height'] as num).toDouble(),
+      );
+      final fltElement = MPCore.findTargetHashCode(measureId);
+      if (fltElement == null) {
+        return;
+      }
+      final renderObject = fltElement.findRenderObject();
+      if (!(renderObject is RenderParagraph)) {
+        return;
+      }
+      (renderObject as RenderParagraph).measuredSize = size;
+      (renderObject as RenderParagraph).markParentNeedsLayout();
+      fltElement.markNeedsBuild();
+    }
+  });
+  WidgetsBinding.instance.scheduleFrame();
+}
+
 MPElement _encodeRichText(Element element) {
   final widget = element.widget as RichText;
+  final renderObject = element.findRenderObject();
   return MPElement(
     name: 'rich_text',
     children: [_encodeSpan(widget.text, element)],
     // ignore: invalid_use_of_protected_member
     constraints: element.findRenderObject()?.constraints,
     attributes: {
+      'measureId': renderObject is RenderParagraph &&
+              (renderObject as RenderParagraph).measuredSize == null
+          ? element.hashCode
+          : null,
       'maxLines': widget.maxLines,
       'inline': element.findAncestorWidgetOfExactType<MPInlineText>() != null,
       'textAlign': widget.textAlign?.toString(),

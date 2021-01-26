@@ -81,8 +81,7 @@ class MPChannelBase {
     try {
       final RichText widget =
           MPCore.findTargetHashCode(message['target'])?.widget;
-      if (widget == null) return;
-      if (message['event'] == 'onTap') {
+      if (widget != null && message['event'] == 'onTap') {
         final span = MPCore.findTargetTextSpanHashCode(
           message['subTarget'],
           element: widget.text,
@@ -90,6 +89,8 @@ class MPChannelBase {
         if (span != null && span.recognizer is TapGestureRecognizer) {
           (span.recognizer as TapGestureRecognizer).onTap?.call();
         }
+      } else if (message['event'] == 'onMeasured') {
+        _onMeasuredText(message['data']);
       }
     } catch (e) {
       print(e);
