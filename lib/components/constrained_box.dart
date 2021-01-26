@@ -2,11 +2,15 @@ part of '../mpcore.dart';
 
 MPElement _encodeConstrainedBox(Element element) {
   final widget = element.widget as ConstrainedBox;
+  final childElements = MPElement.childrenFromFlutterElement(element);
   return MPElement(
     name: 'constrained_box',
-    children: MPElement.childrenFromFlutterElement(element),
+    children: childElements,
     // ignore: invalid_use_of_protected_member
-    constraints: element.findRenderObject()?.constraints,
+    constraints: childElements.isEmpty
+        ? (element.findRenderObject() as RenderConstrainedBox)
+            ?.additionalConstraints
+        : element.findRenderObject()?.constraints,
     attributes: {
       'scrollable': MPCore.findTarget<Scrollable>(element) != null,
     },
