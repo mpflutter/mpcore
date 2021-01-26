@@ -24,8 +24,12 @@ MPElement _encodeListView(Element element) {
     constraints: element.findRenderObject()?.constraints,
     attributes: {
       'isRoot': (() {
-        if (widget.scrollDirection == Axis.vertical &&
-            element.findAncestorWidgetOfExactType<Scrollable>() == null) {
+        if (widget.primary == false) {
+          return false;
+        } else if (widget.scrollDirection == Axis.vertical &&
+            element.findAncestorWidgetOfExactType<Scrollable>() == null &&
+            element.findAncestorWidgetOfExactType<Align>() == null &&
+            element.findAncestorWidgetOfExactType<Center>() == null) {
           return true;
         } else {
           return false;

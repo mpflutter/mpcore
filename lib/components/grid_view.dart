@@ -19,14 +19,13 @@ MPElement _encodeGridView(Element element) {
     children: MPElement.childrenFromFlutterElement(
       indexedSemanticeParentElement,
     ),
+    // ignore: invalid_use_of_protected_member
+    constraints: element.findRenderObject()?.constraints,
     attributes: {
       'scrollDirection': widget.scrollDirection?.toString(),
       'padding': widget.padding?.toString(),
-      'width': element
-          .findAncestorWidgetOfExactType<Container>()
-          ?.constraints
-          ?.minWidth
-          ?.toString(),
+      'width':
+          (element.findRenderObject()?.constraints as BoxConstraints)?.maxWidth,
       'gridDelegate': _encodeGridDelegate(widget.gridDelegate),
     },
   );
@@ -34,10 +33,14 @@ MPElement _encodeGridView(Element element) {
 
 MPElement _encodeSliverWaterfallItem(Element element) {
   final widget = element.widget as SliverWaterfallItem;
+  double height = widget.size?.height;
+  if (height == null && element.findRenderObject() is RenderBox) {
+    height = (element.findRenderObject() as RenderBox).size?.height ?? 0;
+  }
   return MPElement(
     name: 'sliver_waterfall_item',
     children: MPElement.childrenFromFlutterElement(element),
-    attributes: {'height': widget.size?.height},
+    attributes: {'height': height},
   );
 }
 

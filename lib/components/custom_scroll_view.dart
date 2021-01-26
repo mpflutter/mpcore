@@ -18,7 +18,12 @@ MPElement _encodeCustomScrollView(Element element) {
     constraints: element.findRenderObject()?.constraints,
     attributes: {
       'isRoot': (() {
-        if (element.findAncestorWidgetOfExactType<Scrollable>() == null) {
+        if ((element.widget as CustomScrollView).primary == false) {
+          return false;
+        } else if (element.findAncestorWidgetOfExactType<Scrollable>() ==
+                null &&
+            element.findAncestorWidgetOfExactType<Align>() == null &&
+            element.findAncestorWidgetOfExactType<Center>() == null) {
           return true;
         } else {
           return false;

@@ -80,9 +80,6 @@ class SliverWaterfallItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints.tightFor(height: size.height),
-      child: child,
-    );
+    return child;
   }
 }

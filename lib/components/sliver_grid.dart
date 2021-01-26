@@ -23,6 +23,8 @@ MPElement _encodeSliverGrid(Element element) {
           .findAncestorWidgetOfExactType<SliverPadding>()
           ?.padding
           ?.toString(),
+      'width': (element.findRenderObject()?.constraints as SliverConstraints)
+          ?.crossAxisExtent,
       'gridDelegate': _encodeGridDelegate(widget.gridDelegate),
     },
   );
