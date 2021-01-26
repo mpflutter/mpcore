@@ -17,8 +17,7 @@ void _onMeasuredText(List values) {
         return;
       }
       (renderObject as RenderParagraph).measuredSize = size;
-      (renderObject as RenderParagraph).markParentNeedsLayout();
-      fltElement.markNeedsBuild();
+      renderObject.reassemble();
     }
   });
   WidgetsBinding.instance.scheduleFrame();
@@ -27,11 +26,12 @@ void _onMeasuredText(List values) {
 MPElement _encodeRichText(Element element) {
   final widget = element.widget as RichText;
   final renderObject = element.findRenderObject();
+  // ignore: invalid_use_of_protected_member
+  var constraints = element.findRenderObject()?.constraints;
   return MPElement(
     name: 'rich_text',
     children: [_encodeSpan(widget.text, element)],
-    // ignore: invalid_use_of_protected_member
-    constraints: element.findRenderObject()?.constraints,
+    constraints: constraints,
     attributes: {
       'measureId': renderObject is RenderParagraph &&
               (renderObject as RenderParagraph).measuredSize == null
