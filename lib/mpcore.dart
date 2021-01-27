@@ -84,7 +84,13 @@ class MPCore {
 
   void connectToHostChannel() async {
     final _ = MPChannel.setupHotReload(this);
-    sendFrame();
+    while (true) {
+      try {
+        await sendFrame();
+      } catch (e) {
+        print(e);
+      }
+    }
   }
 
   Future handleHotReload() async {
@@ -114,7 +120,6 @@ class MPCore {
     // } else {
     final frameData = newFrameData;
     MPChannel.postMesssage(frameData);
-    sendFrame();
     // }
     // _oldFrameObject = newFrameObject;
   }
