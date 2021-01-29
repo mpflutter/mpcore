@@ -28,15 +28,23 @@ MPElement _encodeRichText(Element element) {
   final renderObject = element.findRenderObject();
   // ignore: invalid_use_of_protected_member
   var constraints = element.findRenderObject()?.constraints;
+  if (renderObject is RenderParagraph && renderObject.measuredSize != null) {
+    constraints = BoxConstraints(
+      minWidth: renderObject.measuredSize.width,
+      minHeight: renderObject.measuredSize.height,
+      maxWidth: renderObject.measuredSize.width,
+      maxHeight: renderObject.measuredSize.height,
+    );
+  }
   return MPElement(
     name: 'rich_text',
     children: [_encodeSpan(widget.text, element)],
     constraints: constraints,
     attributes: {
-      'measureId': renderObject is RenderParagraph &&
-              (renderObject as RenderParagraph).measuredSize == null
-          ? element.hashCode
-          : null,
+      'measureId':
+          renderObject is RenderParagraph && renderObject.measuredSize == null
+              ? element.hashCode
+              : null,
       'maxLines': widget.maxLines,
       'inline': element.findAncestorWidgetOfExactType<MPInlineText>() != null,
       'textAlign': widget.textAlign?.toString(),
