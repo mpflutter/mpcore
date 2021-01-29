@@ -46,7 +46,6 @@ MPElement _encodeRichText(Element element) {
               ? element.hashCode
               : null,
       'maxLines': widget.maxLines,
-      'inline': element.findAncestorWidgetOfExactType<MPInlineText>() != null,
       'textAlign': widget.textAlign?.toString(),
     },
   );
