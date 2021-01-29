@@ -8,3 +8,4 @@ export 'package:flutter/widgets.dart';
 export 'web_view.dart';
 export 'dialog.dart';
 export 'page_view.dart';
+export 'video_view.dart';

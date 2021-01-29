@@ -4,7 +4,8 @@ import 'package:mpcore/mpcore.dart';
 
 part './web_view.dart';
 part './scaffold.dart';
-part 'page_view.dart';
+part './page_view.dart';
+part './video_view.dart';
 
 class MPKitEncoder {
   static MPElement fromFlutterElement(Element element) {
@@ -14,6 +15,8 @@ class MPKitEncoder {
       return _encodeMPScaffold(element);
     } else if (element.widget is MPPageView) {
       return _encodeMPPageView(element);
+    } else if (element.widget is MPVideoView) {
+      return _encodeMPVideoView(element);
     } else {
       return null;
     }
