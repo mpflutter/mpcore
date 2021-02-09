@@ -25,6 +25,7 @@ MPElement _encodeGridView(Element element) {
       'scrollDirection': widget.scrollDirection?.toString(),
       'padding': widget.padding?.toString(),
       'width':
+          // ignore: invalid_use_of_protected_member
           (element.findRenderObject()?.constraints as BoxConstraints)?.maxWidth,
       'gridDelegate': _encodeGridDelegate(widget.gridDelegate),
     },
@@ -33,7 +34,7 @@ MPElement _encodeGridView(Element element) {
 
 MPElement _encodeSliverWaterfallItem(Element element) {
   final widget = element.widget as SliverWaterfallItem;
-  double height = widget.size?.height;
+  var height = widget.size?.height;
   if (height == null && element.findRenderObject() is RenderBox) {
     height = (element.findRenderObject() as RenderBox).size?.height ?? 0;
   }
