@@ -155,6 +155,16 @@ class MPCore {
     }
     if (activeScaffoldElement != null) {
       final vDocument = _Document(
+        routeId: (() {
+          final route = ModalRoute.of(activeScaffoldElement);
+          if (route != null && route.isFirst) {
+            return 0;
+          } else if (route != null) {
+            return route.hashCode;
+          } else {
+            return 0;
+          }
+        })(),
         scaffold: activeScaffoldElement != null
             ? MPElement.fromFlutterElement(activeScaffoldElement)
             : null,

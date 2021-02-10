@@ -1,16 +1,19 @@
 part of './mpcore.dart';
 
 class _Document {
+  final int routeId;
   final MPElement scaffold;
   final List<MPElement> overlays;
 
   _Document({
+    this.routeId,
     this.scaffold,
     this.overlays,
   });
 
   Map toJson() {
     return {
+      'routeId': routeId,
       'scaffold': scaffold,
       'overlays': overlays,
     };

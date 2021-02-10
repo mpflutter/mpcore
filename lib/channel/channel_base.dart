@@ -149,8 +149,14 @@ class MPChannelBase {
     try {
       if (message['event'] == 'doPop') {
         MPNavigatorObserver.doBacking = true;
-        if (MPNavigatorObserver.instance.navigator.canPop()) {
-          MPNavigatorObserver.instance.navigator.pop();
+        if (message['toRouteId'] != null) {
+          MPNavigatorObserver.instance.navigator.popUntil((route) =>
+              route.isFirst ||
+              route.hashCode == int.tryParse(message['toRouteId']));
+        } else {
+          if (MPNavigatorObserver.instance.navigator.canPop()) {
+            MPNavigatorObserver.instance.navigator.pop();
+          }
         }
         MPNavigatorObserver.doBacking = false;
       }
