@@ -108,20 +108,8 @@ class MPCore {
       'type': 'frame_data',
       'message': toDocument(),
     });
-    // final newFrameObject = json.decode(newFrameData);
-    // In some case, it will cause dead loop.
-    // if (_oldFrameObject != null) {
-    //   final diffFrameObject = JsonPatch.diff(_oldFrameObject, newFrameObject);
-    //   MPChannel.postMesssage(json.encode({
-    //     'type': 'frame_diff_data',
-    //     'message': diffFrameObject,
-    //   }));
-    //   sendFrame();
-    // } else {
     final frameData = newFrameData;
     MPChannel.postMesssage(frameData);
-    // }
-    // _oldFrameObject = newFrameObject;
   }
 
   Future nextFrame() async {
@@ -137,8 +125,7 @@ class MPCore {
     Element activeScaffoldElement;
     final scaffoldElements = <Element>[];
     final overlays = <MPElement>[];
-    findTargets<Scaffold>(renderView, out: scaffoldElements);
-    findTargets<MPScaffold>(renderView, out: scaffoldElements);
+    findTargetsTwo<MPScaffold, Scaffold>(renderView, out: scaffoldElements);
     for (var scaffoldElement in scaffoldElements) {
       if (scaffoldElement.widget is MPOverlayScaffold) {
         overlays.add(_encodeOverlay(scaffoldElement));
@@ -209,6 +196,20 @@ class MPCore {
         }
       }
       findTargets<T>(el, out: out, findParent: findParent);
+    });
+  }
+
+  static void findTargetsTwo<T, U>(Element element,
+      {List out, bool findParent = false}) {
+    element.visitChildElements((el) {
+      if (el.widget is T || el.widget is U) {
+        if (findParent == true) {
+          out.add(element);
+        } else {
+          out.add(el);
+        }
+      }
+      findTargetsTwo<T, U>(el, out: out, findParent: findParent);
     });
   }
 

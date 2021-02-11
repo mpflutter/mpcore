@@ -1,5 +1,7 @@
 part of '../mpcore.dart';
 
+Map<int, Element> _measuringText = {};
+
 void _onMeasuredText(List values) {
   values.forEach((element) {
     if (element is Map) {
@@ -8,10 +10,12 @@ void _onMeasuredText(List values) {
         (element['size']['width'] as num).toDouble(),
         (element['size']['height'] as num).toDouble(),
       );
-      final fltElement = MPCore.findTargetHashCode(measureId);
+      final fltElement =
+          _measuringText[measureId] ?? MPCore.findTargetHashCode(measureId);
       if (fltElement == null) {
         return;
       }
+      _measuringText.remove(measureId);
       final renderObject = fltElement.findRenderObject();
       if (!(renderObject is RenderParagraph)) {
         return;
@@ -35,6 +39,9 @@ MPElement _encodeRichText(Element element) {
       maxWidth: renderObject.measuredSize.width,
       maxHeight: renderObject.measuredSize.height,
     );
+  }
+  if (renderObject is RenderParagraph && renderObject.measuredSize == null) {
+    _measuringText[element.hashCode] = element;
   }
   return MPElement(
     name: 'rich_text',
