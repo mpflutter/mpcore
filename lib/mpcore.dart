@@ -10,7 +10,6 @@ import 'channel/channel_io.dart'
     if (dart.library.js) './channel/channel_js.dart';
 import './mpkit/mpkit.dart';
 import 'mpkit/encoder/mpkit_encoder.dart';
-// import 'package:json_patch/json_patch.dart';
 
 export './mpkit/mpkit.dart';
 export './taro/taro.dart';
@@ -125,7 +124,8 @@ class MPCore {
     Element activeScaffoldElement;
     final scaffoldElements = <Element>[];
     final overlays = <MPElement>[];
-    findTargetsTwo<MPScaffold, Scaffold>(renderView, out: scaffoldElements);
+    findTargetsTwo<MPScaffold, Scaffold>(renderView,
+        out: scaffoldElements, mustCurrentRoute: true);
     for (var scaffoldElement in scaffoldElements) {
       if (scaffoldElement.widget is MPOverlayScaffold) {
         overlays.add(_encodeOverlay(scaffoldElement));
@@ -199,17 +199,25 @@ class MPCore {
     });
   }
 
-  static void findTargetsTwo<T, U>(Element element,
-      {List out, bool findParent = false}) {
+  static void findTargetsTwo<T, U>(
+    Element element, {
+    List out,
+    bool findParent = false,
+    bool mustCurrentRoute = false,
+  }) {
     element.visitChildElements((el) {
       if (el.widget is T || el.widget is U) {
+        if (mustCurrentRoute && ModalRoute.of(el)?.isCurrent != true) {
+          return;
+        }
         if (findParent == true) {
           out.add(element);
         } else {
           out.add(el);
         }
       }
-      findTargetsTwo<T, U>(el, out: out, findParent: findParent);
+      findTargetsTwo<T, U>(el,
+          out: out, findParent: findParent, mustCurrentRoute: mustCurrentRoute);
     });
   }
 

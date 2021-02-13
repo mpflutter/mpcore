@@ -31,14 +31,19 @@ MPElement _encodeRichText(Element element) {
   final widget = element.widget as RichText;
   final renderObject = element.findRenderObject();
   // ignore: invalid_use_of_protected_member
-  var constraints = element.findRenderObject()?.constraints;
+  var constraints = element.findRenderObject()?.constraints as BoxConstraints;
   if (renderObject is RenderParagraph && renderObject.measuredSize != null) {
-    constraints = BoxConstraints(
-      minWidth: renderObject.measuredSize.width,
-      minHeight: renderObject.measuredSize.height,
-      maxWidth: renderObject.measuredSize.width,
-      maxHeight: renderObject.measuredSize.height,
-    );
+    if (renderObject.size.width < renderObject.measuredSize.width ||
+        renderObject.size.height < renderObject.measuredSize.height) {
+      renderObject.measuredSize = null;
+    } else {
+      constraints = BoxConstraints(
+        minWidth: renderObject.size.width,
+        minHeight: renderObject.size.height,
+        maxWidth: renderObject.size.width,
+        maxHeight: renderObject.size.height,
+      );
+    }
   }
   if (renderObject is RenderParagraph && renderObject.measuredSize == null) {
     _measuringText[element.hashCode] = element;
