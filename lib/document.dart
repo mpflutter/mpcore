@@ -2,11 +2,13 @@ part of './mpcore.dart';
 
 class _Document {
   final int routeId;
+  final MPElement mainTabBar;
   final MPElement scaffold;
   final List<MPElement> overlays;
 
   _Document({
     this.routeId,
+    this.mainTabBar,
     this.scaffold,
     this.overlays,
   });
@@ -14,6 +16,7 @@ class _Document {
   Map toJson() {
     return {
       'routeId': routeId,
+      'mainTabBar': mainTabBar,
       'scaffold': scaffold,
       'overlays': overlays,
     };

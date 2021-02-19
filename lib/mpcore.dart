@@ -122,22 +122,22 @@ class MPCore {
   _Document toDocument() {
     if (renderView == null) return null;
     Element activeScaffoldElement;
+    Element mainTabElement;
     final scaffoldElements = <Element>[];
     final overlays = <MPElement>[];
-    findTargetsTwo<MPScaffold, Scaffold>(renderView,
+    findTargetsTwo<MPScaffold, MPMainTab>(renderView,
         out: scaffoldElements, mustCurrentRoute: true);
     for (var scaffoldElement in scaffoldElements) {
       if (scaffoldElement.widget is MPOverlayScaffold) {
         overlays.add(_encodeOverlay(scaffoldElement));
-      } else {
+      } else if (scaffoldElement.widget is MPScaffold) {
         if (scaffoldElement.findAncestorWidgetOfExactType<MPScaffold>() !=
             null) {
           continue;
         }
         activeScaffoldElement = scaffoldElement;
-        // if (scaffoldElement.widget is Scaffold) {
-        //   bodyElement = findTarget<ScaffoldBodyBuilder>(scaffoldElement);
-        // }
+      } else if (scaffoldElement.widget is MPMainTab) {
+        mainTabElement = scaffoldElement;
       }
     }
     if (activeScaffoldElement != null) {
@@ -152,6 +152,10 @@ class MPCore {
             return 0;
           }
         })(),
+        mainTabBar: mainTabElement != null
+            ? MPElement.fromFlutterElement(
+                MPCore.findTargetKey(Key('mainTabBar'), mainTabElement))
+            : null,
         scaffold: activeScaffoldElement != null
             ? MPElement.fromFlutterElement(activeScaffoldElement)
             : null,

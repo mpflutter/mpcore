@@ -6,6 +6,7 @@ part './web_view.dart';
 part './scaffold.dart';
 part './page_view.dart';
 part './video_view.dart';
+part './main_tab.dart';
 
 class MPKitEncoder {
   static MPElement fromFlutterElement(Element element) {
@@ -17,6 +18,8 @@ class MPKitEncoder {
       return _encodeMPPageView(element);
     } else if (element.widget is MPVideoView) {
       return _encodeMPVideoView(element);
+    } else if (element.widget is MPMainTab) {
+      return _encodeMPMainTab(element);
     } else {
       return null;
     }
