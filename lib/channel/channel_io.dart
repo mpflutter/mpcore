@@ -257,4 +257,6 @@ class MPChannel {
   static String getInitialRoute() {
     return '/';
   }
+
+  static void onSubPackageNavigate(String pkgName, String routeName) {}
 }

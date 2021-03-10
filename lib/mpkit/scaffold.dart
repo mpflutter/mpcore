@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 
 class MPScaffold extends StatelessWidget {
   final String name;
+  final Color appBarColor; // Taro use only
+  final Color appBarTintColor; // Taro use only
   final Widget body;
   final PreferredSizeWidget appBar;
   final Widget bottomBar;
@@ -11,6 +13,8 @@ class MPScaffold extends StatelessWidget {
 
   MPScaffold({
     this.name,
+    this.appBarColor,
+    this.appBarTintColor,
     this.body,
     this.appBar,
     this.bottomBar,
@@ -45,7 +49,8 @@ class MPOverlayScaffold extends MPScaffold {
     Widget body,
     Color backgroundColor,
     this.onBackgroundTap,
-  }) : super(body: body, backgroundColor: backgroundColor);
+  }) : super(
+            body: AbsorbPointer(child: body), backgroundColor: backgroundColor);
 }
 
 class MPScaffoldBody extends StatelessWidget {

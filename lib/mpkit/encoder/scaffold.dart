@@ -37,6 +37,8 @@ MPElement _encodeMPScaffold(Element element) {
     attributes: {
       'name': name,
       'appBar': MPElement.fromFlutterElement(appBarElement),
+      'appBarColor': widget.appBarColor?.value?.toString(),
+      'appBarTintColor': widget.appBarTintColor?.value?.toString(),
       'appBarHeight': (appBarElement?.widget as MPScaffoldAppBar)
               ?.child
               ?.preferredSize

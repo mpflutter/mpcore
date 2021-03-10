@@ -52,6 +52,9 @@ class MPChannel {
 
   static String getInitialRoute() {
     try {
+      if (Taro.isTaro) {
+        return js.context['location']['href'] ?? '/';
+      }
       final uri = Uri.parse(window.location.href);
       final uriRoute = uri.queryParameters['route'];
       if (uriRoute != null) {
@@ -61,5 +64,17 @@ class MPChannel {
       print(e);
     }
     return '/';
+  }
+
+  static void onSubPackageNavigate(String pkgName, String routeName) {
+    if (pkgName == 'main') {
+      pkgName = 'index';
+    }
+    if (Taro.isTaro) {
+      js.context.callMethod('locationToSubPackage', [pkgName, routeName]);
+    } else {
+      js.context['location']['href'] =
+          '${pkgName}.html?route=${Uri.encodeFull(routeName)}';
+    }
   }
 }

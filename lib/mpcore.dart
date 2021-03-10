@@ -57,6 +57,8 @@ part './components/web_dialogs.dart';
 part './channel/channel_base.dart';
 
 class MPCore {
+  static Map<String, String> routeMapSubPackages;
+
   static String getInitialRoute() {
     return MPChannel.getInitialRoute();
   }
@@ -212,7 +214,9 @@ class MPCore {
     element.visitChildElements((el) {
       if (el.widget is T || el.widget is U) {
         if (mustCurrentRoute && ModalRoute.of(el)?.isCurrent != true) {
-          return;
+          if (!(el.widget is MPOverlayScaffold)) {
+            return;
+          }
         }
         if (findParent == true) {
           out.add(element);

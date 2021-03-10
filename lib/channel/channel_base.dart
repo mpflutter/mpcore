@@ -172,4 +172,6 @@ class MPChannelBase {
       plugin.onClientMessage(message);
     }
   }
+
+  static void onSubPackageNavigate(String pkgName, String routeName) {}
 }
