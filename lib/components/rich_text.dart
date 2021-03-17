@@ -10,8 +10,7 @@ void _onMeasuredText(List values) {
         (element['size']['width'] as num).toDouble(),
         (element['size']['height'] as num).toDouble(),
       );
-      final fltElement =
-          _measuringText[measureId] ?? MPCore.findTargetHashCode(measureId);
+      final fltElement = _measuringText[measureId];
       if (fltElement == null) {
         return;
       }
