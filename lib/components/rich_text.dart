@@ -23,6 +23,15 @@ void _onMeasuredText(List values) {
       renderObject.reassemble();
     }
   });
+  _measuringText.forEach((key, fltElement) {
+    final renderObject = fltElement.findRenderObject();
+    if (!(renderObject is RenderParagraph)) {
+      return;
+    }
+    (renderObject as RenderParagraph).measuredSize = Size(0, 0);
+    renderObject.reassemble();
+  });
+  _measuringText.clear();
   WidgetsBinding.instance.scheduleFrame();
 }
 
@@ -32,8 +41,8 @@ MPElement _encodeRichText(Element element) {
   // ignore: invalid_use_of_protected_member
   var constraints = element.findRenderObject()?.constraints as BoxConstraints;
   if (renderObject is RenderParagraph && renderObject.measuredSize != null) {
-    if (renderObject.size.width < renderObject.measuredSize.width ||
-        renderObject.size.height < renderObject.measuredSize.height) {
+    if (renderObject.size.width + 1.0 < renderObject.measuredSize.width ||
+        renderObject.size.height + 1.0 < renderObject.measuredSize.height) {
       renderObject.measuredSize = null;
     } else {
       constraints = BoxConstraints(

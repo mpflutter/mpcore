@@ -105,9 +105,15 @@ class MPCore {
 
   void sendFrame() async {
     await nextFrame();
+    var textMeasuringRetryMax = 20;
+    while (_measuringText.isNotEmpty && textMeasuringRetryMax > 0) {
+      await Future.delayed(Duration(milliseconds: 100));
+      textMeasuringRetryMax--;
+    }
+    final doc = toDocument();
     final newFrameData = json.encode({
       'type': 'frame_data',
-      'message': toDocument(),
+      'message': doc,
     });
     final frameData = newFrameData;
     MPChannel.postMesssage(frameData);
