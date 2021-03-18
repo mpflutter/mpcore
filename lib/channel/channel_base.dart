@@ -8,6 +8,9 @@ class MPNavigatorObserver extends NavigatorObserver {
   @override
   void didPush(Route route, Route previousRoute) {
     if (previousRoute == null) return;
+    if (route.settings?.name?.startsWith('/mp_dialog/') == true) {
+      return;
+    }
     final routeData = json.encode({
       'type': 'route',
       'message': {
@@ -25,6 +28,9 @@ class MPNavigatorObserver extends NavigatorObserver {
   @override
   void didPop(Route route, Route previousRoute) {
     if (doBacking) return;
+    if (route.settings?.name?.startsWith('/mp_dialog/') == true) {
+      return;
+    }
     final routeData = json.encode({
       'type': 'route',
       'message': {

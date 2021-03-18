@@ -39,7 +39,7 @@ class MPApp extends StatelessWidget {
       },
       onGenerateRoute: (settings) {
         if (MPCore.routeMapSubPackages != null) {
-          String targetPackage = 'main';
+          var targetPackage = 'main';
           for (final key in MPCore.routeMapSubPackages.keys) {
             if (settings.name.startsWith(key)) {
               targetPackage = MPCore.routeMapSubPackages[key];
@@ -61,7 +61,7 @@ class MPApp extends StatelessWidget {
       onGenerateInitialRoutes: (_) {
         final routeName = initialRoute ?? '/';
         if (MPCore.routeMapSubPackages != null) {
-          String targetPackage = 'main';
+          var targetPackage = 'main';
           for (final key in MPCore.routeMapSubPackages.keys) {
             if (routeName.startsWith(key)) {
               targetPackage = MPCore.routeMapSubPackages[key];

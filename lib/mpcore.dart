@@ -110,6 +110,9 @@ class MPCore {
       await Future.delayed(Duration(milliseconds: 100));
       textMeasuringRetryMax--;
     }
+    if (textMeasuringRetryMax <= 0) {
+      _measuringText.clear();
+    }
     final doc = toDocument();
     final newFrameData = json.encode({
       'type': 'frame_data',
@@ -135,6 +138,7 @@ class MPCore {
     final overlays = <MPElement>[];
     findTargetsTwo<MPScaffold, MPMainTab>(renderView,
         out: scaffoldElements, mustCurrentRoute: true);
+    activeOverlayParentRoute = null;
     for (var scaffoldElement in scaffoldElements) {
       if (scaffoldElement.widget is MPOverlayScaffold) {
         overlays.add(_encodeOverlay(scaffoldElement));
@@ -211,18 +215,30 @@ class MPCore {
     });
   }
 
+  static ModalRoute activeOverlayParentRoute;
+
   static void findTargetsTwo<T, U>(
     Element element, {
     List out,
     bool findParent = false,
     bool mustCurrentRoute = false,
   }) {
+    var els = <Element>[];
     element.visitChildElements((el) {
+      els.add(el);
+    });
+    els.reversed.forEach((el) {
       if (el.widget is T || el.widget is U) {
-        if (mustCurrentRoute && ModalRoute.of(el)?.isCurrent != true) {
+        if (mustCurrentRoute &&
+            ModalRoute.of(el)?.isCurrent != true &&
+            ModalRoute.of(el) != activeOverlayParentRoute) {
           if (!(el.widget is MPOverlayScaffold)) {
             return;
           }
+        }
+        if ((el.widget is MPOverlayScaffold)) {
+          activeOverlayParentRoute =
+              (el.widget as MPOverlayScaffold).parentRoute;
         }
         if (findParent == true) {
           out.add(element);
@@ -230,8 +246,12 @@ class MPCore {
           out.add(el);
         }
       }
-      findTargetsTwo<T, U>(el,
-          out: out, findParent: findParent, mustCurrentRoute: mustCurrentRoute);
+      findTargetsTwo<T, U>(
+        el,
+        out: out,
+        findParent: findParent,
+        mustCurrentRoute: mustCurrentRoute,
+      );
     });
   }
 

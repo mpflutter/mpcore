@@ -44,13 +44,14 @@ class MPScaffold extends StatelessWidget {
 
 class MPOverlayScaffold extends MPScaffold {
   final Function onBackgroundTap;
+  final ModalRoute parentRoute;
 
   MPOverlayScaffold({
     Widget body,
     Color backgroundColor,
     this.onBackgroundTap,
-  }) : super(
-            body: AbsorbPointer(child: body), backgroundColor: backgroundColor);
+    this.parentRoute,
+  }) : super(body: body, backgroundColor: backgroundColor);
 }
 
 class MPScaffoldBody extends StatelessWidget {
