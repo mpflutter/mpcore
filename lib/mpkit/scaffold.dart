@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 class MPScaffold extends StatelessWidget {
   final String name;
+  final Map<String, String> metaData;
   final Color appBarColor; // Taro use only
   final Color appBarTintColor; // Taro use only
   final Widget body;
@@ -13,6 +14,7 @@ class MPScaffold extends StatelessWidget {
 
   MPScaffold({
     this.name,
+    this.metaData,
     this.appBarColor,
     this.appBarTintColor,
     this.body,

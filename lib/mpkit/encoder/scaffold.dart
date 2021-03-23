@@ -36,6 +36,7 @@ MPElement _encodeMPScaffold(Element element) {
     name: 'mp_scaffold',
     attributes: {
       'name': name,
+      'metaData': widget.metaData,
       'appBar': MPElement.fromFlutterElement(appBarElement),
       'appBarColor': widget.appBarColor?.value?.toString(),
       'appBarTintColor': widget.appBarTintColor?.value?.toString(),
