@@ -115,9 +115,13 @@ class MPCore {
     if (textMeasuringRetryMax <= 0) {
       _measuringText.clear();
     }
-    final recentDirtyElements = BuildOwner.recentDirtyElements
-        .where((element) => ModalRoute.of(element)?.isCurrent == true)
-        .toList();
+    final recentDirtyElements = BuildOwner.recentDirtyElements.where((element) {
+      try {
+        return ModalRoute.of(element)?.isCurrent == true;
+      } catch (e) {
+        return false;
+      }
+    }).toList();
     if (recentDirtyElements.isNotEmpty &&
         recentDirtyElements.every((element) =>
             lastFromData.contains('"hashCode":${element.hashCode}'))) {
