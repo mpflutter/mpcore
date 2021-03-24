@@ -3,6 +3,7 @@ part of '../mpcore.dart';
 MPElement _encodeSizedBox(Element element) {
   final widget = element.widget as SizedBox;
   return MPElement(
+    hashCode: element.hashCode,
     name: 'sized_box',
     children: MPElement.childrenFromFlutterElement(element),
     attributes: {

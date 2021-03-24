@@ -33,6 +33,7 @@ MPElement _encodeMPScaffold(Element element) {
     return MPElement.fromFlutterElement(bodyElement);
   }
   return MPElement(
+    hashCode: element.hashCode,
     name: 'mp_scaffold',
     attributes: {
       'name': name,

@@ -5,15 +5,25 @@ class _Document {
   final MPElement mainTabBar;
   final MPElement scaffold;
   final List<MPElement> overlays;
+  final MPElement diff;
+  final int diffIndex;
 
   _Document({
     this.routeId,
     this.mainTabBar,
     this.scaffold,
     this.overlays,
+    this.diff,
+    this.diffIndex,
   });
 
   Map toJson() {
+    if (diff != null && diffIndex != null) {
+      return {
+        'diff': diff,
+        'diffIndex': diffIndex,
+      };
+    }
     return {
       'routeId': routeId,
       'mainTabBar': mainTabBar,
@@ -24,15 +34,25 @@ class _Document {
 }
 
 class MPElement {
+  @override
+  final int hashCode;
+
   final String name;
   final List<MPElement> children;
   final Constraints constraints;
   final Map<String, dynamic> attributes;
 
-  MPElement({this.name, this.children, this.constraints, this.attributes});
+  MPElement({
+    this.hashCode,
+    this.name,
+    this.children,
+    this.constraints,
+    this.attributes,
+  });
 
   Map toJson() {
     return {
+      'hashCode': hashCode,
       'name': name,
       'children': children,
       'constraints': _encodeConstraints(),

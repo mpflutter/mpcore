@@ -7,6 +7,7 @@ MPElement _encodeListView(Element element) {
   );
   if (indexedSemanticeParentElement == null) {
     return MPElement(
+      hashCode: element.hashCode,
       name: 'list_view',
       children: [],
       // ignore: invalid_use_of_protected_member
@@ -16,6 +17,7 @@ MPElement _encodeListView(Element element) {
   }
   final widget = element.widget as ListView;
   return MPElement(
+    hashCode: element.hashCode,
     name: 'list_view',
     children: MPElement.childrenFromFlutterElement(
       indexedSemanticeParentElement,

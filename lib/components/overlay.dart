@@ -9,6 +9,7 @@ MPElement _encodeOverlay(Element scaffoldElement) {
         (scaffoldElement.widget as MPOverlayScaffold).backgroundColor;
   }
   return MPElement(
+    hashCode: scaffoldElement.hashCode,
     name: 'overlay',
     children: MPElement.childrenFromFlutterElement(bodyElement),
     attributes: {

@@ -8,6 +8,7 @@ MPElement _encodeMPPageView(Element element) {
     out: children,
   );
   return MPElement(
+    hashCode: element.hashCode,
     name: 'mp_page_view',
     // ignore: invalid_use_of_protected_member
     constraints: element.findRenderObject()?.constraints,

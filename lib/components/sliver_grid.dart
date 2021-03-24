@@ -7,6 +7,7 @@ MPElement _encodeSliverGrid(Element element) {
   );
   if (indexedSemanticeParentElement == null) {
     return MPElement(
+      hashCode: element.hashCode,
       name: 'sliver_grid',
       children: [],
       attributes: {},
@@ -14,6 +15,7 @@ MPElement _encodeSliverGrid(Element element) {
   }
   final widget = element.widget as SliverGrid;
   return MPElement(
+    hashCode: element.hashCode,
     name: 'sliver_grid',
     children: MPElement.childrenFromFlutterElement(
       indexedSemanticeParentElement,

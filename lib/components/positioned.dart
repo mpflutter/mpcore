@@ -23,6 +23,7 @@ MPElement _encodePositioned(Element element) {
   }
   final children = MPElement.childrenFromFlutterElement(element);
   return MPElement(
+    hashCode: element.hashCode,
     name: 'positioned',
     children: children,
     attributes: attributes,

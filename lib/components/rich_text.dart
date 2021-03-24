@@ -57,6 +57,7 @@ MPElement _encodeRichText(Element element) {
     _measuringText[element.hashCode] = element;
   }
   return MPElement(
+    hashCode: element.hashCode,
     name: 'rich_text',
     children: [_encodeSpan(widget.text, element)],
     constraints: constraints,

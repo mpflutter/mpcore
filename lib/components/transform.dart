@@ -9,6 +9,7 @@ MPElement _encodeTransform(Element element) {
   final tx = widget.transform.storage[12];
   final ty = widget.transform.storage[13];
   return MPElement(
+    hashCode: element.hashCode,
     name: 'transform',
     children: MPElement.childrenFromFlutterElement(element),
     attributes: {

@@ -7,12 +7,14 @@ MPElement _encodeSliverList(Element element) {
   );
   if (indexedSemanticeParentElement == null) {
     return MPElement(
+      hashCode: element.hashCode,
       name: 'sliver_list',
       children: [],
       attributes: {},
     );
   }
   return MPElement(
+    hashCode: element.hashCode,
     name: 'sliver_list',
     children: MPElement.childrenFromFlutterElement(
       indexedSemanticeParentElement,

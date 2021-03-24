@@ -3,6 +3,7 @@ part of '../mpcore.dart';
 MPElement _encodeTabBar(Element element) {
   final widget = element.widget as TabBar;
   return MPElement(
+    hashCode: element.hashCode,
     name: 'tab_bar',
     children: widget.tabs.map((e) => _encodeTab(e)).toList(),
     attributes: {

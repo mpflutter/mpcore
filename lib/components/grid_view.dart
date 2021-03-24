@@ -7,6 +7,7 @@ MPElement _encodeGridView(Element element) {
   );
   if (indexedSemanticeParentElement == null) {
     return MPElement(
+      hashCode: element.hashCode,
       name: 'grid_view',
       children: [],
       attributes: {},
@@ -15,6 +16,7 @@ MPElement _encodeGridView(Element element) {
   final widget = element.widget as GridView;
 
   return MPElement(
+    hashCode: element.hashCode,
     name: 'grid_view',
     children: MPElement.childrenFromFlutterElement(
       indexedSemanticeParentElement,
@@ -39,6 +41,7 @@ MPElement _encodeSliverWaterfallItem(Element element) {
     height = (element.findRenderObject() as RenderBox).size?.height ?? 0;
   }
   return MPElement(
+    hashCode: element.hashCode,
     name: 'sliver_waterfall_item',
     children: MPElement.childrenFromFlutterElement(element),
     attributes: {'height': height},

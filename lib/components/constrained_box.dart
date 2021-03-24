@@ -29,6 +29,7 @@ MPElement _encodeConstrainedBox(Element element) {
     constraints = element.findRenderObject()?.constraints;
   }
   return MPElement(
+    hashCode: element.hashCode,
     name: 'constrained_box',
     children: childElements,
     constraints: constraints,

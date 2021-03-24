@@ -3,6 +3,7 @@ part of '../mpcore.dart';
 MPElement _encodeVisibility(Element element) {
   final widget = element.widget as Visibility;
   return MPElement(
+    hashCode: element.hashCode,
     name: 'visibility',
     children: MPElement.childrenFromFlutterElement(element),
     attributes: {
@@ -14,6 +15,7 @@ MPElement _encodeVisibility(Element element) {
 MPElement _encodeSliverVisibility(Element element) {
   final widget = element.widget as SliverVisibility;
   return MPElement(
+    hashCode: element.hashCode,
     name: 'visibility',
     children: MPElement.childrenFromFlutterElement(element),
     attributes: {

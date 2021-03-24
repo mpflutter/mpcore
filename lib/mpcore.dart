@@ -113,13 +113,25 @@ class MPCore {
     if (textMeasuringRetryMax <= 0) {
       _measuringText.clear();
     }
-    final doc = toDocument();
-    final newFrameData = json.encode({
-      'type': 'frame_data',
-      'message': doc,
-    });
-    final frameData = newFrameData;
-    MPChannel.postMesssage(frameData);
+    if (BuildOwner.recentDirtyElements.isNotEmpty &&
+        BuildOwner.recentDirtyElements.length == 1) {
+      final doc = toDiffDocument(BuildOwner.recentDirtyElements[0]);
+      final diffFrameData = json.encode({
+        'type': 'diff_data',
+        'message': doc,
+      });
+      final frameData = diffFrameData;
+      MPChannel.postMesssage(frameData);
+      BuildOwner.recentDirtyElements.clear();
+    } else {
+      final doc = toDocument();
+      final newFrameData = json.encode({
+        'type': 'frame_data',
+        'message': doc,
+      });
+      final frameData = newFrameData;
+      MPChannel.postMesssage(frameData);
+    }
   }
 
   Future nextFrame() async {
@@ -128,6 +140,13 @@ class MPCore {
       completer.complete();
     });
     return completer.future;
+  }
+
+  _Document toDiffDocument(Element diffElement) {
+    return _Document(
+      diff: MPElement.fromFlutterElement(diffElement),
+      diffIndex: diffElement.hashCode,
+    );
   }
 
   _Document toDocument() {
