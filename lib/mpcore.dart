@@ -113,9 +113,8 @@ class MPCore {
     if (textMeasuringRetryMax <= 0) {
       _measuringText.clear();
     }
-    if (BuildOwner.recentDirtyElements.isNotEmpty &&
-        BuildOwner.recentDirtyElements.length == 1) {
-      final doc = toDiffDocument(BuildOwner.recentDirtyElements[0]);
+    if (BuildOwner.recentDirtyElements.isNotEmpty) {
+      final doc = toDiffDocument(BuildOwner.recentDirtyElements);
       final diffFrameData = json.encode({
         'type': 'diff_data',
         'message': doc,
@@ -142,10 +141,9 @@ class MPCore {
     return completer.future;
   }
 
-  _Document toDiffDocument(Element diffElement) {
+  _Document toDiffDocument(List<Element> diffsElement) {
     return _Document(
-      diff: MPElement.fromFlutterElement(diffElement),
-      diffIndex: diffElement.hashCode,
+      diffs: diffsElement.map((e) => MPElement.fromFlutterElement(e)).toList(),
     );
   }
 

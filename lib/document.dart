@@ -5,23 +5,20 @@ class _Document {
   final MPElement mainTabBar;
   final MPElement scaffold;
   final List<MPElement> overlays;
-  final MPElement diff;
-  final int diffIndex;
+  final List<MPElement> diffs;
 
   _Document({
     this.routeId,
     this.mainTabBar,
     this.scaffold,
     this.overlays,
-    this.diff,
-    this.diffIndex,
+    this.diffs,
   });
 
   Map toJson() {
-    if (diff != null && diffIndex != null) {
+    if (diffs != null) {
       return {
-        'diff': diff,
-        'diffIndex': diffIndex,
+        'diffs': diffs,
       };
     }
     return {
