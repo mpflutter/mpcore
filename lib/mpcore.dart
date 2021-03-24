@@ -116,7 +116,8 @@ class MPCore {
       _measuringText.clear();
     }
     final recentDirtyElements = BuildOwner.recentDirtyElements
-        .where((element) => ModalRoute.of(element)?.isCurrent == true);
+        .where((element) => ModalRoute.of(element)?.isCurrent == true)
+        .toList();
     if (recentDirtyElements.isNotEmpty &&
         recentDirtyElements.every((element) =>
             lastFromData.contains('"hashCode":${element.hashCode}'))) {
