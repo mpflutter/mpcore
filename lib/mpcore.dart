@@ -115,10 +115,12 @@ class MPCore {
     if (textMeasuringRetryMax <= 0) {
       _measuringText.clear();
     }
-    if (BuildOwner.recentDirtyElements.isNotEmpty &&
-        BuildOwner.recentDirtyElements.every((element) =>
+    final recentDirtyElements = BuildOwner.recentDirtyElements
+        .where((element) => ModalRoute.of(element)?.isCurrent == true);
+    if (recentDirtyElements.isNotEmpty &&
+        recentDirtyElements.every((element) =>
             lastFromData.contains('"hashCode":${element.hashCode}'))) {
-      final doc = toDiffDocument(BuildOwner.recentDirtyElements);
+      final doc = toDiffDocument(recentDirtyElements);
       final diffFrameData = json.encode({
         'type': 'diff_data',
         'message': doc,
@@ -148,6 +150,16 @@ class MPCore {
 
   _Document toDiffDocument(List<Element> diffsElement) {
     return _Document(
+      routeId: (() {
+        final route = ModalRoute.of(diffsElement[0]);
+        if (route != null && route.isFirst) {
+          return 0;
+        } else if (route != null) {
+          return route.hashCode;
+        } else {
+          return 0;
+        }
+      })(),
       diffs: diffsElement.map((e) => MPElement.fromFlutterElement(e)).toList(),
     );
   }
