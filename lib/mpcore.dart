@@ -103,6 +103,8 @@ class MPCore {
     }
   }
 
+  String lastFromData;
+
   void sendFrame() async {
     await nextFrame();
     var textMeasuringRetryMax = 20;
@@ -113,7 +115,9 @@ class MPCore {
     if (textMeasuringRetryMax <= 0) {
       _measuringText.clear();
     }
-    if (BuildOwner.recentDirtyElements.isNotEmpty) {
+    if (BuildOwner.recentDirtyElements.isNotEmpty &&
+        BuildOwner.recentDirtyElements.every((element) =>
+            lastFromData.contains('"hashCode":${element.hashCode}'))) {
       final doc = toDiffDocument(BuildOwner.recentDirtyElements);
       final diffFrameData = json.encode({
         'type': 'diff_data',
@@ -121,7 +125,6 @@ class MPCore {
       });
       final frameData = diffFrameData;
       MPChannel.postMesssage(frameData);
-      BuildOwner.recentDirtyElements.clear();
     } else {
       final doc = toDocument();
       final newFrameData = json.encode({
@@ -129,8 +132,10 @@ class MPCore {
         'message': doc,
       });
       final frameData = newFrameData;
+      lastFromData = frameData;
       MPChannel.postMesssage(frameData);
     }
+    BuildOwner.recentDirtyElements.clear();
   }
 
   Future nextFrame() async {
