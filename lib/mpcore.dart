@@ -122,7 +122,6 @@ class MPCore {
         return false;
       }
     }).toList();
-    recentDirtyElements.clear();
     _Document diffDoc;
     if (recentDirtyElements.isNotEmpty) {
       diffDoc = toDiffDocument(recentDirtyElements);
