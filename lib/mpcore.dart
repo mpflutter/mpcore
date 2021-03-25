@@ -122,11 +122,19 @@ class MPCore {
         return false;
       }
     }).toList();
+    recentDirtyElements.clear();
+    _Document diffDoc;
     if (recentDirtyElements.isNotEmpty) {
-      final doc = toDiffDocument(recentDirtyElements);
+      diffDoc = toDiffDocument(recentDirtyElements);
+      if (!diffDoc.diffs.every((element) =>
+          lastFromData.contains('"hashCode":${element.hashCode}'))) {
+        diffDoc = null;
+      }
+    }
+    if (diffDoc != null) {
       final diffFrameData = json.encode({
         'type': 'diff_data',
-        'message': doc,
+        'message': diffDoc,
       });
       final frameData = diffFrameData;
       MPChannel.postMesssage(frameData);
