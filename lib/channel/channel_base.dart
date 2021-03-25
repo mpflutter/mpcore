@@ -58,6 +58,8 @@ class MPNavigatorObserver extends NavigatorObserver {
 
 class MPChannelBase {
   static void onGestureDetectorTrigger(Map message) {
+    print('onGestureDetectorTrigger start = ' +
+        DateTime.now().millisecondsSinceEpoch.toString());
     try {
       final GestureDetector widget =
           MPCore.findTargetHashCode(message['target'])?.widget;
@@ -65,6 +67,8 @@ class MPChannelBase {
       if (message['event'] == 'onTap') {
         widget.onTap?.call();
       }
+      print('onGestureDetectorTrigger end = ' +
+          DateTime.now().millisecondsSinceEpoch.toString());
     } catch (e) {
       print(e);
     }

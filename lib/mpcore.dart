@@ -122,9 +122,7 @@ class MPCore {
         return false;
       }
     }).toList();
-    if (recentDirtyElements.isNotEmpty &&
-        recentDirtyElements.every((element) =>
-            lastFromData.contains('"hashCode":${element.hashCode}'))) {
+    if (recentDirtyElements.isNotEmpty) {
       final doc = toDiffDocument(recentDirtyElements);
       final diffFrameData = json.encode({
         'type': 'diff_data',
@@ -142,7 +140,9 @@ class MPCore {
       lastFromData = frameData;
       MPChannel.postMesssage(frameData);
     }
-    BuildOwner.recentDirtyElements.clear();
+    if (_measuringText.isEmpty) {
+      BuildOwner.recentDirtyElements.clear();
+    }
   }
 
   Future nextFrame() async {
