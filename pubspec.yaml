@@ -1,5 +1,6 @@
 name: mpcore
 description: A new Flutter package project.
+publish_to: none
 version: 0.0.1
 author: /
 homepage: /
@@ -19,7 +20,5 @@ dependencies:
   path: ^1.8.0
 
 dependency_overrides:
-  # flutter: 
-  #   git: https://github.com/mpflutter/flutter
   flutter: 
-    path: /Users/saiakirahui/Documents/mpflutter/flutter
+    git: https://github.com/mpflutter/flutter
