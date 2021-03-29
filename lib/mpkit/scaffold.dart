@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+import '../mpcore.dart';
+
 class MPScaffold extends StatelessWidget {
   final String name;
   final Map<String, String> metaData;
@@ -31,7 +33,7 @@ class MPScaffold extends StatelessWidget {
         MediaQuery.of(context).size.height < 10) {
       return Container();
     }
-    return Stack(
+    Widget child = Stack(
       children: [
         appBar != null ? MPScaffoldAppBar(child: appBar) : Container(),
         body != null ? MPScaffoldBody(child: body) : Container(),
@@ -41,6 +43,23 @@ class MPScaffold extends StatelessWidget {
             : Container(),
       ],
     );
+    final app = context.findAncestorWidgetOfExactType<MPApp>();
+    if (app?.maxWidth != null) {
+      final mediaQuery = MediaQuery.of(context);
+      if (mediaQuery.size.width > app?.maxWidth) {
+        final newMediaQuery = mediaQuery.copyWith(
+          size: Size(
+            context.findAncestorWidgetOfExactType<MPApp>()?.maxWidth,
+            mediaQuery.size.height,
+          ),
+        );
+        child = MediaQuery(
+          data: newMediaQuery,
+          child: child,
+        );
+      }
+    }
+    return child;
   }
 }
 
@@ -82,7 +101,14 @@ class MPScaffoldAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return child;
+    if (child == null) {
+      return child;
+    }
+    return Container(
+      constraints:
+          BoxConstraints.tightFor(width: MediaQuery.of(context).size.width),
+      child: child,
+    );
   }
 }
 

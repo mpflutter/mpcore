@@ -13,6 +13,7 @@ class MPApp extends StatelessWidget {
   final String initialRoute;
   final RouteFactory onGenerateRoute;
   final List<NavigatorObserver> navigatorObservers;
+  final double maxWidth;
 
   MPApp({
     this.currentPackage,
@@ -22,6 +23,7 @@ class MPApp extends StatelessWidget {
     this.initialRoute,
     this.onGenerateRoute,
     this.navigatorObservers,
+    this.maxWidth,
   });
 
   @override
