@@ -10,3 +10,4 @@ export 'dialog.dart';
 export 'page_view.dart';
 export 'video_view.dart';
 export 'main_tab.dart';
+export 'open_button.dart';
