@@ -167,6 +167,8 @@ class MPChannelBase {
         MPNavigatorObserver.doBacking = false;
       } else if (message['event'] == 'doPush') {
         MPNavigatorObserver.instance.navigator.pushNamed(message['name']);
+      } else if (message['event'] == 'doReplace') {
+        MPNavigatorObserver.instance.navigator.pushNamed(message['name']);
       }
     } catch (e) {
       print(e);
