@@ -11,7 +11,7 @@ class MPChannel {
 
   static void setupHotReload(MPCore minip) async {}
 
-  static void postMesssage(String message) {
+  static void postMesssage(String message, {bool forLastConnection}) {
     if (!messageHandlerSetted) {
       messageHandlerSetted = true;
       js.context.callMethod('addEventListener', [

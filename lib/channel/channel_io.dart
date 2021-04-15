@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:developer' as dev;
 
 import 'package:flutter/widgets.dart';
+import 'package:mpcore/mpjs/mpjs_io.dart';
 
 import '../mpcore.dart';
 
@@ -53,6 +54,7 @@ class MPChannel {
           socket.listen(handleClientMessage);
           MPCore.clearOldFrameObject();
           WidgetsBinding.instance.scheduleFrame();
+          _flushMessageQueue();
         } else if (req.uri.path.startsWith('/assets/packages/')) {
           handlePackageAssetsRequest(req);
         } else if (req.uri.path.startsWith('/assets/')) {
@@ -221,30 +223,44 @@ class MPChannel {
   }
 
   static void handleClientMessage(msg) {
-    final obj = json.decode(msg);
-    if (obj['type'] == 'gesture_detector') {
-      MPChannelBase.onGestureDetectorTrigger(obj['message']);
-    } else if (obj['type'] == 'overlay') {
-      MPChannelBase.onOverlayTrigger(obj['message']);
-    } else if (obj['type'] == 'rich_text') {
-      MPChannelBase.onRichTextTrigger(obj['message']);
-    } else if (obj['type'] == 'tab_bar') {
-      MPChannelBase.onTabBarTrigger(obj['message']);
-    } else if (obj['type'] == 'scroller') {
-      MPChannelBase.onScrollerTrigger(obj['message']);
-    } else if (obj['type'] == 'router') {
-      MPChannelBase.onRouterTrigger(obj['message']);
-    } else if (obj['type'] == 'editable_text') {
-      MPChannelBase.onEditableTextTrigger(obj['message']);
-    } else if (obj['type'] == 'action') {
-      MPChannelBase.onActionTrigger(obj['message']);
-    } else {
-      MPChannelBase.onPluginMessage(obj);
+    try {
+      final obj = json.decode(msg);
+      if (obj['type'] == 'gesture_detector') {
+        MPChannelBase.onGestureDetectorTrigger(obj['message']);
+      } else if (obj['type'] == 'overlay') {
+        MPChannelBase.onOverlayTrigger(obj['message']);
+      } else if (obj['type'] == 'rich_text') {
+        MPChannelBase.onRichTextTrigger(obj['message']);
+      } else if (obj['type'] == 'tab_bar') {
+        MPChannelBase.onTabBarTrigger(obj['message']);
+      } else if (obj['type'] == 'scroller') {
+        MPChannelBase.onScrollerTrigger(obj['message']);
+      } else if (obj['type'] == 'router') {
+        MPChannelBase.onRouterTrigger(obj['message']);
+      } else if (obj['type'] == 'editable_text') {
+        MPChannelBase.onEditableTextTrigger(obj['message']);
+      } else if (obj['type'] == 'action') {
+        MPChannelBase.onActionTrigger(obj['message']);
+      } else if (obj['type'] == 'mpjs') {
+        JsBridgeInvoker.instance.makeResponse(obj['message']);
+      } else {
+        MPChannelBase.onPluginMessage(obj);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
-  static void postMesssage(String message) {
+  static void postMesssage(String message, {bool forLastConnection}) {
     if (message == null) return;
+    if (sockets.isEmpty) {
+      _addMessageToQueue(message);
+      return;
+    }
+    if (forLastConnection == true) {
+      sockets.last.add(message);
+      return;
+    }
     for (var socket in sockets) {
       try {
         socket.add(message);
@@ -259,4 +275,23 @@ class MPChannel {
   }
 
   static void onSubPackageNavigate(String pkgName, String routeName) {}
+
+  static final List<String> _messageQueue = [];
+
+  static void _addMessageToQueue(String message) {
+    _messageQueue.add(message);
+  }
+
+  static void _flushMessageQueue() {
+    for (var socket in sockets) {
+      try {
+        for (var item in _messageQueue) {
+          socket.add(item);
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+    _messageQueue.clear();
+  }
 }
