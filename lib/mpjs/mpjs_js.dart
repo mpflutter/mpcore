@@ -82,7 +82,7 @@ class JsObject {
       final funcId = obj.hashCode;
       funcHandlers[funcId] = obj;
       return 'func:${funcId}';
-    } else if (obj is JsObject) {
+    } else if (obj is JsObject && obj.objectHandler != null) {
       return 'obj:${obj.objectHandler}';
     } else {
       return obj;
@@ -127,9 +127,9 @@ class JsObject {
       'objectHandler': objectHandler,
       'callChain': _callChain,
       'method': method,
-      'args': args.map((e) {
+      'args': args?.map((e) {
         return toBrowserObject(e);
-      }).toList(),
+      })?.toList(),
     });
     return result;
   }
