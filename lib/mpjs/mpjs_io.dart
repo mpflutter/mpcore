@@ -37,6 +37,7 @@ class JsBridgeInvoker {
       final String requestId = message['requestId'];
       handlers[requestId]
           ?.complete(JsObject.wrapBrowserObject(message['result']));
+      handlers.remove(requestId);
     } else if (message['funcId'] != null) {
       final String funcId = message['funcId'];
       final func =
@@ -67,6 +68,18 @@ class JsObject {
       return JsObject(objectHandler: obj['objectHandler']);
     } else {
       return JsObject();
+    }
+  }
+
+  static dynamic toBrowserObject(dynamic obj) {
+    if (obj is Function) {
+      final funcId = obj.hashCode;
+      funcHandlers[funcId] = obj;
+      return 'func:${funcId}';
+    } else if (obj is JsObject) {
+      return 'obj:${obj.objectHandler}';
+    } else {
+      return obj;
     }
   }
 
@@ -109,13 +122,7 @@ class JsObject {
       'callChain': _callChain,
       'method': method,
       'args': args.map((e) {
-        if (e is Function) {
-          final funcId = e.hashCode;
-          funcHandlers[funcId] = e;
-          return 'func:${funcId}';
-        } else {
-          return e;
-        }
+        return toBrowserObject(e);
       }).toList(),
     });
     return result;
@@ -127,15 +134,7 @@ class JsObject {
       'callChain': _callChain,
       'key': key,
     });
-    if (result is String) {
-      return result;
-    } else if (result is num) {
-      return result;
-    } else if (result is Map && result['objectHandler'] is String) {
-      return JsObject(objectHandler: result['objectHandler']);
-    } else {
-      return JsObject();
-    }
+    return result;
   }
 
   Future<dynamic> setPropertyValue(String key, dynamic value) async {
@@ -143,16 +142,8 @@ class JsObject {
       'objectHandler': objectHandler,
       'callChain': _callChain,
       'key': key,
-      'value': value,
+      'value': toBrowserObject(value),
     });
-    if (result is String) {
-      return result;
-    } else if (result is num) {
-      return result;
-    } else if (result is Map && result['objectHandler'] is int) {
-      return JsObject(objectHandler: result['objectHandler']);
-    } else {
-      return JsObject();
-    }
+    return result;
   }
 }

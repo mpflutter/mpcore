@@ -3,6 +3,7 @@ import 'dart:html';
 
 import 'dart:convert';
 import 'dart:js' as js;
+import 'package:mpcore/mpjs/mpjs_js.dart';
 
 import '../mpcore.dart';
 
@@ -41,6 +42,8 @@ class MPChannel {
             MPChannelBase.onEditableTextTrigger(obj['message']);
           } else if (obj['type'] == 'action') {
             MPChannelBase.onActionTrigger(obj['message']);
+          } else if (obj['type'] == 'mpjs' && obj['flow'] != 'request') {
+            JsBridgeInvoker.instance.makeResponse(obj['message']);
           } else {
             MPChannelBase.onPluginMessage(obj);
           }
