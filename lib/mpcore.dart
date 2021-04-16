@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/gestures.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'channel/channel_io.dart'
@@ -57,7 +58,7 @@ part './components/web_dialogs.dart';
 part './channel/channel_base.dart';
 
 class MPCore {
-  static Map<String, String> routeMapSubPackages;
+  static Map<String, String>? routeMapSubPackages;
 
   static String getInitialRoute() {
     return MPChannel.getInitialRoute();
@@ -72,8 +73,6 @@ class MPCore {
   static void registerPlugin(MPPlugin plugin) {
     _plugins.add(plugin);
   }
-
-  MPCore();
 
   Element get renderView => WidgetsBinding.instance.renderViewElement;
 
@@ -97,15 +96,15 @@ class MPCore {
   Future handleHotReload() async {
     try {
       markNeedsBuild(renderView);
-      sendFrame();
+      await sendFrame();
     } catch (e) {
       print(e);
     }
   }
 
-  String lastFromData;
+  String? lastFromData;
 
-  void sendFrame() async {
+  Future sendFrame() async {
     await nextFrame();
     var textMeasuringRetryMax = 20;
     while (_measuringText.isNotEmpty && textMeasuringRetryMax > 0) {
@@ -122,11 +121,11 @@ class MPCore {
         return false;
       }
     }).toList();
-    _Document diffDoc;
-    if (recentDirtyElements.isNotEmpty) {
+    _Document? diffDoc;
+    if (recentDirtyElements.isNotEmpty && lastFromData != null) {
       diffDoc = toDiffDocument(recentDirtyElements);
-      if (!diffDoc.diffs.every((element) =>
-          lastFromData.contains('"hashCode":${element.hashCode}'))) {
+      if (!diffDoc.diffs!.every((element) =>
+          lastFromData!.contains('"hashCode":${element.hashCode}'))) {
         diffDoc = null;
       }
     }
@@ -163,7 +162,7 @@ class MPCore {
   _Document toDiffDocument(List<Element> diffsElement) {
     return _Document(
       routeId: (() {
-        final route = ModalRoute.of(diffsElement[0]);
+        final ModalRoute? route = ModalRoute.of(diffsElement[0]);
         if (route != null && route.isFirst) {
           return 0;
         } else if (route != null) {
@@ -176,10 +175,9 @@ class MPCore {
     );
   }
 
-  _Document toDocument() {
-    if (renderView == null) return null;
-    Element activeScaffoldElement;
-    Element mainTabElement;
+  _Document? toDocument() {
+    Element? activeScaffoldElement;
+    Element? mainTabElement;
     final scaffoldElements = <Element>[];
     final overlays = <MPElement>[];
     findTargetsTwo<MPScaffold, MPMainTab>(renderView,
@@ -201,7 +199,7 @@ class MPCore {
     if (activeScaffoldElement != null) {
       final vDocument = _Document(
         routeId: (() {
-          final route = ModalRoute.of(activeScaffoldElement);
+          final ModalRoute? route = ModalRoute.of(activeScaffoldElement);
           if (route != null && route.isFirst) {
             return 0;
           } else if (route != null) {
@@ -211,12 +209,17 @@ class MPCore {
           }
         })(),
         mainTabBar: mainTabElement != null
-            ? MPElement.fromFlutterElement(
-                MPCore.findTargetKey(Key('mainTabBar'), mainTabElement))
+            ? (() {
+                final target =
+                    MPCore.findTargetKey(Key('mainTabBar'), mainTabElement!);
+                if (target != null) {
+                  return MPElement.fromFlutterElement(target);
+                } else {
+                  return null;
+                }
+              })()
             : null,
-        scaffold: activeScaffoldElement != null
-            ? MPElement.fromFlutterElement(activeScaffoldElement)
-            : null,
+        scaffold: MPElement.fromFlutterElement(activeScaffoldElement),
         overlays: overlays,
       );
       return vDocument;
@@ -225,11 +228,11 @@ class MPCore {
     }
   }
 
-  static Element findTarget<T>(Element element, {bool findParent = false}) {
+  static Element? findTarget<T>(Element? element, {bool findParent = false}) {
     if (element == null) {
       return null;
     }
-    Element targetElement;
+    Element? targetElement;
     element.visitChildElements((el) {
       if (el.widget is T) {
         if (findParent == true) {
@@ -248,7 +251,7 @@ class MPCore {
   }
 
   static void findTargets<T>(Element element,
-      {List out, bool findParent = false}) {
+      {required List out, bool findParent = false}) {
     element.visitChildElements((el) {
       if (el.widget is T) {
         if (findParent == true) {
@@ -261,11 +264,11 @@ class MPCore {
     });
   }
 
-  static ModalRoute activeOverlayParentRoute;
+  static ModalRoute? activeOverlayParentRoute;
 
   static void findTargetsTwo<T, U>(
     Element element, {
-    List out,
+    required List out,
     bool findParent = false,
     bool mustCurrentRoute = false,
   }) {
@@ -301,12 +304,13 @@ class MPCore {
     });
   }
 
-  static Element findTargetHashCode(
-    int hashCode, {
-    Element element,
+  static Element? findTargetHashCode(
+    int? hashCode, {
+    Element? element,
   }) {
+    if (hashCode == null) return null;
     element ??= WidgetsBinding.instance.renderViewElement;
-    Element targetElement;
+    Element? targetElement;
     element.visitChildElements((el) {
       if (el.hashCode == hashCode || el.widget.hashCode == hashCode) {
         targetElement = el;
@@ -320,16 +324,16 @@ class MPCore {
     return targetElement;
   }
 
-  static TextSpan findTargetTextSpanHashCode(
+  static TextSpan? findTargetTextSpanHashCode(
     int hashCode, {
-    InlineSpan element,
+    InlineSpan? element,
   }) {
-    if (element.hashCode == hashCode) {
+    if (element.hashCode == hashCode && element is TextSpan) {
       return element;
     } else {
-      TextSpan next;
+      TextSpan? next;
       // ignore: deprecated_member_use
-      element.children?.forEach((span) {
+      element?.children?.forEach((span) {
         next ??= findTargetTextSpanHashCode(hashCode, element: span);
       });
       if (next != null) {
@@ -340,9 +344,9 @@ class MPCore {
     }
   }
 
-  static Element findTargetKey(Key key, Element element,
+  static Element? findTargetKey(Key key, Element element,
       {bool findParent = false}) {
-    Element targetElement;
+    Element? targetElement;
     element.visitChildElements((el) {
       if (el.widget?.key == key) {
         if (findParent == true) {
@@ -360,9 +364,8 @@ class MPCore {
     return targetElement;
   }
 
-  static Element findFirstChild(Element element) {
-    if (element == null) return null;
-    Element targetElement;
+  static Element? findFirstChild(Element element) {
+    Element? targetElement;
     element.visitChildElements((el) {
       targetElement ??= el;
     });
@@ -377,7 +380,6 @@ class MPCore {
   }
 
   static void printElement(Element element, {int level = 0}) {
-    if (element == null) return;
     element.visitChildElements((el) {
       print(level);
       print(el);

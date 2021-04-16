@@ -1,21 +1,21 @@
 part of '../mpcore.dart';
 
 class MPWebDialogs {
-  static Future alert({String message}) {
+  static Future alert({required String message}) {
     return MPAction(
       type: 'web_dialogs',
       params: {'dialogType': 'alert', 'message': message},
     ).send();
   }
 
-  static Future confirm({String message}) {
+  static Future confirm({required String message}) {
     return MPAction(
       type: 'web_dialogs',
       params: {'dialogType': 'confirm', 'message': message},
     ).send();
   }
 
-  static Future prompt({String message, String defaultValue}) {
+  static Future prompt({required String message, String? defaultValue}) {
     return MPAction(
       type: 'web_dialogs',
       params: {

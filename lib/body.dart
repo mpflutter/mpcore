@@ -1,16 +1,16 @@
 part of 'mpcore.dart';
 
 class MPTabBody extends StatefulWidget {
-  final Widget header;
+  final Widget? header;
   final TabController tabController;
-  final Widget tabBar;
+  final Widget? tabBar;
   final List<Builder> children;
 
   MPTabBody({
     this.header,
-    this.tabController,
+    required this.tabController,
     this.tabBar,
-    this.children,
+    required this.children,
   });
 
   @override
@@ -18,7 +18,7 @@ class MPTabBody extends StatefulWidget {
 }
 
 class _MPTabBodyState extends State<MPTabBody>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin<MPTabBody> {
   @override
   void initState() {
     super.initState();

@@ -1,18 +1,19 @@
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter/widgets.dart';
 
 import '../mpcore.dart';
 
 class MPScaffold extends StatelessWidget {
-  final String name;
-  final Map<String, String> metaData;
-  final Color appBarColor; // Taro use only
-  final Color appBarTintColor; // Taro use only
-  final Widget body;
-  final PreferredSizeWidget appBar;
-  final Widget bottomBar;
-  final Widget floatingBody;
-  final Color backgroundColor;
-  final bool isListBody;
+  final String? name;
+  final Map<String, String>? metaData;
+  final Color? appBarColor; // Taro use only
+  final Color? appBarTintColor; // Taro use only
+  final Widget? body;
+  final PreferredSizeWidget? appBar;
+  final Widget? bottomBar;
+  final Widget? floatingBody;
+  final Color? backgroundColor;
+  final bool? isListBody;
 
   MPScaffold({
     this.name,
@@ -43,15 +44,12 @@ class MPScaffold extends StatelessWidget {
             : Container(),
       ],
     );
-    final app = context.findAncestorWidgetOfExactType<MPApp>();
-    if (app?.maxWidth != null) {
+    final app = context.findAncestorWidgetOfExactType<MPApp?>();
+    if (app != null && app.maxWidth != null) {
       final mediaQuery = MediaQuery.of(context);
-      if (mediaQuery.size.width > app?.maxWidth) {
+      if (mediaQuery.size.width > app.maxWidth!) {
         final newMediaQuery = mediaQuery.copyWith(
-          size: Size(
-            context.findAncestorWidgetOfExactType<MPApp>()?.maxWidth,
-            mediaQuery.size.height,
-          ),
+          size: Size(app.maxWidth!, mediaQuery.size.height),
         );
         child = MediaQuery(
           data: newMediaQuery,
@@ -64,19 +62,19 @@ class MPScaffold extends StatelessWidget {
 }
 
 class MPOverlayScaffold extends MPScaffold {
-  final Function onBackgroundTap;
-  final ModalRoute parentRoute;
+  final Function? onBackgroundTap;
+  final ModalRoute? parentRoute;
 
   MPOverlayScaffold({
-    Widget body,
-    Color backgroundColor,
+    Widget? body,
+    Color? backgroundColor,
     this.onBackgroundTap,
     this.parentRoute,
   }) : super(body: body, backgroundColor: backgroundColor);
 }
 
 class MPScaffoldBody extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
 
   MPScaffoldBody({
     this.child,
@@ -93,7 +91,7 @@ class MPScaffoldBody extends StatelessWidget {
 }
 
 class MPScaffoldAppBar extends StatelessWidget {
-  final PreferredSizeWidget child;
+  final PreferredSizeWidget? child;
 
   MPScaffoldAppBar({
     this.child,
@@ -102,7 +100,7 @@ class MPScaffoldAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (child == null) {
-      return child;
+      return Container();
     }
     return Container(
       constraints:
@@ -113,7 +111,7 @@ class MPScaffoldAppBar extends StatelessWidget {
 }
 
 class MPScaffoldBottomBar extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
 
   MPScaffoldBottomBar({
     this.child,
@@ -122,7 +120,7 @@ class MPScaffoldBottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (child == null) {
-      return child;
+      return Container();
     }
     return Container(
       constraints:
@@ -133,7 +131,7 @@ class MPScaffoldBottomBar extends StatelessWidget {
 }
 
 class MPScaffoldFloatingBody extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
 
   MPScaffoldFloatingBody({
     this.child,
@@ -141,6 +139,6 @@ class MPScaffoldFloatingBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return child;
+    return child ?? Container();
   }
 }

@@ -1,9 +1,10 @@
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter/widgets.dart';
 
 class MPPageRoute<T> extends PageRoute<T> {
   final WidgetBuilder builder;
 
-  MPPageRoute({RouteSettings settings, this.builder})
+  MPPageRoute({RouteSettings? settings, required this.builder})
       : super(settings: settings);
 
   @override

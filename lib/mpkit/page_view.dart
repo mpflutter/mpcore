@@ -1,4 +1,5 @@
-import 'package:mpcore/mpkit/mpkit.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:flutter/widgets.dart';
 
 class MPPageView extends StatelessWidget {
   final List<Widget> children;
@@ -6,7 +7,7 @@ class MPPageView extends StatelessWidget {
   final bool loop;
 
   MPPageView({
-    this.children,
+    required this.children,
     this.scrollDirection = Axis.horizontal,
     this.loop = false,
   });

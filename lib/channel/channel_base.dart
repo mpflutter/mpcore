@@ -6,7 +6,7 @@ class MPNavigatorObserver extends NavigatorObserver {
   static bool doBacking = false;
 
   @override
-  void didPush(Route route, Route previousRoute) {
+  void didPush(Route route, Route? previousRoute) {
     if (previousRoute == null) return;
     if (route.settings?.name?.startsWith('/mp_dialog/') == true) {
       return;
@@ -51,7 +51,7 @@ class MPNavigatorObserver extends NavigatorObserver {
   }
 
   @override
-  void didReplace({Route newRoute, Route oldRoute}) {
+  void didReplace({required Route newRoute, required Route oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
   }
 }
@@ -59,9 +59,8 @@ class MPNavigatorObserver extends NavigatorObserver {
 class MPChannelBase {
   static void onGestureDetectorTrigger(Map message) {
     try {
-      final GestureDetector widget =
-          MPCore.findTargetHashCode(message['target'])?.widget;
-      if (widget == null) return;
+      final widget = MPCore.findTargetHashCode(message['target'])?.widget;
+      if (!(widget is GestureDetector)) return;
       if (message['event'] == 'onTap') {
         widget.onTap?.call();
       }
@@ -72,9 +71,8 @@ class MPChannelBase {
 
   static void onOverlayTrigger(Map message) {
     try {
-      final MPOverlayScaffold widget =
-          MPCore.findTargetHashCode(message['target'])?.widget;
-      if (widget == null) return;
+      final widget = MPCore.findTargetHashCode(message['target'])?.widget;
+      if (!(widget is MPOverlayScaffold)) return;
       if (message['event'] == 'onBackgroundTap') {
         widget.onBackgroundTap?.call();
       }
@@ -85,15 +83,15 @@ class MPChannelBase {
 
   static void onRichTextTrigger(Map message) {
     try {
-      final RichText widget =
-          MPCore.findTargetHashCode(message['target'])?.widget;
-      if (widget != null && message['event'] == 'onTap') {
+      final widget = MPCore.findTargetHashCode(message['target'])?.widget;
+      if (!(widget is RichText)) return;
+      if (message['event'] == 'onTap') {
         final span = MPCore.findTargetTextSpanHashCode(
           message['subTarget'],
           element: widget.text,
         );
-        if (span != null && span.recognizer is TapGestureRecognizer) {
-          (span.recognizer as TapGestureRecognizer).onTap?.call();
+        if (span?.recognizer is TapGestureRecognizer) {
+          (span?.recognizer as TapGestureRecognizer).onTap?.call();
         }
       } else if (message['event'] == 'onMeasured') {
         _onMeasuredText(message['data']);
@@ -105,9 +103,8 @@ class MPChannelBase {
 
   static void onTabBarTrigger(Map message) {
     try {
-      final TabBar widget =
-          MPCore.findTargetHashCode(message['target'])?.widget;
-      if (widget == null) return;
+      final widget = MPCore.findTargetHashCode(message['target'])?.widget;
+      if (!(widget is TabBar)) return;
       if (message['event'] == 'onTapIndex') {
         widget.controller.index = message['data'];
       }
@@ -118,9 +115,8 @@ class MPChannelBase {
 
   static void onEditableTextTrigger(Map message) {
     try {
-      final EditableText widget =
-          MPCore.findTargetHashCode(message['target'])?.widget;
-      if (widget == null) return;
+      final widget = MPCore.findTargetHashCode(message['target'])?.widget;
+      if (!(widget is EditableText)) return;
       if (message['event'] == 'onSubmitted') {
         widget.onSubmitted?.call(message['data']);
       } else if (message['event'] == 'onChanged' && message['data'] is String) {

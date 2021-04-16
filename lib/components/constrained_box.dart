@@ -3,11 +3,11 @@ part of '../mpcore.dart';
 MPElement _encodeConstrainedBox(Element element) {
   // final widget = element.widget as ConstrainedBox;
   final childElements = MPElement.childrenFromFlutterElement(element);
-  BoxConstraints constraints;
+  BoxConstraints? constraints;
   if (childElements.isEmpty) {
-    if (element.findRenderObject() is RenderConstrainedBox) {
-      constraints = (element.findRenderObject() as RenderConstrainedBox)
-          ?.additionalConstraints;
+    final renderBox = element.findRenderObject();
+    if (renderBox is RenderConstrainedBox) {
+      constraints = renderBox.additionalConstraints;
       if (constraints.hasInfiniteWidth && constraints.hasInfiniteHeight) {
         constraints = BoxConstraints(
           minWidth: 0,
@@ -25,8 +25,11 @@ MPElement _encodeConstrainedBox(Element element) {
       );
     }
   } else {
-    // ignore: invalid_use_of_protected_member
-    constraints = element.findRenderObject()?.constraints;
+    final renderBox = element.findRenderObject();
+    if (renderBox is RenderBox) {
+      // ignore: invalid_use_of_protected_member
+      constraints = renderBox.constraints;
+    }
   }
   return MPElement(
     hashCode: element.hashCode,

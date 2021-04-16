@@ -28,7 +28,7 @@ MPElement _encodeGridView(Element element) {
       'padding': widget.padding?.toString(),
       'width':
           // ignore: invalid_use_of_protected_member
-          (element.findRenderObject()?.constraints as BoxConstraints)?.maxWidth,
+          (element.findRenderObject()?.constraints as BoxConstraints).maxWidth,
       'gridDelegate': _encodeGridDelegate(widget.gridDelegate),
     },
   );
@@ -38,7 +38,7 @@ MPElement _encodeSliverWaterfallItem(Element element) {
   final widget = element.widget as SliverWaterfallItem;
   var height = widget.size?.height;
   if (height == null && element.findRenderObject() is RenderBox) {
-    height = (element.findRenderObject() as RenderBox).size?.height ?? 0;
+    height = (element.findRenderObject() as RenderBox).size.height;
   }
   return MPElement(
     hashCode: element.hashCode,
@@ -48,7 +48,7 @@ MPElement _encodeSliverWaterfallItem(Element element) {
   );
 }
 
-Map _encodeGridDelegate(dynamic delegate) {
+Map? _encodeGridDelegate(dynamic delegate) {
   if (delegate == null) return null;
   if (delegate is SliverWaterfallDelegate) {
     return {

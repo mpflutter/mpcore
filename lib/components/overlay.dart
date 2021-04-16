@@ -1,8 +1,8 @@
 part of '../mpcore.dart';
 
 MPElement _encodeOverlay(Element scaffoldElement) {
-  Element bodyElement;
-  Color bodyBackgroundColor;
+  Element? bodyElement;
+  Color? bodyBackgroundColor;
   if (scaffoldElement.widget is MPOverlayScaffold) {
     bodyElement = MPCore.findTarget<MPScaffoldBody>(scaffoldElement);
     bodyBackgroundColor =
@@ -11,9 +11,11 @@ MPElement _encodeOverlay(Element scaffoldElement) {
   return MPElement(
     hashCode: scaffoldElement.hashCode,
     name: 'overlay',
-    children: MPElement.childrenFromFlutterElement(bodyElement),
+    children: bodyElement != null
+        ? MPElement.childrenFromFlutterElement(bodyElement)
+        : null,
     attributes: {
-      'backgroundColor': bodyBackgroundColor?.value?.toString(),
+      'backgroundColor': bodyBackgroundColor?.value.toString(),
       'onBackgroundTap': scaffoldElement.hashCode,
     },
   );

@@ -12,7 +12,7 @@ class MPChannel {
 
   static void setupHotReload(MPCore minip) async {}
 
-  static void postMesssage(String message, {bool forLastConnection}) {
+  static void postMesssage(String message, {bool? forLastConnection}) {
     if (!messageHandlerSetted) {
       messageHandlerSetted = true;
       js.context.callMethod('addEventListener', [
@@ -50,7 +50,7 @@ class MPChannel {
         }
       ]);
     }
-    window.top.postMessage(message, '*');
+    window.top?.postMessage(message, '*');
   }
 
   static String getInitialRoute() {

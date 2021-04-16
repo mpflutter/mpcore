@@ -2,24 +2,27 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:developer' as dev;
 
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter/widgets.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:mime_type/mime_type.dart';
 import 'package:mpcore/mpjs/mpjs_io.dart';
 
 import '../mpcore.dart';
 
 import 'package:path/path.dart' as path;
 import '../hot_reloader.dart';
-import 'package:mime_type/mime_type.dart';
 
 class MPChannel {
   static bool _serverSetupped = false;
-  static HttpServer server;
+  static late HttpServer server;
   static List<WebSocket> sockets = [];
 
   static Future setupHotReload(MPCore minip) async {
     if (HotReloader.isHotReloadable) {
       var info = await dev.Service.getInfo();
       var uri = info.serverUri;
+      if (uri == null) return;
       uri = uri.replace(path: path.join(uri.path, 'ws'));
       if (uri.scheme == 'https') {
         uri = uri.replace(scheme: 'wss');
@@ -114,7 +117,7 @@ class MPChannel {
     }
   }
 
-  static String findPackagePath(String pkgName) {
+  static String? findPackagePath(String pkgName) {
     final lines = File('./.packages').readAsLinesSync();
     for (final line in lines) {
       if (line.startsWith('$pkgName:')) {
@@ -251,8 +254,7 @@ class MPChannel {
     }
   }
 
-  static void postMesssage(String message, {bool forLastConnection}) {
-    if (message == null) return;
+  static void postMesssage(String message, {bool? forLastConnection}) {
     if (sockets.isEmpty) {
       _addMessageToQueue(message);
       return;

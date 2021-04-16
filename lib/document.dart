@@ -1,11 +1,11 @@
 part of './mpcore.dart';
 
 class _Document {
-  final int routeId;
-  final MPElement mainTabBar;
-  final MPElement scaffold;
-  final List<MPElement> overlays;
-  final List<MPElement> diffs;
+  final int? routeId;
+  final MPElement? mainTabBar;
+  final MPElement? scaffold;
+  final List<MPElement>? overlays;
+  final List<MPElement>? diffs;
 
   _Document({
     this.routeId,
@@ -36,13 +36,13 @@ class MPElement {
   final int hashCode;
 
   final String name;
-  final List<MPElement> children;
-  final Constraints constraints;
-  final Map<String, dynamic> attributes;
+  final List<MPElement>? children;
+  final Constraints? constraints;
+  final Map<String, dynamic>? attributes;
 
   MPElement({
-    this.hashCode,
-    this.name,
+    required this.hashCode,
+    required this.name,
     this.children,
     this.constraints,
     this.attributes,
@@ -58,7 +58,7 @@ class MPElement {
     };
   }
 
-  Map _encodeConstraints() {
+  Map? _encodeConstraints() {
     if (constraints != null && constraints is BoxConstraints) {
       return {
         'minWidth': (constraints as BoxConstraints).minWidth.toString(),
@@ -78,9 +78,9 @@ class MPElement {
       {};
 
   static MPElement fromFlutterElement(Element element) {
-    if (element == null) return null;
     if (fromFlutterElementMethodCache[element.widget.runtimeType] != null) {
-      return fromFlutterElementMethodCache[element.widget.runtimeType](element);
+      return fromFlutterElementMethodCache[element.widget.runtimeType]!(
+          element);
     } else if (element.widget is ColoredBox) {
       fromFlutterElementMethodCache[element.widget.runtimeType] =
           _encodeColoredBox;
@@ -245,7 +245,8 @@ class MPElement {
   static List<MPElement> childrenFromFlutterElement(Element element) {
     final els = <MPElement>[];
     element.visitChildElements((element) {
-      els.add(fromFlutterElement(element));
+      final it = fromFlutterElement(element);
+      els.add(it);
     });
     return els;
   }

@@ -14,7 +14,7 @@ class MPAction {
   final String type;
   final Map params;
 
-  MPAction({this.type, this.params});
+  MPAction({required this.type, required this.params});
 
   Future<dynamic> send() {
     final completer = Completer();

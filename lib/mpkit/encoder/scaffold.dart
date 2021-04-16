@@ -6,8 +6,8 @@ MPElement _encodeMPScaffold(Element element) {
   final widget = element.widget as MPScaffold;
   final name = widget.name;
   final tabBodyElement = MPCore.findTarget<MPTabBody>(element);
-  Element headerElement;
-  Element tabBarElement;
+  Element? headerElement;
+  Element? tabBarElement;
   var isTabBody = false;
   var isListBody = widget.isListBody;
   final appBarElement = MPCore.findTarget<MPScaffoldAppBar>(element);
@@ -17,19 +17,31 @@ MPElement _encodeMPScaffold(Element element) {
       MPCore.findTarget<MPScaffoldFloatingBody>(element);
   final bodyBackgroundColor = widget.backgroundColor;
   if (tabBodyElement != null) {
-    headerElement = MPCore.findFirstChild(
-        MPCore.findTargetKey(Key('tab_header'), tabBodyElement));
-    tabBarElement = MPCore.findFirstChild(
-        MPCore.findTargetKey(Key('tab_bar'), tabBodyElement));
-    bodyElement = MPCore.findFirstChild(
-        MPCore.findTargetKey(Key('tab_body'), tabBodyElement));
+    headerElement = (() {
+      final target = MPCore.findTargetKey(Key('tab_header'), tabBodyElement);
+      if (target != null) {
+        return MPCore.findFirstChild(target);
+      }
+    })();
+    tabBarElement = (() {
+      final target = MPCore.findTargetKey(Key('tab_bar'), tabBodyElement);
+      if (target != null) {
+        return MPCore.findFirstChild(target);
+      }
+    })();
+    bodyElement = (() {
+      final target = MPCore.findTargetKey(Key('tab_body'), tabBodyElement);
+      if (target != null) {
+        return MPCore.findFirstChild(target);
+      }
+    })();
     isTabBody = true;
   }
   if (isListBody == null &&
       MPCore.findTarget<Scrollable>(bodyElement) != null) {
     isListBody = true;
   }
-  if (stackedScaffold) {
+  if (stackedScaffold && bodyElement != null) {
     return MPElement.fromFlutterElement(bodyElement);
   }
   return MPElement(
@@ -38,20 +50,32 @@ MPElement _encodeMPScaffold(Element element) {
     attributes: {
       'name': name,
       'metaData': widget.metaData,
-      'appBar': MPElement.fromFlutterElement(appBarElement),
-      'appBarColor': widget.appBarColor?.value?.toString(),
-      'appBarTintColor': widget.appBarTintColor?.value?.toString(),
+      'appBar': appBarElement != null
+          ? MPElement.fromFlutterElement(appBarElement)
+          : null,
+      'appBarColor': widget.appBarColor?.value.toString(),
+      'appBarTintColor': widget.appBarTintColor?.value.toString(),
       'appBarHeight': (appBarElement?.widget as MPScaffoldAppBar)
-              ?.child
+              .child
               ?.preferredSize
               ?.height ??
           0.0,
-      'header': MPElement.fromFlutterElement(headerElement),
-      'tabBar': MPElement.fromFlutterElement(tabBarElement),
-      'body': MPElement.fromFlutterElement(bodyElement),
-      'floatingBody': MPElement.fromFlutterElement(floatingBodyElement),
-      'bottomBar': MPElement.fromFlutterElement(bottomBarElement),
-      'backgroundColor': bodyBackgroundColor?.value?.toString(),
+      'header': headerElement != null
+          ? MPElement.fromFlutterElement(headerElement)
+          : null,
+      'tabBar': tabBarElement != null
+          ? MPElement.fromFlutterElement(tabBarElement)
+          : null,
+      'body': bodyElement != null
+          ? MPElement.fromFlutterElement(bodyElement)
+          : null,
+      'floatingBody': floatingBodyElement != null
+          ? MPElement.fromFlutterElement(floatingBodyElement)
+          : null,
+      'bottomBar': bottomBarElement != null
+          ? MPElement.fromFlutterElement(bottomBarElement)
+          : null,
+      'backgroundColor': bodyBackgroundColor?.value.toString(),
       'isListBody': isListBody,
       'isTabBody': isTabBody,
     },

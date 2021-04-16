@@ -84,11 +84,12 @@ class JsObject {
   }
 
   final List<String> _callChain = [];
-  final String objectHandler;
+  final String? objectHandler;
 
   JsObject({this.objectHandler});
 
   JsObject operator [](Object property) {
+    if (!(property is String)) return JsObject();
     return getProperty(property);
   }
 
@@ -100,12 +101,17 @@ class JsObject {
     return obj;
   }
 
-  Future<bool> hasProperty(String key) {
-    return JsBridgeInvoker.instance.makeRequest('hasProperty', {
+  Future<bool> hasProperty(String key) async {
+    final result = await JsBridgeInvoker.instance.makeRequest('hasProperty', {
       'callChain': _callChain,
       'objectHandler': objectHandler,
       'key': key,
     });
+    if (result is bool) {
+      return result;
+    } else {
+      return false;
+    }
   }
 
   Future<void> deleteProperty(String key) {
@@ -116,14 +122,14 @@ class JsObject {
     });
   }
 
-  Future<dynamic> callMethod(Object method, [List args]) async {
+  Future<dynamic> callMethod(Object method, [List? args]) async {
     final result = await JsBridgeInvoker.instance.makeRequest('callMethod', {
       'objectHandler': objectHandler,
       'callChain': _callChain,
       'method': method,
       'args': args?.map((e) {
         return toBrowserObject(e);
-      })?.toList(),
+      }).toList(),
     });
     return result;
   }

@@ -1,3 +1,4 @@
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter/widgets.dart';
 import 'package:mpcore/mpcore.dart';
 import 'package:mpcore/channel/channel_io.dart'
@@ -6,23 +7,23 @@ import 'package:mpcore/channel/channel_io.dart'
 import 'page_route.dart';
 
 class MPApp extends StatelessWidget {
-  final String currentPackage;
-  final String title;
-  final Color color;
+  final String? currentPackage;
+  final String? title;
+  final Color? color;
   final Map<String, WidgetBuilder> routes;
   final String initialRoute;
-  final RouteFactory onGenerateRoute;
+  final RouteFactory? onGenerateRoute;
   final List<NavigatorObserver> navigatorObservers;
-  final double maxWidth;
+  final double? maxWidth;
 
   MPApp({
     this.currentPackage,
     this.title,
     this.color,
-    this.routes,
-    this.initialRoute,
+    required this.routes,
+    required this.initialRoute,
     this.onGenerateRoute,
-    this.navigatorObservers,
+    required this.navigatorObservers,
     this.maxWidth,
   });
 
@@ -40,11 +41,12 @@ class MPApp extends StatelessWidget {
         return MPPageRoute<T>(settings: settings, builder: builder);
       },
       onGenerateRoute: (settings) {
-        if (MPCore.routeMapSubPackages != null) {
+        final routeMapSubPackages = MPCore.routeMapSubPackages;
+        if (routeMapSubPackages != null) {
           var targetPackage = 'main';
-          for (final key in MPCore.routeMapSubPackages.keys) {
+          for (final key in routeMapSubPackages.keys) {
             if (settings.name.startsWith(key)) {
-              targetPackage = MPCore.routeMapSubPackages[key];
+              targetPackage = routeMapSubPackages[key] ?? 'main';
             }
           }
           if (targetPackage != currentPackage) {
@@ -58,15 +60,24 @@ class MPApp extends StatelessWidget {
           }
         }
         return onGenerateRoute?.call(settings) ??
-            MPPageRoute(builder: (context) => routes[settings.name](context));
+            MPPageRoute(builder: (context) {
+              final routeBuilder = routes[settings.name];
+              if (routeBuilder != null) {
+                return routeBuilder(context);
+              } else {
+                return Container();
+              }
+            });
       },
       onGenerateInitialRoutes: (_) {
-        final routeName = initialRoute ?? '/';
-        if (MPCore.routeMapSubPackages != null) {
+        final routeName = initialRoute;
+        final routeMapSubPackages = MPCore.routeMapSubPackages;
+        if (routeMapSubPackages != null) {
           var targetPackage = 'main';
-          for (final key in MPCore.routeMapSubPackages.keys) {
+
+          for (final key in routeMapSubPackages.keys) {
             if (routeName.startsWith(key)) {
-              targetPackage = MPCore.routeMapSubPackages[key];
+              targetPackage = routeMapSubPackages[key] ?? 'main';
             }
           }
           if (targetPackage != currentPackage) {
@@ -83,7 +94,14 @@ class MPApp extends StatelessWidget {
         }
         return [
           onGenerateRoute?.call(RouteSettings(name: routeName)) ??
-              MPPageRoute(builder: (context) => routes[routeName](context))
+              MPPageRoute(builder: (context) {
+                final routeBuilder = routes[routeName];
+                if (routeBuilder != null) {
+                  return routeBuilder(context);
+                } else {
+                  return Container();
+                }
+              })
         ];
       },
     );

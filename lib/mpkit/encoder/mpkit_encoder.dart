@@ -1,6 +1,8 @@
 library mpkit_encoder;
 
 import 'package:mpcore/mpcore.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:flutter/widgets.dart';
 
 part './web_view.dart';
 part './scaffold.dart';
@@ -10,7 +12,7 @@ part './main_tab.dart';
 part './open_button.dart';
 
 class MPKitEncoder {
-  static MPElement fromFlutterElement(Element element) {
+  static MPElement? fromFlutterElement(Element element) {
     if (element.widget is MPWebView) {
       return _encodeMPWebView(element);
     } else if (element.widget is MPScaffold) {

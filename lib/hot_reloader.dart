@@ -4,9 +4,13 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:glob/glob.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:vm_service_lib/vm_service_lib_io.dart' show vmServiceConnectUri;
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:vm_service_lib/vm_service_lib.dart' show VmService;
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:watcher/watcher.dart';
 
 const String _kVmServiceUrl = 'ws://localhost:8181/ws';
@@ -23,7 +27,7 @@ class HotReloaderPath {
   final Watcher watcher;
 
   /// Subscription
-  StreamSubscription<WatchEvent> _sub;
+  StreamSubscription<WatchEvent>? _sub;
 
   HotReloaderPath._(this.reloader, String path) : watcher = Watcher(path);
 
@@ -88,10 +92,10 @@ class HotReloader {
   Stream<DateTime> get onReload => _onReload.stream;
 
   /// [VmService] client to request hot reloading
-  VmService _client;
+  VmService? _client;
 
   /// Stream subscription for [_onChange]
-  StreamSubscription _onChangeSub;
+  StreamSubscription? _onChangeSub;
 
   /// Private variable to track if the hot reloader is running
   final bool _isRunning = false;
@@ -317,7 +321,7 @@ More information can be found at: https://www.dartlang.org/dart-vm/tools/dart-vm
   ///
   /// If [path] is link, it resolves the link
   /// If the [path] is not found, `null` is returned
-  Future<String> _resolvePath(String path) async {
+  Future<String?> _resolvePath(String path) async {
     try {
       final stat = await FileStat.stat(path);
       if (stat.type == FileSystemEntityType.link) {
@@ -350,11 +354,11 @@ More information can be found at: https://www.dartlang.org/dart-vm/tools/dart-vm
     _client ??= await vmServiceConnectUri(vmServiceUrl);
 
     // Find main isolate id to reload it
-    final vm = await _client.getVM();
+    final vm = await _client!.getVM();
     final ref = vm.isolates.first;
 
     // Reload
-    final rep = await _client.reloadSources(ref.id);
+    final rep = await _client!.reloadSources(ref.id);
 
     if (!rep.success) {
       print('Reloading failed! Reason: $rep');

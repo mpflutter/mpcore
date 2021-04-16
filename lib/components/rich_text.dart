@@ -19,7 +19,7 @@ void _onMeasuredText(List values) {
       if (!(renderObject is RenderParagraph)) {
         return;
       }
-      (renderObject as RenderParagraph).measuredSize = size;
+      renderObject.measuredSize = size;
       renderObject.reassemble();
     }
   });
@@ -28,7 +28,7 @@ void _onMeasuredText(List values) {
     if (!(renderObject is RenderParagraph)) {
       return;
     }
-    (renderObject as RenderParagraph).measuredSize = Size(0, 0);
+    renderObject.measuredSize = Size(0, 0);
     renderObject.reassemble();
   });
   _measuringText.clear();
@@ -41,8 +41,8 @@ MPElement _encodeRichText(Element element) {
   // ignore: invalid_use_of_protected_member
   var constraints = element.findRenderObject()?.constraints as BoxConstraints;
   if (renderObject is RenderParagraph && renderObject.measuredSize != null) {
-    if (renderObject.size.width + 1.0 < renderObject.measuredSize.width ||
-        renderObject.size.height + 1.0 < renderObject.measuredSize.height) {
+    if (renderObject.size.width + 1.0 < renderObject.measuredSize!.width ||
+        renderObject.size.height + 1.0 < renderObject.measuredSize!.height) {
       renderObject.measuredSize = null;
     } else {
       constraints = BoxConstraints(
@@ -75,12 +75,13 @@ MPElement _encodeRichText(Element element) {
 MPElement _encodeSpan(InlineSpan span, Element richTextElement) {
   if (span is TextSpan) {
     return MPElement(
+      hashCode: span.hashCode,
       name: 'text_span',
       children:
-          span.children?.map((e) => _encodeSpan(e, richTextElement))?.toList(),
+          span.children?.map((e) => _encodeSpan(e, richTextElement)).toList(),
       attributes: {
         'text': span.text,
-        'style': _encodeTextStyle(span.style),
+        'style': span.style != null ? _encodeTextStyle(span.style!) : null,
         'onTap_el': (() {
           if (span.recognizer is TapGestureRecognizer) {
             return richTextElement.hashCode;
@@ -98,17 +99,20 @@ MPElement _encodeSpan(InlineSpan span, Element richTextElement) {
         element: richTextElement);
     if (targetElement == null) {
       return MPElement(
+        hashCode: span.hashCode,
         name: 'inline_span',
         attributes: {},
       );
     }
     return MPElement(
+      hashCode: span.hashCode,
       name: 'widget_span',
       children: [MPElement.fromFlutterElement(targetElement)],
       attributes: {},
     );
   } else {
     return MPElement(
+      hashCode: span.hashCode,
       name: 'inline_span',
       attributes: {},
     );
@@ -117,35 +121,35 @@ MPElement _encodeSpan(InlineSpan span, Element richTextElement) {
 
 Map _encodeTextStyle(TextStyle style) {
   final map = {};
-  if (style?.fontFamily != null) {
+  if (style.fontFamily != null) {
     map['fontFamily'] = style.fontFamily;
   }
-  if (style?.fontSize != null) {
+  if (style.fontSize != null) {
     map['fontSize'] = style.fontSize;
   }
-  if (style?.color != null) {
-    map['color'] = style.color.value.toString();
+  if (style.color != null) {
+    map['color'] = style.color!.value.toString();
   }
-  if (style?.fontWeight != null) {
+  if (style.fontWeight != null) {
     map['fontWeight'] = style.fontWeight.toString();
   }
-  if (style?.fontStyle != null) {
+  if (style.fontStyle != null) {
     map['fontStyle'] = style.fontStyle.toString();
   }
-  if (style?.letterSpacing != null) {
+  if (style.letterSpacing != null) {
     map['letterSpacing'] = style.letterSpacing;
   }
-  if (style?.wordSpacing != null) {
+  if (style.wordSpacing != null) {
     map['wordSpacing'] = style.wordSpacing;
   }
-  if (style?.textBaseline != null) {
+  if (style.textBaseline != null) {
     map['textBaseline'] = style.textBaseline.toString();
   }
-  if (style?.height != null) {
+  if (style.height != null) {
     map['height'] = style.height;
   }
-  if (style?.backgroundColor != null) {
-    map['backgroundColor'] = style.backgroundColor.value.toString();
+  if (style.backgroundColor != null) {
+    map['backgroundColor'] = style.backgroundColor!.value.toString();
   }
   return map;
 }

@@ -1,13 +1,15 @@
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:flutter/widgets.dart';
+
 import 'dart:math' as math;
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/src/rendering/sliver_grid.dart';
-import 'package:mpcore/mpkit/mpkit.dart';
 
 class SliverWaterfallDelegate
     extends SliverGridDelegateWithFixedCrossAxisCount {
   const SliverWaterfallDelegate({
-    int crossAxisCount,
+    required int crossAxisCount,
     double mainAxisSpacing = 0.0,
     double crossAxisSpacing = 0.0,
   }) : super(
@@ -74,9 +76,9 @@ class _SliverWaterfallGridGeometry extends SliverGridGeometry {
 
 class SliverWaterfallItem extends StatelessWidget {
   final Widget child;
-  final Size size;
+  final Size? size;
 
-  SliverWaterfallItem({this.child, this.size});
+  SliverWaterfallItem({required this.child, this.size});
 
   @override
   Widget build(BuildContext context) {

@@ -6,27 +6,28 @@ MPElement _encodeDecoratedBox(Element element) {
   if (widget.decoration is BoxDecoration) {
     final decoration = widget.decoration as BoxDecoration;
     if (decoration.color != null) {
-      attributes['color'] = decoration.color.value.toString();
+      attributes['color'] = decoration.color!.value.toString();
     }
-    if (decoration.image != null && decoration.image.image != null) {
+    final decoImage = decoration.image;
+    if (decoImage != null) {
       attributes['image'] = (() {
         return {
           'src': (() {
-            if (decoration.image.image is NetworkImage) {
-              return (decoration.image.image as NetworkImage).url;
+            if (decoImage.image is NetworkImage) {
+              return (decoImage.image as NetworkImage).url;
             }
           })(),
           'assetName': (() {
-            if (decoration.image.image is AssetImage) {
-              return (decoration.image.image as AssetImage).assetName;
+            if (decoImage.image is AssetImage) {
+              return (decoImage.image as AssetImage).assetName;
             }
           })(),
           'assetPkg': (() {
-            if (decoration.image.image is AssetImage) {
-              return (decoration.image.image as AssetImage).package;
+            if (decoImage.image is AssetImage) {
+              return (decoImage.image as AssetImage).package;
             }
           })(),
-          'fit': decoration.image.fit?.toString(),
+          'fit': decoImage.fit?.toString(),
         };
       })();
     }
@@ -36,7 +37,7 @@ MPElement _encodeDecoratedBox(Element element) {
           decoration.borderRadius.toString();
     }
     if (decoration.boxShadow != null) {
-      attributes['decoration']['boxShadow'] = decoration.boxShadow.map((e) {
+      attributes['decoration']['boxShadow'] = decoration.boxShadow!.map((e) {
         return {
           'color': e.color.value.toString(),
           'offset': e.offset.toString(),

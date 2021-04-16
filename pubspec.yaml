@@ -1,12 +1,12 @@
 name: mpcore
-description: A new Flutter package project.
+description: The MPFlutter core libs.
 publish_to: none
 version: 0.0.1
 author: /
 homepage: /
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
   flutter: ">=1.17.0 <2.0.0"
 
 dependencies:
