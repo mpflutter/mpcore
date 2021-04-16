@@ -53,10 +53,14 @@ MPElement _encodeMPScaffold(Element element) {
       'appBar': appBarElement != null
           ? MPElement.fromFlutterElement(appBarElement)
           : null,
-      'appBarColor': widget.appBarColor?.value.toString(),
-      'appBarTintColor': widget.appBarTintColor?.value.toString(),
-      'appBarHeight': (appBarElement?.widget as MPScaffoldAppBar)
-              .child
+      'appBarColor': widget.appBarColor != null
+          ? widget.appBarColor!.value.toString()
+          : null,
+      'appBarTintColor': widget.appBarTintColor != null
+          ? widget.appBarTintColor!.value.toString()
+          : null,
+      'appBarHeight': (appBarElement?.widget as MPScaffoldAppBar?)
+              ?.child
               ?.preferredSize
               ?.height ??
           0.0,
@@ -75,7 +79,9 @@ MPElement _encodeMPScaffold(Element element) {
       'bottomBar': bottomBarElement != null
           ? MPElement.fromFlutterElement(bottomBarElement)
           : null,
-      'backgroundColor': bodyBackgroundColor?.value.toString(),
+      'backgroundColor': bodyBackgroundColor != null
+          ? bodyBackgroundColor!.value.toString()
+          : null,
       'isListBody': isListBody,
       'isTabBody': isTabBody,
     },

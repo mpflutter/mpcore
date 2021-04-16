@@ -133,9 +133,11 @@ class JsObject {
       'objectHandler': objectHandler,
       'callChain': _callChain,
       'method': method,
-      'args': args?.map((e) {
-        return toBrowserObject(e);
-      }).toList(),
+      'args': args != null
+          ? args.map((e) {
+              return toBrowserObject(e);
+            }).toList()
+          : null,
     });
     return result;
   }

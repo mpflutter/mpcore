@@ -12,7 +12,7 @@ MPElement _encodeIcon(Element element) {
         'fontFamily': widget.icon?.fontFamily,
         'codePoint': widget.icon?.codePoint,
       },
-      'color': widget.color?.value.toString(),
+      'color': widget.color != null ? widget.color.value.toString() : null,
       'size': widget.size,
     },
   );

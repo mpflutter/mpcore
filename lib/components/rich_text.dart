@@ -77,8 +77,9 @@ MPElement _encodeSpan(InlineSpan span, Element richTextElement) {
     return MPElement(
       hashCode: span.hashCode,
       name: 'text_span',
-      children:
-          span.children?.map((e) => _encodeSpan(e, richTextElement)).toList(),
+      children: span.children != null
+          ? span.children!.map((e) => _encodeSpan(e, richTextElement)).toList()
+          : null,
       attributes: {
         'text': span.text,
         'style': span.style != null ? _encodeTextStyle(span.style!) : null,

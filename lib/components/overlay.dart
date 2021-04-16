@@ -15,7 +15,9 @@ MPElement _encodeOverlay(Element scaffoldElement) {
         ? MPElement.childrenFromFlutterElement(bodyElement)
         : null,
     attributes: {
-      'backgroundColor': bodyBackgroundColor?.value.toString(),
+      'backgroundColor': bodyBackgroundColor != null
+          ? bodyBackgroundColor.value.toString()
+          : null,
       'onBackgroundTap': scaffoldElement.hashCode,
     },
   );
