@@ -80,7 +80,7 @@ MPElement _encodeMPScaffold(Element element) {
           ? MPElement.fromFlutterElement(bottomBarElement)
           : null,
       'backgroundColor': bodyBackgroundColor != null
-          ? bodyBackgroundColor!.value.toString()
+          ? bodyBackgroundColor.value.toString()
           : null,
       'isListBody': isListBody,
       'isTabBody': isTabBody,
