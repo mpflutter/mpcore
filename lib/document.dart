@@ -127,10 +127,6 @@ class MPElement {
       fromFlutterElementMethodCache[element.widget.runtimeType] =
           _encodeDecoratedBox;
       return _encodeDecoratedBox(element);
-    } else if (element.widget is Divider) {
-      fromFlutterElementMethodCache[element.widget.runtimeType] =
-          _encodeDivider;
-      return _encodeDivider(element);
     } else if (element.widget is Image) {
       fromFlutterElementMethodCache[element.widget.runtimeType] = _encodeImage;
       return _encodeImage(element);
@@ -212,9 +208,6 @@ class MPElement {
       fromFlutterElementMethodCache[element.widget.runtimeType] =
           _encodeSliverGrid;
       return _encodeSliverGrid(element);
-    } else if (element.widget is TabBar) {
-      fromFlutterElementMethodCache[element.widget.runtimeType] = _encodeTabBar;
-      return _encodeTabBar(element);
     } else if (element.widget is EditableText) {
       fromFlutterElementMethodCache[element.widget.runtimeType] =
           _encodeEditableText;

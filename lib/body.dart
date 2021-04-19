@@ -1,8 +1,19 @@
 part of 'mpcore.dart';
 
+class MPTabController extends ChangeNotifier {
+  int _index = 0;
+
+  int get index => _index;
+
+  set index(int index) {
+    _index = index;
+    notifyListeners();
+  }
+}
+
 class MPTabBody extends StatefulWidget {
   final Widget? header;
-  final TabController tabController;
+  final MPTabController tabController;
   final Widget? tabBar;
   final List<Builder> children;
 

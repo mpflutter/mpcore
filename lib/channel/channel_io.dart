@@ -234,8 +234,6 @@ class MPChannel {
         MPChannelBase.onOverlayTrigger(obj['message']);
       } else if (obj['type'] == 'rich_text') {
         MPChannelBase.onRichTextTrigger(obj['message']);
-      } else if (obj['type'] == 'tab_bar') {
-        MPChannelBase.onTabBarTrigger(obj['message']);
       } else if (obj['type'] == 'scroller') {
         MPChannelBase.onScrollerTrigger(obj['message']);
       } else if (obj['type'] == 'router') {

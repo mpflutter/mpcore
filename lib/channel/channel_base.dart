@@ -101,18 +101,6 @@ class MPChannelBase {
     }
   }
 
-  static void onTabBarTrigger(Map message) {
-    try {
-      final widget = MPCore.findTargetHashCode(message['target'])?.widget;
-      if (!(widget is TabBar)) return;
-      if (message['event'] == 'onTapIndex') {
-        widget.controller.index = message['data'];
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   static void onEditableTextTrigger(Map message) {
     try {
       final widget = MPCore.findTargetHashCode(message['target'])?.widget;

@@ -5,7 +5,7 @@ import 'dart:convert';
 
 import 'package:flutter/gestures.dart';
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter/rendering.dart';
 import 'channel/channel_io.dart'
     if (dart.library.js) './channel/channel_js.dart';
@@ -34,9 +34,7 @@ part './components/clip_oval.dart';
 part './components/div_box.dart';
 part './components/ignore_pointer.dart';
 part './components/positioned.dart';
-part './components/tab_bar.dart';
 part './components/clip_r_rect.dart';
-part './components/divider.dart';
 part './components/image.dart';
 part './components/rich_text.dart';
 part './components/transform.dart';
