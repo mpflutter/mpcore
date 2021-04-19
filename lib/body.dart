@@ -9,6 +9,8 @@ class MPTabController extends ChangeNotifier {
     _index = index;
     notifyListeners();
   }
+
+  MPTabController({int? initialIndex}) : _index = initialIndex ?? 0;
 }
 
 class MPTabBody extends StatefulWidget {
