@@ -83,9 +83,9 @@ class MPChannelBase {
 
   static void onRichTextTrigger(Map message) {
     try {
-      final widget = MPCore.findTargetHashCode(message['target'])?.widget;
-      if (!(widget is RichText)) return;
       if (message['event'] == 'onTap') {
+        final widget = MPCore.findTargetHashCode(message['target'])?.widget;
+        if (!(widget is RichText)) return;
         final span = MPCore.findTargetTextSpanHashCode(
           message['subTarget'],
           element: widget.text,
