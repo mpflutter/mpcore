@@ -1,4 +1,3 @@
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter/widgets.dart';
 
 import '../mpcore.dart';
@@ -44,7 +43,7 @@ class MPScaffold extends StatelessWidget {
             : Container(),
       ],
     );
-    final app = context.findAncestorWidgetOfExactType<MPApp?>();
+    final app = context.findAncestorWidgetOfExactType<MPApp>();
     if (app != null && app.maxWidth != null) {
       final mediaQuery = MediaQuery.of(context);
       if (mediaQuery.size.width > app.maxWidth!) {

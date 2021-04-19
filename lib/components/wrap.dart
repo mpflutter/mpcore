@@ -9,15 +9,15 @@ MPElement _encodeWrap(Element element) {
     // ignore: invalid_use_of_protected_member
     constraints: element.findRenderObject()?.constraints,
     attributes: {
-      'direction': widget.direction?.toString(),
-      'alignment': widget.alignment?.toString(),
+      'direction': widget.direction.toString(),
+      'alignment': widget.alignment.toString(),
       'spacing': widget.spacing,
-      'runAlignment': widget.runAlignment?.toString(),
+      'runAlignment': widget.runAlignment.toString(),
       'runSpacing': widget.runSpacing,
-      'crossAxisAlignment': widget.crossAxisAlignment?.toString(),
-      'textDirection': widget.textDirection?.toString(),
-      'verticalDirection': widget.verticalDirection?.toString(),
-      'clipBehavior': widget.clipBehavior?.toString(),
+      'crossAxisAlignment': widget.crossAxisAlignment.toString(),
+      'textDirection': widget.textDirection.toString(),
+      'verticalDirection': widget.verticalDirection.toString(),
+      'clipBehavior': widget.clipBehavior.toString(),
     },
   );
 }

@@ -32,7 +32,7 @@ void _onMeasuredText(List values) {
     renderObject.reassemble();
   });
   _measuringText.clear();
-  WidgetsBinding.instance.scheduleFrame();
+  WidgetsBinding.instance?.scheduleFrame();
 }
 
 MPElement _encodeRichText(Element element) {
@@ -67,7 +67,7 @@ MPElement _encodeRichText(Element element) {
               ? element.hashCode
               : null,
       'maxLines': widget.maxLines,
-      'textAlign': widget.textAlign?.toString(),
+      'textAlign': widget.textAlign.toString(),
     },
   );
 }

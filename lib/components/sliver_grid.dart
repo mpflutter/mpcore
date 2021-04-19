@@ -14,6 +14,8 @@ MPElement _encodeSliverGrid(Element element) {
     );
   }
   final widget = element.widget as SliverGrid;
+  final padding =
+      element.findAncestorWidgetOfExactType<SliverPadding>()?.padding;
   return MPElement(
     hashCode: element.hashCode,
     name: 'sliver_grid',
@@ -21,10 +23,7 @@ MPElement _encodeSliverGrid(Element element) {
       indexedSemanticeParentElement,
     ),
     attributes: {
-      'padding': element
-          .findAncestorWidgetOfExactType<SliverPadding>()
-          ?.padding
-          ?.toString(),
+      'padding': padding?.toString(),
       // ignore: invalid_use_of_protected_member
       'width': (element.findRenderObject()?.constraints as SliverConstraints)
           .crossAxisExtent,

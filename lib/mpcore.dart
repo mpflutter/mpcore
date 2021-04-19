@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/gestures.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter/widgets.dart';
 import 'package:flutter/rendering.dart';
 import 'channel/channel_io.dart'
@@ -72,7 +71,7 @@ class MPCore {
     _plugins.add(plugin);
   }
 
-  Element get renderView => WidgetsBinding.instance.renderViewElement;
+  Element get renderView => WidgetsBinding.instance!.renderViewElement!;
 
   // static Map _oldFrameObject;
 
@@ -151,7 +150,7 @@ class MPCore {
 
   Future nextFrame() async {
     final completer = Completer();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       completer.complete();
     });
     return completer.future;
@@ -197,7 +196,7 @@ class MPCore {
     if (activeScaffoldElement != null) {
       final vDocument = _Document(
         routeId: (() {
-          final ModalRoute? route = ModalRoute.of(activeScaffoldElement);
+          final ModalRoute? route = ModalRoute.of(activeScaffoldElement!);
           if (route != null && route.isFirst) {
             return 0;
           } else if (route != null) {
@@ -307,9 +306,9 @@ class MPCore {
     Element? element,
   }) {
     if (hashCode == null) return null;
-    element ??= WidgetsBinding.instance.renderViewElement;
+    element ??= WidgetsBinding.instance?.renderViewElement;
     Element? targetElement;
-    element.visitChildElements((el) {
+    element?.visitChildElements((el) {
       if (el.hashCode == hashCode || el.widget.hashCode == hashCode) {
         targetElement = el;
       } else {
@@ -346,7 +345,7 @@ class MPCore {
       {bool findParent = false}) {
     Element? targetElement;
     element.visitChildElements((el) {
-      if (el.widget?.key == key) {
+      if (el.widget.key == key) {
         if (findParent == true) {
           targetElement = element;
         } else {

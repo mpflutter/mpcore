@@ -6,9 +6,9 @@ class MPNavigatorObserver extends NavigatorObserver {
   static bool doBacking = false;
 
   @override
-  void didPush(Route route, Route? previousRoute) {
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     if (previousRoute == null) return;
-    if (route.settings?.name?.startsWith('/mp_dialog/') == true) {
+    if (route.settings.name?.startsWith('/mp_dialog/') == true) {
       return;
     }
     final routeData = json.encode({
@@ -17,7 +17,7 @@ class MPNavigatorObserver extends NavigatorObserver {
         'event': 'didPush',
         'route': {
           'hash': route.hashCode,
-          'name': route.settings?.name ?? '/',
+          'name': route.settings.name ?? '/',
         }
       },
     });
@@ -26,9 +26,9 @@ class MPNavigatorObserver extends NavigatorObserver {
   }
 
   @override
-  void didPop(Route route, Route previousRoute) {
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     if (doBacking) return;
-    if (route.settings?.name?.startsWith('/mp_dialog/') == true) {
+    if (route.settings.name?.startsWith('/mp_dialog/') == true) {
       return;
     }
     final routeData = json.encode({
@@ -37,7 +37,7 @@ class MPNavigatorObserver extends NavigatorObserver {
         'event': 'didPop',
         'route': {
           'hash': previousRoute.hashCode,
-          'name': previousRoute.settings?.name ?? '/',
+          'name': previousRoute?.settings.name ?? '/',
         }
       },
     });
@@ -46,12 +46,12 @@ class MPNavigatorObserver extends NavigatorObserver {
   }
 
   @override
-  void didRemove(Route route, Route previousRoute) {
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didRemove(route, previousRoute);
   }
 
   @override
-  void didReplace({required Route newRoute, required Route oldRoute}) {
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
   }
 }
@@ -108,8 +108,8 @@ class MPChannelBase {
       if (message['event'] == 'onSubmitted') {
         widget.onSubmitted?.call(message['data']);
       } else if (message['event'] == 'onChanged' && message['data'] is String) {
-        widget.controller?.text = message['data'];
-        widget.controller?.textDirty = false;
+        widget.controller.text = message['data'];
+        widget.controller.textDirty = false;
         widget.onChanged?.call(message['data']);
       }
     } catch (e) {
@@ -140,19 +140,19 @@ class MPChannelBase {
       if (message['event'] == 'doPop') {
         MPNavigatorObserver.doBacking = true;
         if (message['toRouteId'] != null) {
-          MPNavigatorObserver.instance.navigator.popUntil((route) =>
+          MPNavigatorObserver.instance.navigator?.popUntil((route) =>
               route.isFirst ||
               route.hashCode == int.tryParse(message['toRouteId']));
         } else {
-          if (MPNavigatorObserver.instance.navigator.canPop()) {
-            MPNavigatorObserver.instance.navigator.pop();
+          if (MPNavigatorObserver.instance.navigator?.canPop() == true) {
+            MPNavigatorObserver.instance.navigator?.pop();
           }
         }
         MPNavigatorObserver.doBacking = false;
       } else if (message['event'] == 'doPush') {
-        MPNavigatorObserver.instance.navigator.pushNamed(message['name']);
+        MPNavigatorObserver.instance.navigator?.pushNamed(message['name']);
       } else if (message['event'] == 'doReplace') {
-        MPNavigatorObserver.instance.navigator.pushNamed(message['name']);
+        MPNavigatorObserver.instance.navigator?.pushNamed(message['name']);
       }
     } catch (e) {
       print(e);

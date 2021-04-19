@@ -1,4 +1,3 @@
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter/widgets.dart';
 import 'package:mpcore/mpcore.dart';
 import 'package:mpcore/channel/channel_io.dart'
@@ -30,10 +29,10 @@ class MPApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WidgetsApp(
-      title: title,
-      color: color,
+      title: title ?? '',
+      color: color ?? Color(0),
       builder: (context, widget) {
-        return widget;
+        return widget ?? Container();
       },
       routes: routes,
       navigatorObservers: navigatorObservers,
@@ -45,12 +44,12 @@ class MPApp extends StatelessWidget {
         if (routeMapSubPackages != null) {
           var targetPackage = 'main';
           for (final key in routeMapSubPackages.keys) {
-            if (settings.name.startsWith(key)) {
+            if (settings.name?.startsWith(key) == true) {
               targetPackage = routeMapSubPackages[key] ?? 'main';
             }
           }
           if (targetPackage != currentPackage) {
-            MPChannel.onSubPackageNavigate(targetPackage, settings.name);
+            MPChannel.onSubPackageNavigate(targetPackage, settings.name ?? '');
             return MPPageRoute(
               builder: (context) => Container(),
               settings: RouteSettings(

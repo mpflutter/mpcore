@@ -1,7 +1,6 @@
 library mpkit_encoder;
 
 import 'package:mpcore/mpcore.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter/widgets.dart';
 
 part './web_view.dart';

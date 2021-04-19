@@ -2,9 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:developer' as dev;
 
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter/widgets.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:mime_type/mime_type.dart';
 import 'package:mpcore/mpjs/mpjs_io.dart';
 
@@ -56,7 +54,7 @@ class MPChannel {
           sockets.add(socket);
           socket.listen(handleClientMessage);
           MPCore.clearOldFrameObject();
-          WidgetsBinding.instance.scheduleFrame();
+          WidgetsBinding.instance?.scheduleFrame();
           _flushMessageQueue();
         } else if (req.uri.path.startsWith('/assets/packages/')) {
           handlePackageAssetsRequest(req);

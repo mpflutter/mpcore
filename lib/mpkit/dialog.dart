@@ -1,6 +1,5 @@
 import 'dart:math';
 
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter/widgets.dart';
 
 import 'mpkit.dart';
@@ -10,9 +9,9 @@ Future<T> showMPDialog<T>({
   required WidgetBuilder builder,
   bool barrierDismissible = true,
   Color? barrierColor,
-}) {
+}) async {
   final parentRoute = ModalRoute.of(context);
-  return Navigator.of(context).push(MPPageRoute(
+  final result = await Navigator.of(context).push(MPPageRoute(
     builder: (context) {
       return MPOverlayScaffold(
         backgroundColor: barrierColor,
@@ -27,4 +26,5 @@ Future<T> showMPDialog<T>({
     },
     settings: RouteSettings(name: '/mp_dialog/${Random().nextDouble()}'),
   ));
+  return result;
 }

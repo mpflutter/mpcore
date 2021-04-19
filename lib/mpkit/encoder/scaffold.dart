@@ -44,6 +44,8 @@ MPElement _encodeMPScaffold(Element element) {
   if (stackedScaffold && bodyElement != null) {
     return MPElement.fromFlutterElement(bodyElement);
   }
+  final appBarPreferredSize =
+      (appBarElement?.widget as MPScaffoldAppBar?)?.child?.preferredSize;
   return MPElement(
     hashCode: element.hashCode,
     name: 'mp_scaffold',
@@ -59,11 +61,7 @@ MPElement _encodeMPScaffold(Element element) {
       'appBarTintColor': widget.appBarTintColor != null
           ? widget.appBarTintColor!.value.toString()
           : null,
-      'appBarHeight': (appBarElement?.widget as MPScaffoldAppBar?)
-              ?.child
-              ?.preferredSize
-              ?.height ??
-          0.0,
+      'appBarHeight': appBarPreferredSize?.height ?? 0.0,
       'header': headerElement != null
           ? MPElement.fromFlutterElement(headerElement)
           : null,

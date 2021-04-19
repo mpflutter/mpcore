@@ -24,7 +24,7 @@ MPElement _encodeGridView(Element element) {
     // ignore: invalid_use_of_protected_member
     constraints: element.findRenderObject()?.constraints,
     attributes: {
-      'scrollDirection': widget.scrollDirection?.toString(),
+      'scrollDirection': widget.scrollDirection.toString(),
       'padding': widget.padding?.toString(),
       'width':
           // ignore: invalid_use_of_protected_member

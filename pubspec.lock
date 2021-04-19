@@ -22,13 +22,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.2.0"
-  clock:
-    dependency: transitive
-    description:
-      name: clock
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.1.0"
   collection:
     dependency: transitive
     description:
@@ -42,15 +35,13 @@ packages:
       name: file
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.2.1"
+    version: "6.1.0"
   flutter:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: e5fbd1ad7597c749eff2ac5e7b6b1a9c42066fc4
-      url: "https://github.com/mpflutter/flutter"
-    source: git
+      path: "/Users/saiakirahui/Documents/mpflutter/flutter"
+      relative: false
+    source: path
     version: "0.0.0"
   glob:
     dependency: "direct main"
@@ -58,21 +49,7 @@ packages:
       name: glob
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.2.0"
-  intl:
-    dependency: transitive
-    description:
-      name: intl
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.17.0"
-  js:
-    dependency: transitive
-    description:
-      name: js
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.6.3"
+    version: "2.0.1"
   json_patch:
     dependency: "direct main"
     description:
@@ -93,21 +70,7 @@ packages:
       name: mime_type
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.3.2"
-  node_interop:
-    dependency: transitive
-    description:
-      name: node_interop
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.2.1"
-  node_io:
-    dependency: transitive
-    description:
-      name: node_io
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.2.0"
+    version: "1.0.0"
   path:
     dependency: "direct main"
     description:
@@ -162,20 +125,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.0"
-  vm_service_lib:
+  vm_service:
     dependency: "direct main"
     description:
-      name: vm_service_lib
+      name: vm_service
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.3.10+2"
+    version: "6.2.0"
   watcher:
     dependency: "direct main"
     description:
       name: watcher
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.9.7+15"
+    version: "1.0.0"
 sdks:
   dart: ">=2.12.0 <3.0.0"
   flutter: ">=1.17.0"

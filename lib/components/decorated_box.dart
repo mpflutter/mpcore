@@ -87,9 +87,7 @@ MPElement _encodeDecoratedBox(Element element) {
       };
     }
   }
-  if (widget.position != null) {
-    attributes['position'] = widget.position.toString();
-  }
+  attributes['position'] = widget.position.toString();
   return MPElement(
     hashCode: element.hashCode,
     name: 'decorated_box',

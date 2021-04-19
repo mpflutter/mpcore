@@ -9,10 +9,9 @@ MPElement _encodeEditableText(Element element) {
     // ignore: invalid_use_of_protected_member
     constraints: element.findRenderObject()?.constraints,
     attributes: {
-      'style': widget.style != null ? _encodeTextStyle(widget.style) : null,
-      'value': widget.controller?.textDirty == true
-          ? (widget.controller?.text ?? '')
-          : null,
+      'style': _encodeTextStyle(widget.style),
+      'value':
+          widget.controller.textDirty == true ? widget.controller.text : null,
       'placeholder': widget.placeholder,
       'maxLines': widget.maxLines,
       'obscureText': widget.obscureText,

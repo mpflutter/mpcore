@@ -38,7 +38,7 @@ MPElement _encodeListView(Element element) {
         }
       })(),
       'padding': widget.padding?.toString(),
-      'scrollDirection': widget.scrollDirection?.toString(),
+      'scrollDirection': widget.scrollDirection.toString(),
     },
   );
 }

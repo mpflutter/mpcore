@@ -4,13 +4,9 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:glob/glob.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:vm_service_lib/vm_service_lib_io.dart' show vmServiceConnectUri;
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:vm_service_lib/vm_service_lib.dart' show VmService;
-// ignore: import_of_legacy_library_into_null_safe
+import 'package:vm_service/vm_service_io.dart' show vmServiceConnectUri;
+import 'package:vm_service/vm_service.dart' show VmService;
 import 'package:watcher/watcher.dart';
 
 const String _kVmServiceUrl = 'ws://localhost:8181/ws';
@@ -222,7 +218,7 @@ class HotReloader {
   ///      // Your code goes here
   ///    }
   void addGlob(Glob glob) {
-    glob.listSync().forEach(addFile);
+    // glob.listSync().forEach(addFile);
   }
 
   /// Registers [FileSystemEntity] to watch
@@ -355,12 +351,12 @@ More information can be found at: https://www.dartlang.org/dart-vm/tools/dart-vm
 
     // Find main isolate id to reload it
     final vm = await _client!.getVM();
-    final ref = vm.isolates.first;
+    final ref = vm.isolates!.first;
 
     // Reload
-    final rep = await _client!.reloadSources(ref.id);
+    final rep = await _client!.reloadSources(ref.id!);
 
-    if (!rep.success) {
+    if (rep.success != true) {
       print('Reloading failed! Reason: $rep');
       return;
     }
