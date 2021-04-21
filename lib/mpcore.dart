@@ -71,6 +71,13 @@ class MPCore {
     _plugins.add(plugin);
   }
 
+  static bool? sendingSSRFrame = false;
+
+  static void scheduleSSRFrame() async {
+    sendingSSRFrame = true;
+    WidgetsBinding.instance?.scheduleFrame();
+  }
+
   Element get renderView => WidgetsBinding.instance!.renderViewElement!;
 
   // static Map _oldFrameObject;
@@ -126,7 +133,7 @@ class MPCore {
         diffDoc = null;
       }
     }
-    if (diffDoc != null) {
+    if (diffDoc != null && sendingSSRFrame != true) {
       final diffFrameData = json.encode({
         'type': 'diff_data',
         'message': diffDoc,
@@ -136,7 +143,7 @@ class MPCore {
     } else {
       final doc = toDocument();
       final newFrameData = json.encode({
-        'type': 'frame_data',
+        'type': sendingSSRFrame == true ? 'ssr_frame_data' : 'frame_data',
         'message': doc,
       });
       final frameData = newFrameData;

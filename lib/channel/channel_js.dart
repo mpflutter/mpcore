@@ -48,7 +48,11 @@ class MPChannel {
         }
       ]);
     }
-    window.top?.postMessage(message, '*');
+    try {
+      window.top?.postMessage(message, '*');
+    } catch (e) {
+      js.context.callMethod('postMessage', [message]);
+    }
   }
 
   static String getInitialRoute() {
