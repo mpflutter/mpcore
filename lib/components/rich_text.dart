@@ -39,8 +39,10 @@ MPElement _encodeRichText(Element element) {
   final widget = element.widget as RichText;
   final renderObject = element.findRenderObject();
   // ignore: invalid_use_of_protected_member
-  var constraints = element.findRenderObject()?.constraints as BoxConstraints;
-  if (renderObject is RenderParagraph && renderObject.measuredSize != null) {
+  var constraints = element.findRenderObject()?.constraints as BoxConstraints?;
+  if (renderObject is RenderParagraph &&
+      renderObject.hasSize &&
+      renderObject.measuredSize != null) {
     if (renderObject.size.width + 1.0 < renderObject.measuredSize!.width ||
         renderObject.size.height + 1.0 < renderObject.measuredSize!.height) {
       renderObject.measuredSize = null;
@@ -56,6 +58,12 @@ MPElement _encodeRichText(Element element) {
   if (renderObject is RenderParagraph && renderObject.measuredSize == null) {
     _measuringText[element.hashCode] = element;
   }
+  constraints ??= BoxConstraints(
+    minWidth: 0,
+    minHeight: 0,
+    maxWidth: double.infinity,
+    maxHeight: double.infinity,
+  );
   return MPElement(
     hashCode: element.hashCode,
     name: 'rich_text',
