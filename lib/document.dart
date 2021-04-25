@@ -48,7 +48,66 @@ class MPElement {
     this.attributes,
   });
 
+  bool? _isEqual;
+
+  @override
+  bool operator ==(Object other) {
+    if (!(other is MPElement)) return false;
+    euqalCheck(other);
+    return _isEqual!;
+  }
+
+  void euqalCheck(MPElement other) {
+    if (_isEqual != null) return;
+    final result = hashCode == other.hashCode &&
+        name == other.name &&
+        constraints == other.constraints &&
+        isChildrenEqual(other) &&
+        isAttributesEqual(other);
+    _isEqual = result;
+    other._isEqual = result;
+  }
+
+  bool isAttributesEqual(MPElement other) {
+    final myKeys = attributes?.keys.toList();
+    final otherKeys = other.attributes?.keys.toList();
+    if (myKeys == null && otherKeys != null) return false;
+    if (myKeys != null && otherKeys == null) return false;
+    if (myKeys == null && otherKeys == null) return true;
+    if (myKeys!.length != otherKeys!.length) return false;
+    for (var i = 0; i < myKeys.length; i++) {
+      if (myKeys[i] != otherKeys[i]) {
+        return false;
+      }
+    }
+    for (var i = 0; i < myKeys.length; i++) {
+      if (attributes![myKeys[i]] != other.attributes![otherKeys[i]]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  bool isChildrenEqual(MPElement other) {
+    if (children == null && other.children != null) return false;
+    if (children != null && other.children == null) return false;
+    if (children == null && other.children == null) return true;
+    if (children!.length != other.children!.length) return false;
+    for (var i = 0; i < children!.length; i++) {
+      if (children![i] != other.children![i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   Map toJson() {
+    if (_isEqual == true) {
+      return {
+        'hashCode': hashCode,
+        '^': 1,
+      };
+    }
     return {
       'hashCode': hashCode,
       'name': name,

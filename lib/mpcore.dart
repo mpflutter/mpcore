@@ -80,12 +80,6 @@ class MPCore {
 
   Element get renderView => WidgetsBinding.instance!.renderViewElement!;
 
-  // static Map _oldFrameObject;
-
-  static void clearOldFrameObject() {
-    // _oldFrameObject = null;
-  }
-
   void connectToHostChannel() async {
     final _ = MPChannel.setupHotReload(this);
     while (true) {
@@ -106,7 +100,14 @@ class MPCore {
     }
   }
 
-  String? lastFromData;
+  static String? lastFrameData;
+
+  static _Document? lastFrameDocument;
+
+  static void clearOldFrameObject() {
+    lastFrameData = null;
+    lastFrameDocument = null;
+  }
 
   Future sendFrame() async {
     await nextFrame();
@@ -126,10 +127,10 @@ class MPCore {
       }
     }).toList();
     _Document? diffDoc;
-    if (recentDirtyElements.isNotEmpty && lastFromData != null) {
+    if (recentDirtyElements.isNotEmpty && lastFrameData != null) {
       diffDoc = toDiffDocument(recentDirtyElements);
       if (!diffDoc.diffs!.every((element) =>
-          lastFromData!.contains('"hashCode":${element.hashCode}'))) {
+          lastFrameData!.contains('"hashCode":${element.hashCode}'))) {
         diffDoc = null;
       }
     }
@@ -141,13 +142,14 @@ class MPCore {
       final frameData = diffFrameData;
       MPChannel.postMesssage(frameData);
     } else {
-      final doc = toDocument();
+      final doc = toDocument(lastFrameDocument);
       final newFrameData = json.encode({
         'type': sendingSSRFrame == true ? 'ssr_frame_data' : 'frame_data',
         'message': doc,
       });
       final frameData = newFrameData;
-      lastFromData = frameData;
+      lastFrameData = frameData;
+      lastFrameDocument = doc;
       MPChannel.postMesssage(frameData);
     }
     if (_measuringText.isEmpty) {
@@ -179,7 +181,7 @@ class MPCore {
     );
   }
 
-  _Document? toDocument() {
+  _Document? toDocument(_Document? lastDoc) {
     Element? activeScaffoldElement;
     Element? mainTabElement;
     final scaffoldElements = <Element>[];
@@ -246,7 +248,16 @@ class MPCore {
                 }
               })()
             : null,
-        scaffold: MPElement.fromFlutterElement(activeScaffoldElement),
+        scaffold: (() {
+          if (activeScaffoldElement == null) return null;
+          final scaffoldElement =
+              MPElement.fromFlutterElement(activeScaffoldElement);
+          if (lastFrameDocument != null &&
+              lastFrameDocument!.scaffold != null) {
+            scaffoldElement.euqalCheck(lastFrameDocument!.scaffold!);
+          }
+          return scaffoldElement;
+        })(),
         overlays: overlays,
       );
       return vDocument;

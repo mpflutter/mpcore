@@ -69,11 +69,11 @@ class _MPTabBodyState extends State<MPTabBody>
       return Column(
         children: [
           Container(
-            key: Key('tab_bar'),
+            key: widget.tabBarKey,
             child: widget.tabBar,
           ),
           Expanded(
-            key: Key('tab_body'),
+            key: widget.tabBodyKey,
             child: widget.children[widget.tabController.index],
           ),
         ],
