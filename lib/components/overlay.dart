@@ -4,7 +4,9 @@ MPElement _encodeOverlay(Element scaffoldElement) {
   Element? bodyElement;
   Color? bodyBackgroundColor;
   if (scaffoldElement.widget is MPOverlayScaffold) {
-    bodyElement = MPCore.findTarget<MPScaffoldBody>(scaffoldElement);
+    bodyElement = (scaffoldElement.widget as MPOverlayScaffold)
+        .bodyKey
+        .currentContext as Element?;
     bodyBackgroundColor =
         (scaffoldElement.widget as MPOverlayScaffold).backgroundColor;
   }

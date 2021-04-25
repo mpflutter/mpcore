@@ -2,15 +2,21 @@ import 'package:flutter/widgets.dart';
 
 import '../mpcore.dart';
 
+final List<GlobalKey> scaffoldKeys = [];
+
 class MPScaffold extends StatelessWidget {
   final String? name;
   final Map<String, String>? metaData;
   final Color? appBarColor; // Taro use only
   final Color? appBarTintColor; // Taro use only
   final Widget? body;
+  final bodyKey = GlobalKey();
   final PreferredSizeWidget? appBar;
+  final appBarKey = GlobalKey();
   final Widget? bottomBar;
+  final bottomBarKey = GlobalKey();
   final Widget? floatingBody;
+  final floatingBodyKey = GlobalKey();
   final Color? backgroundColor;
   final bool? isListBody;
 
@@ -25,7 +31,13 @@ class MPScaffold extends StatelessWidget {
     this.floatingBody,
     this.backgroundColor,
     this.isListBody,
-  });
+  }) : super(key: (() {
+          scaffoldKeys
+              .removeWhere((element) => element.currentContext?.owner == null);
+          final key = GlobalKey();
+          scaffoldKeys.add(key);
+          return key;
+        })());
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +47,15 @@ class MPScaffold extends StatelessWidget {
     }
     Widget child = Stack(
       children: [
-        appBar != null ? MPScaffoldAppBar(child: appBar) : Container(),
-        body != null ? MPScaffoldBody(child: body) : Container(),
-        bottomBar != null ? MPScaffoldBottomBar(child: bottomBar) : Container(),
+        appBar != null
+            ? MPScaffoldAppBar(key: appBarKey, child: appBar)
+            : Container(),
+        body != null ? MPScaffoldBody(key: bodyKey, child: body) : Container(),
+        bottomBar != null
+            ? MPScaffoldBottomBar(key: bottomBarKey, child: bottomBar)
+            : Container(),
         floatingBody != null
-            ? MPScaffoldFloatingBody(child: floatingBody)
+            ? MPScaffoldFloatingBody(key: floatingBodyKey, child: floatingBody)
             : Container(),
       ],
     );
@@ -76,8 +92,9 @@ class MPScaffoldBody extends StatelessWidget {
   final Widget? child;
 
   MPScaffoldBody({
+    Key? key,
     this.child,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -93,8 +110,9 @@ class MPScaffoldAppBar extends StatelessWidget {
   final PreferredSizeWidget? child;
 
   MPScaffoldAppBar({
+    Key? key,
     this.child,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -113,8 +131,9 @@ class MPScaffoldBottomBar extends StatelessWidget {
   final Widget? child;
 
   MPScaffoldBottomBar({
+    Key? key,
     this.child,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -133,8 +152,9 @@ class MPScaffoldFloatingBody extends StatelessWidget {
   final Widget? child;
 
   MPScaffoldFloatingBody({
+    Key? key,
     this.child,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

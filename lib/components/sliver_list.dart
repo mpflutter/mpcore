@@ -4,6 +4,7 @@ MPElement _encodeSliverList(Element element) {
   final indexedSemanticeParentElement = MPCore.findTarget<KeyedSubtree>(
     element,
     findParent: true,
+    maxDepth: 20,
   );
   if (indexedSemanticeParentElement == null) {
     return MPElement(

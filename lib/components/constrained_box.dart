@@ -36,8 +36,6 @@ MPElement _encodeConstrainedBox(Element element) {
     name: 'constrained_box',
     children: childElements,
     constraints: constraints,
-    attributes: {
-      'scrollable': MPCore.findTarget<Scrollable>(element) != null,
-    },
+    attributes: {},
   );
 }

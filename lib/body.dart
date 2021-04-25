@@ -18,9 +18,12 @@ class MPTabController extends ChangeNotifier {
 
 class MPTabBody extends StatefulWidget {
   final Widget? header;
+  final headerKey = GlobalKey();
   final MPTabController tabController;
   final Widget? tabBar;
+  final tabBarKey = GlobalKey();
   final List<Builder> children;
+  final tabBodyKey = GlobalKey();
 
   MPTabBody({
     this.header,
@@ -49,15 +52,15 @@ class _MPTabBodyState extends State<MPTabBody>
       return Column(
         children: [
           Container(
-            key: Key('tab_header'),
+            key: widget.headerKey,
             child: widget.header,
           ),
           Container(
-            key: Key('tab_bar'),
+            key: widget.tabBarKey,
             child: widget.tabBar,
           ),
           Expanded(
-            key: Key('tab_body'),
+            key: widget.tabBodyKey,
             child: widget.children[widget.tabController.index],
           ),
         ],

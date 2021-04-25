@@ -1,7 +1,10 @@
 part of '../mpcore.dart';
 
 MPElement _encodeCustomScrollView(Element element) {
-  final viewportElement = MPCore.findTarget<Viewport>(element);
+  final viewportElement = MPCore.findTarget<Viewport>(
+    element,
+    maxDepth: 20,
+  );
   if (viewportElement == null) {
     return MPElement(
       hashCode: element.hashCode,

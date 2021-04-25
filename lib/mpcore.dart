@@ -184,8 +184,28 @@ class MPCore {
     Element? mainTabElement;
     final scaffoldElements = <Element>[];
     final overlays = <MPElement>[];
-    findTargetsTwo<MPScaffold, MPMainTab>(renderView,
-        out: scaffoldElements, mustCurrentRoute: true);
+    ModalRoute? activeOverlayParentRoute;
+    scaffoldKeys.forEach((element) {
+      if (element.currentContext?.owner != null &&
+          ModalRoute.of(element.currentContext!)?.isCurrent == true) {
+        final el = element.currentContext as Element;
+        if (el.widget is MPOverlayScaffold) {
+          activeOverlayParentRoute =
+              (el.widget as MPOverlayScaffold).parentRoute;
+        }
+        scaffoldElements.add(el);
+      }
+    });
+    if (activeOverlayParentRoute != null) {
+      scaffoldKeys.forEach((element) {
+        if (element.currentContext?.owner != null &&
+            ModalRoute.of(element.currentContext!) ==
+                activeOverlayParentRoute) {
+          final el = element.currentContext as Element;
+          scaffoldElements.add(el);
+        }
+      });
+    }
     activeOverlayParentRoute = null;
     for (var scaffoldElement in scaffoldElements) {
       if (scaffoldElement.widget is MPOverlayScaffold) {
@@ -214,8 +234,11 @@ class MPCore {
         })(),
         mainTabBar: mainTabElement != null
             ? (() {
-                final target =
-                    MPCore.findTargetKey(Key('mainTabBar'), mainTabElement!);
+                final target = MPCore.findTargetKey(
+                  Key('mainTabBar'),
+                  mainTabElement!,
+                  maxDepth: 20,
+                );
                 if (target != null) {
                   return MPElement.fromFlutterElement(target);
                 } else {
@@ -232,12 +255,20 @@ class MPCore {
     }
   }
 
-  static Element? findTarget<T>(Element? element, {bool findParent = false}) {
+  static Element? findTarget<T>(
+    Element? element, {
+    bool findParent = false,
+    int? maxDepth,
+  }) {
+    if (maxDepth != null && maxDepth < 0) {
+      return null;
+    }
     if (element == null) {
       return null;
     }
     Element? targetElement;
     element.visitChildElements((el) {
+      if (targetElement != null) return;
       if (el.widget is T) {
         if (findParent == true) {
           targetElement = element;
@@ -245,7 +276,11 @@ class MPCore {
           targetElement = el;
         }
       } else {
-        final next = findTarget<T>(el, findParent: findParent);
+        final next = findTarget<T>(
+          el,
+          findParent: findParent,
+          maxDepth: maxDepth != null ? maxDepth - 1 : null,
+        );
         if (next != null) {
           targetElement = next;
         }
@@ -308,11 +343,22 @@ class MPCore {
     });
   }
 
+  static Map<int, Element> hashCodeCache = {};
+
+  static void addElementToHashCodeCache(Element element) {
+    if (hashCodeCache[element.hashCode] != null) return;
+    hashCodeCache[element.hashCode] = element;
+    hashCodeCache.removeWhere((key, value) => value.owner == null);
+  }
+
   static Element? findTargetHashCode(
     int? hashCode, {
     Element? element,
   }) {
     if (hashCode == null) return null;
+    if (hashCodeCache[hashCode] != null) {
+      return hashCodeCache[hashCode];
+    }
     element ??= WidgetsBinding.instance?.renderViewElement;
     Element? targetElement;
     element?.visitChildElements((el) {
@@ -348,8 +394,15 @@ class MPCore {
     }
   }
 
-  static Element? findTargetKey(Key key, Element element,
-      {bool findParent = false}) {
+  static Element? findTargetKey(
+    Key key,
+    Element element, {
+    bool findParent = false,
+    int? maxDepth,
+  }) {
+    if (maxDepth != null && maxDepth < 0) {
+      return null;
+    }
     Element? targetElement;
     element.visitChildElements((el) {
       if (el.widget.key == key) {
@@ -359,7 +412,12 @@ class MPCore {
           targetElement = el;
         }
       } else {
-        final next = findTargetKey(key, el, findParent: findParent);
+        final next = findTargetKey(
+          key,
+          el,
+          findParent: findParent,
+          maxDepth: maxDepth != null ? maxDepth - 1 : null,
+        );
         if (next != null) {
           targetElement = next;
         }

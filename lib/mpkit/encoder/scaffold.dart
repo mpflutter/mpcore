@@ -5,32 +5,35 @@ MPElement _encodeMPScaffold(Element element) {
       element.findAncestorWidgetOfExactType<MPScaffold>() != null;
   final widget = element.widget as MPScaffold;
   final name = widget.name;
-  final tabBodyElement = MPCore.findTarget<MPTabBody>(element);
+  final tabBodyElement = MPCore.findTarget<MPTabBody>(
+    element,
+    maxDepth: 20,
+  );
   Element? headerElement;
   Element? tabBarElement;
   var isTabBody = false;
   var isListBody = widget.isListBody;
-  final appBarElement = MPCore.findTarget<MPScaffoldAppBar>(element);
-  var bodyElement = MPCore.findTarget<MPScaffoldBody>(element);
-  var bottomBarElement = MPCore.findTarget<MPScaffoldBottomBar>(element);
-  final floatingBodyElement =
-      MPCore.findTarget<MPScaffoldFloatingBody>(element);
+  final appBarElement = widget.appBarKey.currentContext as Element?;
+  var bodyElement = widget.bodyKey.currentContext as Element?;
+  var bottomBarElement = widget.bottomBarKey.currentContext as Element?;
+  final floatingBodyElement = widget.floatingBodyKey.currentContext as Element?;
   final bodyBackgroundColor = widget.backgroundColor;
   if (tabBodyElement != null) {
+    final tabBody = tabBodyElement.widget as MPTabBody;
     headerElement = (() {
-      final target = MPCore.findTargetKey(Key('tab_header'), tabBodyElement);
+      final target = tabBody.headerKey.currentContext as Element?;
       if (target != null) {
         return MPCore.findFirstChild(target);
       }
     })();
     tabBarElement = (() {
-      final target = MPCore.findTargetKey(Key('tab_bar'), tabBodyElement);
+      final target = tabBody.tabBarKey.currentContext as Element?;
       if (target != null) {
         return MPCore.findFirstChild(target);
       }
     })();
     bodyElement = (() {
-      final target = MPCore.findTargetKey(Key('tab_body'), tabBodyElement);
+      final target = tabBody.tabBodyKey.currentContext as Element?;
       if (target != null) {
         return MPCore.findFirstChild(target);
       }
@@ -38,7 +41,11 @@ MPElement _encodeMPScaffold(Element element) {
     isTabBody = true;
   }
   if (isListBody == null &&
-      MPCore.findTarget<Scrollable>(bodyElement) != null) {
+      MPCore.findTarget<Scrollable>(
+            bodyElement,
+            maxDepth: 20,
+          ) !=
+          null) {
     isListBody = true;
   }
   if (stackedScaffold && bodyElement != null) {
