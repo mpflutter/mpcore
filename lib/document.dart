@@ -81,7 +81,13 @@ class MPElement {
       }
     }
     for (var i = 0; i < myKeys.length; i++) {
-      if (attributes![myKeys[i]] != other.attributes![otherKeys[i]]) {
+      if (attributes![myKeys[i]] is Map &&
+          other.attributes![otherKeys[i]] is Map) {
+        if (json.encode(attributes![myKeys[i]]) !=
+            json.encode(other.attributes![otherKeys[i]])) {
+          return false;
+        }
+      } else if (attributes![myKeys[i]] != other.attributes![otherKeys[i]]) {
         return false;
       }
     }
@@ -92,12 +98,15 @@ class MPElement {
     if (children == null && other.children != null) return false;
     if (children != null && other.children == null) return false;
     if (children == null && other.children == null) return true;
-    if (children!.length != other.children!.length) return false;
     for (var i = 0; i < children!.length; i++) {
+      if (i >= other.children!.length) {
+        return false;
+      }
       if (children![i] != other.children![i]) {
         return false;
       }
     }
+    if (children!.length != other.children!.length) return false;
     return true;
   }
 
