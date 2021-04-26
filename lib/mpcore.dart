@@ -94,6 +94,7 @@ class MPCore {
   Future handleHotReload() async {
     try {
       markNeedsBuild(renderView);
+      clearOldFrameObject();
       await sendFrame();
     } catch (e) {
       print(e);
