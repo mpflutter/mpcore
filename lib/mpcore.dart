@@ -126,10 +126,9 @@ class MPCore {
     }).toList();
     _Document? diffDoc;
     if (recentDirtyElements.isNotEmpty && lastFrameData != null) {
-      diffDoc = toDiffDocument(recentDirtyElements);
-      if (!diffDoc.diffs!.every((element) =>
+      if (recentDirtyElements.every((element) =>
           lastFrameData!.contains('"hashCode":${element.hashCode}'))) {
-        diffDoc = null;
+        diffDoc = toDiffDocument(recentDirtyElements);
       }
     }
     if (diffDoc != null && sendingSSRFrame != true) {
