@@ -33,6 +33,7 @@ MPElement _encodeConstrainedBox(Element element) {
   }
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'constrained_box',
     children: childElements,
     constraints: constraints,

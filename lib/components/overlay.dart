@@ -12,6 +12,7 @@ MPElement _encodeOverlay(Element scaffoldElement) {
   }
   return MPElement(
     hashCode: scaffoldElement.hashCode,
+    flutterElement: scaffoldElement,
     name: 'overlay',
     children: bodyElement != null
         ? MPElement.childrenFromFlutterElement(bodyElement)

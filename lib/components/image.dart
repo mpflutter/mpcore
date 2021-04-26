@@ -4,6 +4,7 @@ MPElement _encodeImage(Element element) {
   final widget = element.widget as Image;
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'image',
     // ignore: invalid_use_of_protected_member
     constraints: element.findRenderObject()?.constraints,

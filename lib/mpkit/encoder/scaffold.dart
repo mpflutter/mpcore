@@ -55,6 +55,7 @@ MPElement _encodeMPScaffold(Element element) {
       (appBarElement?.widget as MPScaffoldAppBar?)?.child?.preferredSize;
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'mp_scaffold',
     attributes: {
       'name': name,

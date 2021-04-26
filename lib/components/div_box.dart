@@ -7,6 +7,7 @@ MPElement _encodeDivBox(Element element) {
   }
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'div',
     children: children,
     attributes: {},

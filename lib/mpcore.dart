@@ -119,11 +119,8 @@ class MPCore {
       _measuringText.clear();
     }
     final recentDirtyElements = BuildOwner.recentDirtyElements.where((element) {
-      try {
-        return ModalRoute.of(element)?.isCurrent == true;
-      } catch (e) {
-        return false;
-      }
+      return element.isInactive() != true &&
+          ModalRoute.of(element)?.isCurrent == true;
     }).toList();
     _Document? diffDoc;
     if (recentDirtyElements.isNotEmpty && lastFrameData != null) {
@@ -151,6 +148,15 @@ class MPCore {
     }
     if (_measuringText.isEmpty) {
       BuildOwner.recentDirtyElements.clear();
+    }
+    MPElement.runElementCacheGC();
+    if (MPElement.invalidElements.isNotEmpty) {
+      final gcData = json.encode({
+        'type': 'element_gc',
+        'message': MPElement.invalidElements,
+      });
+      MPChannel.postMesssage(gcData);
+      MPElement.invalidElements.clear();
     }
   }
 

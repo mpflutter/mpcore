@@ -24,6 +24,7 @@ MPElement _encodePositioned(Element element) {
   final children = MPElement.childrenFromFlutterElement(element);
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'positioned',
     children: children,
     attributes: attributes,

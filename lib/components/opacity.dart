@@ -4,6 +4,7 @@ MPElement _encodeOpacity(Element element) {
   final widget = element.widget as Opacity;
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'opacity',
     children: MPElement.childrenFromFlutterElement(element),
     attributes: {
@@ -16,6 +17,7 @@ MPElement _encodeSliverOpacity(Element element) {
   final widget = element.widget as SliverOpacity;
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'opacity',
     children: MPElement.childrenFromFlutterElement(element),
     attributes: {

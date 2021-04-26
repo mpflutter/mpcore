@@ -16,6 +16,7 @@ MPElement _encodeSliverList(Element element) {
   }
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'sliver_list',
     children: MPElement.childrenFromFlutterElement(
       indexedSemanticeParentElement,

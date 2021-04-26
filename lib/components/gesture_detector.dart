@@ -5,6 +5,7 @@ MPElement _encodeGestureDetector(Element element) {
   final widget = element.widget as GestureDetector;
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'gesture_detector',
     children: MPElement.childrenFromFlutterElement(element),
     attributes: {

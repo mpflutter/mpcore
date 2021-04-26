@@ -9,6 +9,7 @@ MPElement _encodeSliverGrid(Element element) {
   if (indexedSemanticeParentElement == null) {
     return MPElement(
       hashCode: element.hashCode,
+      flutterElement: element,
       name: 'sliver_grid',
       children: [],
       attributes: {},
@@ -19,6 +20,7 @@ MPElement _encodeSliverGrid(Element element) {
       element.findAncestorWidgetOfExactType<SliverPadding>()?.padding;
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'sliver_grid',
     children: MPElement.childrenFromFlutterElement(
       indexedSemanticeParentElement,

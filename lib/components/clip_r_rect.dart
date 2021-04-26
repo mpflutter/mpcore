@@ -4,6 +4,7 @@ MPElement _encodeClipRRect(Element element) {
   final widget = element.widget as ClipRRect;
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'clip_r_rect',
     children: MPElement.childrenFromFlutterElement(element),
     attributes: {
@@ -15,6 +16,7 @@ MPElement _encodeClipRRect(Element element) {
 MPElement _encodeClipRect(Element element) {
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'clip_r_rect',
     children: MPElement.childrenFromFlutterElement(element),
     attributes: {

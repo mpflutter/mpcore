@@ -9,6 +9,7 @@ MPElement _encodeMPPageView(Element element) {
   );
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'mp_page_view',
     // ignore: invalid_use_of_protected_member
     constraints: element.findRenderObject()?.constraints,

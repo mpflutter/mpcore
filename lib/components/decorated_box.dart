@@ -90,6 +90,7 @@ MPElement _encodeDecoratedBox(Element element) {
   attributes['position'] = widget.position.toString();
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'decorated_box',
     children: MPElement.childrenFromFlutterElement(element),
     // ignore: invalid_use_of_protected_member

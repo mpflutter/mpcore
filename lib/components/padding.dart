@@ -4,6 +4,7 @@ MPElement _encodePadding(Element element) {
   final widget = element.widget as Padding;
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'padding',
     children: MPElement.childrenFromFlutterElement(element),
     // ignore: invalid_use_of_protected_member
@@ -18,6 +19,7 @@ MPElement _encodeSliverPadding(Element element) {
   final widget = element.widget as SliverPadding;
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'padding',
     children: MPElement.childrenFromFlutterElement(element),
     // ignore: invalid_use_of_protected_member

@@ -4,6 +4,7 @@ MPElement _encodeFlexible(Element element) {
   final widget = element.widget as Flexible;
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'flexible',
     children: MPElement.childrenFromFlutterElement(element),
     attributes: {

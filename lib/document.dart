@@ -33,10 +33,21 @@ class _Document {
 
 class MPElement {
   static Map<int, MPElement> elementCache = {};
+  static List<int> invalidElements = [];
+
+  static void runElementCacheGC() {
+    final theInvalidElements = elementCache.values
+        .where((element) => element.flutterElement?.isInactive() == true)
+        .toList();
+    elementCache.removeWhere(
+        (key, value) => value.flutterElement?.isInactive() == true);
+    invalidElements.addAll(theInvalidElements.map((e) => e.hashCode));
+  }
 
   @override
   final int hashCode;
 
+  final Element? flutterElement;
   final String name;
   final List<MPElement>? children;
   final Constraints? constraints;
@@ -44,6 +55,7 @@ class MPElement {
 
   MPElement({
     required this.hashCode,
+    this.flutterElement,
     required this.name,
     this.children,
     this.constraints,

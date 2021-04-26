@@ -4,6 +4,7 @@ MPElement _encodeEditableText(Element element) {
   final widget = element.widget as EditableText;
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'editable_text',
     children: [],
     // ignore: invalid_use_of_protected_member

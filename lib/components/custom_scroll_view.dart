@@ -8,6 +8,7 @@ MPElement _encodeCustomScrollView(Element element) {
   if (viewportElement == null) {
     return MPElement(
       hashCode: element.hashCode,
+      flutterElement: element,
       name: 'custom_scroll_view',
       children: [],
       // ignore: invalid_use_of_protected_member
@@ -17,6 +18,7 @@ MPElement _encodeCustomScrollView(Element element) {
   }
   return MPElement(
     hashCode: element.hashCode,
+    flutterElement: element,
     name: 'custom_scroll_view',
     children: MPElement.childrenFromFlutterElement(viewportElement),
     // ignore: invalid_use_of_protected_member
