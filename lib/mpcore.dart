@@ -102,11 +102,9 @@ class MPCore {
 
   static String? lastFrameData;
 
-  static _Document? lastFrameDocument;
-
   static void clearOldFrameObject() {
     lastFrameData = null;
-    lastFrameDocument = null;
+    MPElement.elementCache.clear();
   }
 
   Future sendFrame() async {
@@ -142,14 +140,13 @@ class MPCore {
       final frameData = diffFrameData;
       MPChannel.postMesssage(frameData);
     } else {
-      final doc = toDocument(lastFrameDocument);
+      final doc = toDocument();
       final newFrameData = json.encode({
         'type': sendingSSRFrame == true ? 'ssr_frame_data' : 'frame_data',
         'message': doc,
       });
       final frameData = newFrameData;
       lastFrameData = frameData;
-      lastFrameDocument = doc;
       MPChannel.postMesssage(frameData);
     }
     if (_measuringText.isEmpty) {
@@ -181,7 +178,7 @@ class MPCore {
     );
   }
 
-  _Document? toDocument(_Document? lastDoc) {
+  _Document? toDocument() {
     Element? activeScaffoldElement;
     Element? mainTabElement;
     final scaffoldElements = <Element>[];
@@ -250,13 +247,7 @@ class MPCore {
             : null,
         scaffold: (() {
           if (activeScaffoldElement == null) return null;
-          final scaffoldElement =
-              MPElement.fromFlutterElement(activeScaffoldElement);
-          if (lastFrameDocument != null &&
-              lastFrameDocument!.scaffold != null) {
-            scaffoldElement.euqalCheck(lastFrameDocument!.scaffold!);
-          }
-          return scaffoldElement;
+          return MPElement.fromFlutterElement(activeScaffoldElement);
         })(),
         overlays: overlays,
       );

@@ -32,6 +32,8 @@ class _Document {
 }
 
 class MPElement {
+  static Map<int, MPElement> elementCache = {};
+
   @override
   final int hashCode;
 
@@ -46,7 +48,16 @@ class MPElement {
     this.children,
     this.constraints,
     this.attributes,
-  });
+  }) {
+    if (name.endsWith('_span')) {
+      return;
+    }
+    final cachedElement = elementCache[hashCode];
+    if (cachedElement != null) {
+      euqalCheck(cachedElement);
+    }
+    elementCache[hashCode] = this;
+  }
 
   bool? _isEqual;
 
