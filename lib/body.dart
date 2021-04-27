@@ -38,11 +38,19 @@ class MPTabBody extends StatefulWidget {
 
 class _MPTabBodyState extends State<MPTabBody>
     with SingleTickerProviderStateMixin<MPTabBody> {
+  bool switching = false;
+
   @override
   void initState() {
     super.initState();
     widget.tabController.addListener(() {
-      setState(() {});
+      setState(() async {
+        switching = true;
+        await Future.delayed(Duration(milliseconds: 100));
+        setState(() {
+          switching = false;
+        });
+      });
     });
   }
 
@@ -61,7 +69,9 @@ class _MPTabBodyState extends State<MPTabBody>
           ),
           Expanded(
             key: widget.tabBodyKey,
-            child: widget.children[widget.tabController.index],
+            child: switching
+                ? Container()
+                : widget.children[widget.tabController.index],
           ),
         ],
       );
@@ -74,7 +84,9 @@ class _MPTabBodyState extends State<MPTabBody>
           ),
           Expanded(
             key: widget.tabBodyKey,
-            child: widget.children[widget.tabController.index],
+            child: switching
+                ? Container()
+                : widget.children[widget.tabController.index],
           ),
         ],
       );
