@@ -11,6 +11,11 @@ MPElement _encodeMPVideoView(Element element) {
     children: MPElement.childrenFromFlutterElement(element),
     attributes: {
       'url': widget.url,
+      'controls': widget.controls,
+      'autoplay': widget.autoplay,
+      'loop': widget.loop,
+      'muted': widget.muted,
+      'poster': widget.poster,
     },
   );
 }
