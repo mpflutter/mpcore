@@ -1,5 +1,4 @@
 // ignore: avoid_web_libraries_in_flutter
-import 'dart:html';
 
 import 'dart:convert';
 import 'dart:js' as js;
@@ -19,10 +18,14 @@ class MPChannel {
         'message',
         (event) {
           final data = (() {
-            if (event is MessageEvent) {
-              return event.data;
-            } else if (event is js.JsObject) {
+            if (event is js.JsObject) {
               return event['data'];
+            } else {
+              try {
+                return event.data;
+              } catch (e) {
+                return '';
+              }
             }
           })();
           final obj = json.decode(data);
@@ -49,7 +52,7 @@ class MPChannel {
       ]);
     }
     try {
-      window.top?.postMessage(message, '*');
+      (js.context['top'] as js.JsObject).callMethod('postMessage', [message]);
     } catch (e) {
       js.context.callMethod('postMessage', [message]);
     }
@@ -60,7 +63,7 @@ class MPChannel {
       if (Taro.isTaro) {
         return js.context['location']['href'] ?? '/';
       }
-      final uri = Uri.parse(window.location.href);
+      final uri = Uri.parse(js.context['location']['href']);
       final uriRoute = uri.queryParameters['route'];
       if (uriRoute != null) {
         return uriRoute;
