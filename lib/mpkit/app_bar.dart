@@ -82,25 +82,29 @@ class MPAppBar extends StatelessWidget implements PreferredSizeWidget {
               Navigator.of(context).pop();
             }
           },
-          child: Container(
-            width: 44,
-            height: 44,
-            child: Center(
-              child: Container(
-                width: 24,
-                height: 24,
-                child: Image.network(
-                  'https://cdn.jsdelivr.net/gh/mpflutter-plugins/icons@master/arrow_back_ios_new_black_24dp.svg',
-                  width: 24,
-                  height: 24,
-                ),
-              ),
-            ),
-          ),
-        ); //back button
+          child: renderBackButton(),
+        );
       }
       return SizedBox();
     }
+  }
+
+  Container renderBackButton() {
+    return Container(
+      width: 44,
+      height: 44,
+      child: Center(
+        child: Container(
+          width: 18,
+          height: 18,
+          child: Image.network(
+            'https://cdn.jsdelivr.net/gh/mpflutter-plugins/icons@master/arrow_back_ios_new_black_24dp.svg',
+            width: 18,
+            height: 18,
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _renderTrailing(BuildContext context) {
