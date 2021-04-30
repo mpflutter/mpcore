@@ -1,6 +1,7 @@
 library mpkit;
 
 export 'app.dart';
+export 'app_bar.dart';
 export 'page_route.dart';
 export 'scaffold.dart';
 export 'sliver_waterfall_delegate.dart';

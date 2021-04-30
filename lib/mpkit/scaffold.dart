@@ -50,7 +50,14 @@ class MPScaffold extends StatelessWidget {
         appBar != null
             ? MPScaffoldAppBar(key: appBarKey, child: appBar)
             : Container(),
-        body != null ? MPScaffoldBody(key: bodyKey, child: body) : Container(),
+        body != null
+            ? MPScaffoldBody(
+                key: bodyKey,
+                child: body,
+                appBarHeight:
+                    appBar != null ? appBar?.preferredSize.height : null,
+              )
+            : Container(),
         bottomBar != null
             ? MPScaffoldBottomBar(key: bottomBarKey, child: bottomBar)
             : Container(),
@@ -90,17 +97,19 @@ class MPOverlayScaffold extends MPScaffold {
 
 class MPScaffoldBody extends StatelessWidget {
   final Widget? child;
+  final double? appBarHeight;
 
   MPScaffoldBody({
     Key? key,
     this.child,
+    this.appBarHeight,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
+      height: MediaQuery.of(context).size.height - (appBarHeight ?? 0.0),
       child: child,
     );
   }
