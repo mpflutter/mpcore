@@ -153,6 +153,9 @@ class MPChannelBase {
         MPNavigatorObserver.instance.navigator?.pushNamed(message['name']);
       } else if (message['event'] == 'doReplace') {
         MPNavigatorObserver.instance.navigator?.pushNamed(message['name']);
+      } else if (message['event'] == 'doRestart') {
+        MPNavigatorObserver.instance.navigator?.popUntil((route) => false);
+        MPNavigatorObserver.instance.navigator?.pushNamed(message['name']);
       }
     } catch (e) {
       print(e);
