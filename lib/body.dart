@@ -16,14 +16,15 @@ class MPTabController extends ChangeNotifier {
       : _index = initialIndex ?? 0;
 }
 
+// ignore: must_be_immutable
 class MPTabBody extends StatefulWidget {
   final Widget? header;
-  final headerKey = GlobalKey();
+  GlobalKey? headerKey;
   final MPTabController tabController;
   final Widget? tabBar;
-  final tabBarKey = GlobalKey();
+  GlobalKey? tabBarKey;
   final List<Builder> children;
-  final tabBodyKey = GlobalKey();
+  GlobalKey? tabBodyKey;
 
   MPTabBody({
     this.header,
@@ -38,6 +39,9 @@ class MPTabBody extends StatefulWidget {
 
 class _MPTabBodyState extends State<MPTabBody>
     with SingleTickerProviderStateMixin<MPTabBody> {
+  final headerKey = GlobalKey();
+  final tabBarKey = GlobalKey();
+  final tabBodyKey = GlobalKey();
   bool switching = false;
 
   @override
@@ -55,20 +59,36 @@ class _MPTabBodyState extends State<MPTabBody>
   }
 
   @override
+  void didUpdateWidget(covariant MPTabBody oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    widget.headerKey = headerKey;
+    widget.tabBarKey = tabBarKey;
+    widget.tabBodyKey = tabBodyKey;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    widget.headerKey = headerKey;
+    widget.tabBarKey = tabBarKey;
+    widget.tabBodyKey = tabBodyKey;
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (widget.header != null) {
       return Column(
         children: [
           Container(
-            key: widget.headerKey,
+            key: headerKey,
             child: widget.header,
           ),
           Container(
-            key: widget.tabBarKey,
+            key: tabBarKey,
             child: widget.tabBar,
           ),
           Expanded(
-            key: widget.tabBodyKey,
+            key: tabBodyKey,
             child: switching
                 ? Container()
                 : widget.children[widget.tabController.index],
@@ -79,11 +99,11 @@ class _MPTabBodyState extends State<MPTabBody>
       return Column(
         children: [
           Container(
-            key: widget.tabBarKey,
+            key: tabBarKey,
             child: widget.tabBar,
           ),
           Expanded(
-            key: widget.tabBodyKey,
+            key: tabBodyKey,
             child: switching
                 ? Container()
                 : widget.children[widget.tabController.index],

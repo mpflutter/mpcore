@@ -21,19 +21,19 @@ MPElement _encodeMPScaffold(Element element) {
   if (tabBodyElement != null) {
     final tabBody = tabBodyElement.widget as MPTabBody;
     headerElement = (() {
-      final target = tabBody.headerKey.currentContext as Element?;
+      final target = tabBody.headerKey?.currentContext as Element?;
       if (target != null) {
         return MPCore.findFirstChild(target);
       }
     })();
     tabBarElement = (() {
-      final target = tabBody.tabBarKey.currentContext as Element?;
+      final target = tabBody.tabBarKey?.currentContext as Element?;
       if (target != null) {
         return MPCore.findFirstChild(target);
       }
     })();
     bodyElement = (() {
-      final target = tabBody.tabBodyKey.currentContext as Element?;
+      final target = tabBody.tabBodyKey?.currentContext as Element?;
       if (target != null) {
         return MPCore.findFirstChild(target);
       }
