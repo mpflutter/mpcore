@@ -161,5 +161,12 @@ Map _encodeTextStyle(TextStyle style) {
   if (style.backgroundColor != null) {
     map['backgroundColor'] = style.backgroundColor!.value.toString();
   }
+  if (style.decoration != null) {
+    if (style.decoration == TextDecoration.lineThrough) {
+      map['decoration'] = 'TextDecoration.lineThrough';
+    } else if (style.decoration == TextDecoration.underline) {
+      map['decoration'] = 'TextDecoration.underline';
+    }
+  }
   return map;
 }
