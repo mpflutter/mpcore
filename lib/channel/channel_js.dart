@@ -52,9 +52,10 @@ class MPChannel {
       ]);
     }
     try {
-      (js.context['top'] as js.JsObject).callMethod('postMessage', [message]);
+      (js.context['top'] as js.JsObject)
+          .callMethod('postMessage', [message, '*']);
     } catch (e) {
-      js.context.callMethod('postMessage', [message]);
+      js.context.callMethod('postMessage', [message, '*']);
     }
   }
 
