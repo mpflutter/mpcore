@@ -2,8 +2,10 @@ library mpcore;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/gestures.dart';
+import 'package:flutter/ui/ui.dart' as ui;
 import 'package:flutter/widgets.dart';
 import 'package:flutter/rendering.dart';
 import 'channel/channel_io.dart'
@@ -52,6 +54,7 @@ part './components/action.dart';
 part './components/wrap.dart';
 part './components/sliver_persistent_header.dart';
 part './components/web_dialogs.dart';
+part './components/custom_paint.dart';
 part './channel/channel_base.dart';
 
 class MPCore {

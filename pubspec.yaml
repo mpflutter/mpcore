@@ -21,4 +21,5 @@ dependencies:
 
 dependency_overrides:
   flutter: 
-    git: https://github.com/mpflutter/flutter
+    path: /Users/saiakirahui/Documents/mpflutter/flutter
+    # git: https://github.com/mpflutter/flutter

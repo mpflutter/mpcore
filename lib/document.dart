@@ -310,6 +310,10 @@ class MPElement {
       fromFlutterElementMethodCache[element.widget.runtimeType] =
           _encodeSliverPersistentHeader;
       return _encodeSliverPersistentHeader(element);
+    } else if (element.widget is CustomPaint) {
+      fromFlutterElementMethodCache[element.widget.runtimeType] =
+          _encodeCustomPaint;
+      return _encodeCustomPaint(element);
     } else {
       final mpKitResult = MPKitEncoder.fromFlutterElement(element);
       if (mpKitResult != null) {
