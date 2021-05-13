@@ -62,12 +62,12 @@ class MPChannel {
   static String getInitialRoute() {
     try {
       if (Taro.isTaro) {
-        return js.context['location']['href'] ?? '/';
+        return Uri.decodeFull(js.context['location']['href'] ?? '/');
       }
       final uri = Uri.parse(js.context['location']['href']);
       final uriRoute = uri.queryParameters['route'];
       if (uriRoute != null) {
-        return uriRoute;
+        return Uri.decodeFull(uriRoute);
       }
     } catch (e) {
       print(e);
