@@ -6,24 +6,43 @@ class _RecordingCanvas implements Canvas {
 
   @override
   void clipPath(ui.Path path, {bool doAntiAlias = true}) {
-    // TODO: implement clipPath
+    _commands.add({
+      'action': 'clipPath',
+      'path': path,
+    });
   }
 
   @override
   void clipRRect(ui.RRect rrect, {bool doAntiAlias = true}) {
-    // TODO: implement clipRRect
+    final path = ui.Path();
+    path.addRRect(rrect);
+    clipPath(path);
   }
 
   @override
-  void clipRect(ui.Rect rect,
-      {ui.ClipOp clipOp = ui.ClipOp.intersect, bool doAntiAlias = true}) {
-    // TODO: implement clipRect
+  void clipRect(
+    ui.Rect rect, {
+    ui.ClipOp clipOp = ui.ClipOp.intersect,
+    bool doAntiAlias = true,
+  }) {
+    final path = ui.Path();
+    path.addRect(rect);
+    _commands.add({
+      'action': 'clipPath',
+      'path': path,
+      'clipOp': clipOp.toString(),
+    });
   }
 
   @override
   void drawArc(ui.Rect rect, double startAngle, double sweepAngle,
       bool useCenter, ui.Paint paint) {
-    // TODO: implement drawArc
+    final path = ui.Path();
+    if (useCenter == true) {
+      path.moveTo(rect.center.dx, rect.center.dy);
+    }
+    path.addArc(rect, startAngle, sweepAngle);
+    drawPath(path, paint);
   }
 
   @override
@@ -34,13 +53,13 @@ class _RecordingCanvas implements Canvas {
       List<ui.Color>? colors,
       ui.BlendMode? blendMode,
       ui.Rect? cullRect,
-      ui.Paint paint) {
-    // TODO: implement drawAtlas
-  }
+      ui.Paint paint) {}
 
   @override
   void drawCircle(Offset c, double radius, ui.Paint paint) {
-    // TODO: implement drawCircle
+    final path = ui.Path();
+    path.addOval(Rect.fromCircle(center: c, radius: radius));
+    drawPath(path, paint);
   }
 
   @override
@@ -54,24 +73,24 @@ class _RecordingCanvas implements Canvas {
 
   @override
   void drawDRRect(ui.RRect outer, ui.RRect inner, ui.Paint paint) {
-    // TODO: implement drawDRRect
+    _commands.add({
+      'action': 'drawDRRect',
+      'outer': ui.Path()..addRRect(outer),
+      'inner': ui.Path()..addRRect(inner),
+      'paint': encodePaint(paint),
+    });
   }
 
   @override
-  void drawImage(ui.Image image, Offset offset, ui.Paint paint) {
-    // TODO: implement drawImage
-  }
+  void drawImage(ui.Image image, Offset offset, ui.Paint paint) {}
 
   @override
   void drawImageNine(
-      ui.Image image, ui.Rect center, ui.Rect dst, ui.Paint paint) {
-    // TODO: implement drawImageNine
-  }
+      ui.Image image, ui.Rect center, ui.Rect dst, ui.Paint paint) {}
 
   @override
-  void drawImageRect(ui.Image image, ui.Rect src, ui.Rect dst, ui.Paint paint) {
-    // TODO: implement drawImageRect
-  }
+  void drawImageRect(
+      ui.Image image, ui.Rect src, ui.Rect dst, ui.Paint paint) {}
 
   @override
   void drawLine(Offset p1, Offset p2, ui.Paint paint) {
@@ -83,7 +102,9 @@ class _RecordingCanvas implements Canvas {
 
   @override
   void drawOval(ui.Rect rect, ui.Paint paint) {
-    // TODO: implement drawOval
+    final path = ui.Path();
+    path.addOval(rect);
+    drawPath(path, paint);
   }
 
   @override
@@ -92,9 +113,7 @@ class _RecordingCanvas implements Canvas {
   }
 
   @override
-  void drawParagraph(ui.Paragraph paragraph, Offset offset) {
-    // TODO: implement drawParagraph
-  }
+  void drawParagraph(ui.Paragraph paragraph, Offset offset) {}
 
   @override
   void drawPath(ui.Path path, ui.Paint paint) {
@@ -106,18 +125,17 @@ class _RecordingCanvas implements Canvas {
   }
 
   @override
-  void drawPicture(ui.Picture picture) {
-    // TODO: implement drawPicture
-  }
+  void drawPicture(ui.Picture picture) {}
 
   @override
-  void drawPoints(ui.PointMode pointMode, List<Offset> points, ui.Paint paint) {
-    // TODO: implement drawPoints
-  }
+  void drawPoints(
+      ui.PointMode pointMode, List<Offset> points, ui.Paint paint) {}
 
   @override
   void drawRRect(ui.RRect rrect, ui.Paint paint) {
-    // TODO: implement drawRRect
+    final path = ui.Path();
+    path.addRRect(rrect);
+    drawPath(path, paint);
   }
 
   @override
@@ -128,15 +146,11 @@ class _RecordingCanvas implements Canvas {
       Int32List? colors,
       ui.BlendMode? blendMode,
       ui.Rect? cullRect,
-      ui.Paint paint) {
-    // TODO: implement drawRawAtlas
-  }
+      ui.Paint paint) {}
 
   @override
   void drawRawPoints(
-      ui.PointMode pointMode, Float32List points, ui.Paint paint) {
-    // TODO: implement drawRawPoints
-  }
+      ui.PointMode pointMode, Float32List points, ui.Paint paint) {}
 
   @override
   void drawRect(ui.Rect rect, ui.Paint paint) {
@@ -152,15 +166,11 @@ class _RecordingCanvas implements Canvas {
 
   @override
   void drawShadow(ui.Path path, ui.Color color, double elevation,
-      bool transparentOccluder) {
-    // TODO: implement drawShadow
-  }
+      bool transparentOccluder) {}
 
   @override
   void drawVertices(
-      ui.Vertices vertices, ui.BlendMode blendMode, ui.Paint paint) {
-    // TODO: implement drawVertices
-  }
+      ui.Vertices vertices, ui.BlendMode blendMode, ui.Paint paint) {}
 
   @override
   int getSaveCount() {
@@ -175,7 +185,7 @@ class _RecordingCanvas implements Canvas {
 
   @override
   void rotate(double radians) {
-    // TODO: implement rotate
+    _commands.add({'action': 'rotate', 'radians': radians});
   }
 
   @override
@@ -185,28 +195,34 @@ class _RecordingCanvas implements Canvas {
   }
 
   @override
-  void saveLayer(ui.Rect? bounds, ui.Paint paint) {
-    // TODO: implement saveLayer
-  }
+  void saveLayer(ui.Rect? bounds, ui.Paint paint) {}
 
   @override
   void scale(double sx, [double? sy]) {
-    // TODO: implement scale
+    _commands.add({'action': 'scale', 'sx': sx, 'sy': sy ?? sx});
   }
 
   @override
   void skew(double sx, double sy) {
-    // TODO: implement skew
+    _commands.add({'action': 'skew', 'sx': sx, 'sy': sy});
   }
 
   @override
   void transform(Float64List matrix4) {
-    // TODO: implement transform
+    _commands.add({
+      'action': 'transform',
+      'a': matrix4[0],
+      'b': matrix4[1],
+      'c': matrix4[4],
+      'd': matrix4[5],
+      'tx': matrix4[12],
+      'ty': matrix4[13],
+    });
   }
 
   @override
   void translate(double dx, double dy) {
-    // TODO: implement translate
+    _commands.add({'action': 'translate', 'dx': dx, 'dy': dy});
   }
 
   Map encodePaint(ui.Paint paint) {
