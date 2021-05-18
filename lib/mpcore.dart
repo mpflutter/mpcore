@@ -84,6 +84,7 @@ class MPCore {
   Element get renderView => WidgetsBinding.instance!.renderViewElement!;
 
   void connectToHostChannel() async {
+    injectErrorWidget();
     final _ = MPChannel.setupHotReload(this);
     while (true) {
       try {
@@ -92,6 +93,27 @@ class MPCore {
         print(e);
       }
     }
+  }
+
+  void injectErrorWidget() {
+    ErrorWidget.builder = (error) {
+      print(error);
+      return MPScaffold(
+        backgroundColor: Color.fromARGB(255, 115, 0, 2),
+        body: ListView(
+          padding: const EdgeInsets.all(12.0),
+          children: [
+            Text(
+              error.toString(),
+              style: TextStyle(
+                color: Colors.yellow,
+                fontSize: 14,
+              ),
+            )
+          ],
+        ),
+      );
+    };
   }
 
   Future handleHotReload() async {
