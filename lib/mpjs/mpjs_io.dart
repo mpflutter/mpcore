@@ -64,6 +64,8 @@ class JsObject {
       return obj;
     } else if (obj is num) {
       return obj;
+    } else if (obj is bool) {
+      return obj;
     } else if (obj is Map && obj['objectHandler'] is String) {
       return JsObject(objectHandler: obj['objectHandler']);
     } else {
@@ -78,6 +80,10 @@ class JsObject {
       return 'func:${funcId}';
     } else if (obj is JsObject) {
       return 'obj:${obj.objectHandler}';
+    } else if (obj is Map) {
+      return obj.map((key, value) => MapEntry(key, toBrowserObject(value)));
+    } else if (obj is List) {
+      return obj.map((e) => toBrowserObject(e)).toList();
     } else {
       return obj;
     }
@@ -136,13 +142,19 @@ class JsObject {
     return result;
   }
 
-  Future<dynamic> getPropertyValue(String key) async {
+  Future<T?> getPropertyValue<T>(String key) async {
     final result = await JsBridgeInvoker.instance.makeRequest('getValue', {
       'objectHandler': objectHandler,
       'callChain': _callChain,
       'key': key,
     });
-    return result;
+    if (T == dynamic || T == Object) {
+      return result;
+    } else if (result is T) {
+      return result;
+    } else {
+      return null;
+    }
   }
 
   Future<dynamic> setPropertyValue(String key, dynamic value) async {
