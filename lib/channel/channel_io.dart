@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:developer' as dev;
 
+import 'package:flutter/ui/src/mock_engine/device_info_io.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:mpcore/mpjs/mpjs_io.dart';
@@ -10,6 +11,7 @@ import '../mpcore.dart';
 
 import 'package:path/path.dart' as path;
 import '../hot_reloader.dart';
+import '../mpjs/mpjs.dart' as mpjs;
 
 class MPChannel {
   static bool _serverSetupped = false;
@@ -56,6 +58,7 @@ class MPChannel {
           MPCore.clearOldFrameObject();
           WidgetsBinding.instance?.scheduleFrame();
           _flushMessageQueue();
+          _updateWindowSize();
         } else if (req.uri.path.startsWith('/assets/packages/')) {
           handlePackageAssetsRequest(req);
         } else if (req.uri.path.startsWith('/assets/')) {
@@ -72,6 +75,21 @@ class MPChannel {
     } catch (e) {
       print(e);
     }
+  }
+
+  static void _updateWindowSize() async {
+    final num clientWidth =
+        await mpjs.context['document']['body'].getPropertyValue('clientWidth');
+    final num clientHeight =
+        await mpjs.context['document']['body'].getPropertyValue('clientHeight');
+    final num devicePixelRatio =
+        await mpjs.context.getPropertyValue('devicePixelRatio');
+    DeviceInfo.physicalSizeWidth =
+        clientWidth.toDouble() * devicePixelRatio.toDouble();
+    DeviceInfo.physicalSizeHeight =
+        clientHeight.toDouble() * devicePixelRatio.toDouble();
+    DeviceInfo.devicePixelRatio = devicePixelRatio.toDouble();
+    DeviceInfo.deviceSizeChangeCallback?.call();
   }
 
   static void handlePackageAssetsRequest(HttpRequest request) {
