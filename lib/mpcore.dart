@@ -83,16 +83,20 @@ class MPCore {
 
   Element get renderView => WidgetsBinding.instance!.renderViewElement!;
 
-  void connectToHostChannel() async {
-    injectErrorWidget();
-    final _ = MPChannel.setupHotReload(this);
-    while (true) {
-      try {
-        await sendFrame();
-      } catch (e) {
-        print(e);
+  void connectToHostChannel() {
+    runZonedGuarded(() async {
+      injectErrorWidget();
+      final _ = MPChannel.setupHotReload(this);
+      while (true) {
+        try {
+          await sendFrame();
+        } catch (e) {
+          print(e);
+        }
       }
-    }
+    }, (error, stackTrace) {
+      print('Unccaught exception: $error, $stackTrace.');
+    });
   }
 
   void injectErrorWidget() {
