@@ -1,5 +1,75 @@
 part of '../mpcore.dart';
 
+class MPDrawable implements ui.Image {
+  static final Map<int, Completer> _decodeHandlers = {};
+  static final Map<int, MPDrawable> _decodeDrawables = {};
+
+  static Future<MPDrawable> fromNetworkImage(String url) async {
+    final completer = Completer<MPDrawable>();
+    final drawable = MPDrawable();
+    _decodeHandlers[drawable.hashCode] = completer;
+    _decodeDrawables[drawable.hashCode] = drawable;
+    MPChannel.postMesssage(
+      json.encode({
+        'type': 'decode_drawable',
+        'flow': 'request',
+        'message': {
+          'type': 'networkImage',
+          'url': url,
+          'target': drawable.hashCode,
+        },
+      }),
+      forLastConnection: true,
+    );
+    return completer.future;
+  }
+
+  static void receivedDecodedResult(Map params) {
+    int target = params['target'];
+    final handler = _decodeHandlers[target];
+    final drawable = _decodeDrawables[target];
+    if (handler != null && drawable != null) {
+      drawable._width = params['width'];
+      drawable._height = params['height'];
+      handler.complete(drawable);
+    }
+    _decodeHandlers.remove(target);
+    _decodeDrawables.remove(target);
+  }
+
+  static void receivedDecodedError(Map params) {
+    int target = params['target'];
+    final handler = _decodeHandlers[target];
+    final drawable = _decodeDrawables[target];
+    if (handler != null && drawable != null) {
+      handler.completeError(params['error']);
+    }
+    _decodeHandlers.remove(target);
+    _decodeDrawables.remove(target);
+  }
+
+  MPDrawable();
+
+  int _width = 0;
+
+  int _height = 0;
+
+  @override
+  void dispose() {}
+
+  @override
+  int get height => _height;
+
+  @override
+  Future<ByteData?> toByteData(
+      {ui.ImageByteFormat format = ui.ImageByteFormat.rawRgba}) async {
+    return null;
+  }
+
+  @override
+  int get width => _width;
+}
+
 class _RecordingCanvas implements Canvas {
   final List<Map> _commands = [];
   int _saveCount = 0;
@@ -82,15 +152,42 @@ class _RecordingCanvas implements Canvas {
   }
 
   @override
-  void drawImage(ui.Image image, Offset offset, ui.Paint paint) {}
+  void drawImage(ui.Image image, Offset offset, ui.Paint paint) {
+    if (image is MPDrawable) {
+      _commands.add({
+        'action': 'drawImage',
+        'drawable': image.hashCode,
+        'dx': offset.dx,
+        'dy': offset.dy,
+        'paint': encodePaint(paint, encodeAlpha: true),
+      });
+    }
+  }
 
   @override
   void drawImageNine(
-      ui.Image image, ui.Rect center, ui.Rect dst, ui.Paint paint) {}
+      ui.Image image, ui.Rect center, ui.Rect dst, ui.Paint paint) {
+    throw 'Not support.';
+  }
 
   @override
-  void drawImageRect(
-      ui.Image image, ui.Rect src, ui.Rect dst, ui.Paint paint) {}
+  void drawImageRect(ui.Image image, ui.Rect src, ui.Rect dst, ui.Paint paint) {
+    if (image is MPDrawable) {
+      _commands.add({
+        'action': 'drawImageRect',
+        'drawable': image.hashCode,
+        'srcX': src.left,
+        'srcY': src.top,
+        'srcW': src.width,
+        'srcH': src.height,
+        'dstX': dst.left,
+        'dstY': dst.top,
+        'dstW': dst.width,
+        'dstH': dst.height,
+        'paint': encodePaint(paint, encodeAlpha: true),
+      });
+    }
+  }
 
   @override
   void drawLine(Offset p1, Offset p2, ui.Paint paint) {
@@ -225,8 +322,8 @@ class _RecordingCanvas implements Canvas {
     _commands.add({'action': 'translate', 'dx': dx, 'dy': dy});
   }
 
-  Map encodePaint(ui.Paint paint) {
-    return {
+  Map encodePaint(ui.Paint paint, {bool encodeAlpha = false}) {
+    final result = {
       'blendMode': paint.blendMode.toString(),
       'style': paint.style.toString(),
       'strokeWidth': paint.strokeWidth,
@@ -235,12 +332,17 @@ class _RecordingCanvas implements Canvas {
       'color': paint.color.value.toString(),
       'strokeMiterLimit': paint.strokeMiterLimit,
     };
+    if (encodeAlpha) {
+      result['alpha'] = paint.color.opacity;
+    }
+    return result;
   }
 }
 
 MPElement _encodeCustomPaint(Element element) {
   final widget = element.widget as CustomPaint;
   final recordingCanvas = _RecordingCanvas();
+  recordingCanvas.drawColor(Colors.transparent, ui.BlendMode.clear);
   widget.painter?.paint(recordingCanvas, widget.size);
   return MPElement(
     hashCode: element.hashCode,

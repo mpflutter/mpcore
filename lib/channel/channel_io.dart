@@ -252,6 +252,8 @@ class MPChannel {
         MPChannelBase.onRichTextTrigger(obj['message']);
       } else if (obj['type'] == 'scroller') {
         MPChannelBase.onScrollerTrigger(obj['message']);
+      } else if (obj['type'] == 'decode_drawable') {
+        MPChannelBase.onDecodeDrawable(obj['message']);
       } else if (obj['type'] == 'router') {
         MPChannelBase.onRouterTrigger(obj['message']);
       } else if (obj['type'] == 'editable_text') {

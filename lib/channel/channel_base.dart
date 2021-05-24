@@ -127,6 +127,18 @@ class MPChannelBase {
     }
   }
 
+  static void onDecodeDrawable(Map message) {
+    try {
+      if (message['event'] == 'onDecode') {
+        MPDrawable.receivedDecodedResult(message);
+      } else if (message['event'] == 'onError') {
+        MPDrawable.receivedDecodedError(message);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   static void onActionTrigger(Map message) {
     try {
       MPAction.onActionTrigger(message);
