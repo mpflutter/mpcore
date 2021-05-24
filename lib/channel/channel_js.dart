@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 import 'dart:js' as js;
-import 'package:mpcore/mpjs/mpjs_js.dart';
+import 'package:mpcore/mpjs/mpjs.dart';
 
 import '../mpcore.dart';
 

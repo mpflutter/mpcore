@@ -5,7 +5,7 @@ import 'dart:developer' as dev;
 import 'package:flutter/ui/src/mock_engine/device_info_io.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mime_type/mime_type.dart';
-import 'package:mpcore/mpjs/mpjs_io.dart';
+import 'package:mpcore/mpjs/mpjs.dart';
 
 import '../mpcore.dart';
 
