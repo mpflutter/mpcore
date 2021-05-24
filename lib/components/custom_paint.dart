@@ -24,6 +24,26 @@ class MPDrawable implements ui.Image {
     return completer.future;
   }
 
+  static Future<MPDrawable> fromMemoryImage(Uint8List data) async {
+    final completer = Completer<MPDrawable>();
+    final drawable = MPDrawable();
+    _decodeHandlers[drawable.hashCode] = completer;
+    _decodeDrawables[drawable.hashCode] = drawable;
+    MPChannel.postMesssage(
+      json.encode({
+        'type': 'decode_drawable',
+        'flow': 'request',
+        'message': {
+          'type': 'memoryImage',
+          'data': base64.encode(data),
+          'target': drawable.hashCode,
+        },
+      }),
+      forLastConnection: true,
+    );
+    return completer.future;
+  }
+
   static void receivedDecodedResult(Map params) {
     int target = params['target'];
     final handler = _decodeHandlers[target];
