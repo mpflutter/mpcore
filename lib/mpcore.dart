@@ -87,6 +87,16 @@ class MPCore {
     runZonedGuarded(() async {
       injectErrorWidget();
       final _ = MPChannel.setupHotReload(this);
+      var pass = false;
+      while (!pass) {
+        await Future.delayed(Duration(milliseconds: 10));
+        try {
+          markNeedsBuild(renderView);
+          clearOldFrameObject();
+          pass = true;
+          // ignore: empty_catches
+        } catch (e) {}
+      }
       while (true) {
         try {
           await sendFrame();
