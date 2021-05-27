@@ -50,9 +50,23 @@ class MPChannel {
     try {
       server = await HttpServer.bind('0.0.0.0', 9898, shared: false);
       print('Serve on 0.0.0.0:9898');
-      print('Use browser open http://0.0.0.0:9898/index.html for dev.');
+      if (Taro.isTaro) {
+        print('Use MiniProgram Developer Tools import ./dist/weapp for dev.');
+      } else {
+        print('Use browser open http://0.0.0.0:9898/index.html for dev.');
+      }
       await for (var req in server) {
-        if (req.uri.path == '/') {
+        if (req.uri.path == '/ws') {
+          final clientType = req.uri.queryParameters['clientType'];
+          if (clientType != null) {
+            if (Taro.isTaro && clientType != 'taro') {
+              req.response.close();
+              return;
+            } else if (!Taro.isTaro && clientType != 'web') {
+              req.response.close();
+              return;
+            }
+          }
           final socket = await WebSocketTransformer.upgrade(req);
           sockets.add(socket);
           socket.listen(handleClientMessage)
@@ -73,6 +87,8 @@ class MPChannel {
             req.uri.path.startsWith('/index.html') ||
             req.uri.path.startsWith('/main.dart.js') ||
             req.uri.path.startsWith('/static/')) {
+          handleScaffoldRequest(req);
+        } else if (req.uri.path == '/') {
           handleScaffoldRequest(req);
         } else {
           final _ = req.response.close();
@@ -235,7 +251,10 @@ class MPChannel {
   }
 
   static void handleScaffoldRequest(HttpRequest request) {
-    final fileName = request.uri.path;
+    var fileName = request.uri.path;
+    if (fileName == '/') {
+      fileName = '/index.html';
+    }
     final mimeType = mime(fileName) ?? 'text/plain; charset=UTF-8';
     request.response.headers
       ..set(
