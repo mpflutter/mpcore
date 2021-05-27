@@ -7,13 +7,24 @@ import 'package:mpcore/mpjs/mpjs.dart';
 import '../mpcore.dart';
 
 class MPChannel {
-  static bool messageHandlerSetted = false;
+  static bool _messageHandlerSetted = false;
+  static bool _isClientAttached = false;
 
   static void setupHotReload(MPCore minip) async {}
 
+  static void _checkClientAttached() {
+    if (Taro.isTaro) {
+      _isClientAttached = true;
+      _flushMessageQueue();
+    } else if (js.context['mpClientAttached'] == true) {
+      _isClientAttached = true;
+      _flushMessageQueue();
+    }
+  }
+
   static void postMesssage(String message, {bool? forLastConnection}) {
-    if (!messageHandlerSetted) {
-      messageHandlerSetted = true;
+    if (!_messageHandlerSetted) {
+      _messageHandlerSetted = true;
       js.context.callMethod('addEventListener', [
         'message',
         (event) {
@@ -53,6 +64,11 @@ class MPChannel {
         }
       ]);
     }
+    if (!_isClientAttached) {
+      _addMessageToQueue(message);
+      _checkClientAttached();
+      return;
+    }
     try {
       (js.context['top'] as js.JsObject)
           .callMethod('postMessage', [message, '*']);
@@ -87,5 +103,23 @@ class MPChannel {
       js.context['location']['href'] =
           '${pkgName}.html?route=${Uri.encodeFull(routeName)}';
     }
+  }
+
+  static final List<String> _messageQueue = [];
+
+  static void _addMessageToQueue(String message) {
+    _messageQueue.add(message);
+  }
+
+  static void _flushMessageQueue() {
+    for (var item in _messageQueue) {
+      try {
+        (js.context['top'] as js.JsObject)
+            .callMethod('postMessage', [item, '*']);
+      } catch (e) {
+        js.context.callMethod('postMessage', [item, '*']);
+      }
+    }
+    _messageQueue.clear();
   }
 }
