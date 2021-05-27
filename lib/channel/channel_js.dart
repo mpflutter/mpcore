@@ -10,7 +10,12 @@ class MPChannel {
   static bool _messageHandlerSetted = false;
   static bool _isClientAttached = false;
 
-  static void setupHotReload(MPCore minip) async {}
+  static void setupHotReload(MPCore minip) async {
+    while (!_isClientAttached) {
+      _checkClientAttached();
+      await Future.delayed(Duration(milliseconds: 10));
+    }
+  }
 
   static void _checkClientAttached() {
     if (Taro.isTaro) {
