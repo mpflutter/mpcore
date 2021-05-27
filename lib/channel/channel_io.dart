@@ -59,11 +59,9 @@ class MPChannel {
         if (req.uri.path == '/ws') {
           final clientType = req.uri.queryParameters['clientType'];
           if (clientType != null) {
-            if (Taro.isTaro && clientType != 'taro') {
-              req.response.close();
-              return;
-            } else if (!Taro.isTaro && clientType != 'web') {
-              req.response.close();
+            if ((Taro.isTaro && clientType != 'taro') ||
+                (!Taro.isTaro && clientType != 'web')) {
+              final _ = req.response.close();
               return;
             }
           }
@@ -104,9 +102,9 @@ class MPChannel {
         await mpjs.context['document']['body'].getPropertyValue('clientWidth');
     final num clientHeight =
         await mpjs.context['document']['body'].getPropertyValue('clientHeight');
-    final num safeAreaTopHeight = await mpjs.context['document']['body']
+    final dynamic safeAreaTopHeight = await mpjs.context['document']['body']
         .getPropertyValue('windowPaddingTop');
-    final num safeAreaBottomHeight = await mpjs.context['document']['body']
+    final dynamic safeAreaBottomHeight = await mpjs.context['document']['body']
         .getPropertyValue('windowPaddingBottom');
     final num devicePixelRatio =
         await mpjs.context.getPropertyValue('devicePixelRatio');
@@ -117,9 +115,10 @@ class MPChannel {
     DeviceInfo.devicePixelRatio = devicePixelRatio.toDouble();
     DeviceInfo.windowPadding = MockWindowPadding(
       left: 0.0,
-      top: safeAreaTopHeight.toDouble(),
+      top: safeAreaTopHeight is num ? safeAreaTopHeight.toDouble() : 0.0,
       right: 0.0,
-      bottom: safeAreaBottomHeight.toDouble(),
+      bottom:
+          safeAreaBottomHeight is num ? safeAreaBottomHeight.toDouble() : 0.0,
     );
     ;
     DeviceInfo.deviceSizeChangeCallback?.call();
