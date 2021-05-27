@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:developer' as dev;
 
 import 'package:flutter/ui/src/mock_engine/device_info_io.dart';
+import 'package:flutter/ui/ui.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:mpcore/mpjs/mpjs.dart';
@@ -54,7 +55,12 @@ class MPChannel {
         if (req.uri.path == '/') {
           final socket = await WebSocketTransformer.upgrade(req);
           sockets.add(socket);
-          socket.listen(handleClientMessage);
+          socket.listen(handleClientMessage)
+            ..onDone(
+              () {
+                sockets.remove(socket);
+              },
+            );
           MPCore.clearOldFrameObject();
           WidgetsBinding.instance?.scheduleFrame();
           _flushMessageQueue();
@@ -82,6 +88,10 @@ class MPChannel {
         await mpjs.context['document']['body'].getPropertyValue('clientWidth');
     final num clientHeight =
         await mpjs.context['document']['body'].getPropertyValue('clientHeight');
+    final num safeAreaTopHeight = await mpjs.context['document']['body']
+        .getPropertyValue('windowPaddingTop');
+    final num safeAreaBottomHeight = await mpjs.context['document']['body']
+        .getPropertyValue('windowPaddingBottom');
     final num devicePixelRatio =
         await mpjs.context.getPropertyValue('devicePixelRatio');
     DeviceInfo.physicalSizeWidth =
@@ -89,6 +99,13 @@ class MPChannel {
     DeviceInfo.physicalSizeHeight =
         clientHeight.toDouble() * devicePixelRatio.toDouble();
     DeviceInfo.devicePixelRatio = devicePixelRatio.toDouble();
+    DeviceInfo.windowPadding = MockWindowPadding(
+      left: 0.0,
+      top: safeAreaTopHeight.toDouble(),
+      right: 0.0,
+      bottom: safeAreaBottomHeight.toDouble(),
+    );
+    ;
     DeviceInfo.deviceSizeChangeCallback?.call();
   }
 
