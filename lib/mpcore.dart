@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/ui/ui.dart' as ui;
 import 'package:flutter/widgets.dart';
@@ -83,8 +84,8 @@ class MPCore {
 
   Element get renderView => WidgetsBinding.instance!.renderViewElement!;
 
-  void connectToHostChannel() {
-    runZonedGuarded(() async {
+  void connectToHostChannel() async {
+    if (kReleaseMode) {
       injectErrorWidget();
       final _ = MPChannel.setupHotReload(this);
       var pass = false;
@@ -104,9 +105,31 @@ class MPCore {
           print(e);
         }
       }
-    }, (error, stackTrace) {
-      print('Unccaught exception: $error, $stackTrace.');
-    });
+    } else {
+      await runZonedGuarded(() async {
+        injectErrorWidget();
+        final _ = MPChannel.setupHotReload(this);
+        var pass = false;
+        while (!pass) {
+          await Future.delayed(Duration(milliseconds: 10));
+          try {
+            markNeedsBuild(renderView);
+            clearOldFrameObject();
+            pass = true;
+            // ignore: empty_catches
+          } catch (e) {}
+        }
+        while (true) {
+          try {
+            await sendFrame();
+          } catch (e) {
+            print(e);
+          }
+        }
+      }, (error, stackTrace) {
+        print('Unccaught exception: $error, $stackTrace.');
+      });
+    }
   }
 
   void injectErrorWidget() {
