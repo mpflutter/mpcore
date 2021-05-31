@@ -59,8 +59,7 @@ class MPChannel {
         if (req.uri.path == '/ws') {
           final clientType = req.uri.queryParameters['clientType'];
           if (clientType != null) {
-            if ((Taro.isTaro && clientType != 'taro') ||
-                (!Taro.isTaro && clientType != 'web')) {
+            if (Taro.isTaro && clientType != 'taro') {
               final _ = req.response.close();
               return;
             }
