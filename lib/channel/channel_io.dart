@@ -296,6 +296,8 @@ class MPChannel {
         MPChannelBase.onActionTrigger(obj['message']);
       } else if (obj['type'] == 'mpjs') {
         JsBridgeInvoker.instance.makeResponse(obj['message']);
+      } else if (obj['type'] == 'fragment') {
+        MPChannelBase.onFragment(obj['message']);
       } else {
         MPChannelBase.onPluginMessage(obj);
       }

@@ -174,6 +174,20 @@ class MPChannelBase {
     }
   }
 
+  static void onFragment(Map message) {
+    try {
+      if (message['event'] == 'init') {
+        FragmentEventHub.instance.onInit(message['data']);
+      } else if (message['event'] == 'update') {
+        FragmentEventHub.instance.onUpdate(message['data']);
+      } else if (message['event'] == 'dispose') {
+        FragmentEventHub.instance.onDispose(message['data']);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   static void onPluginMessage(Map message) {
     for (final plugin in MPCore._plugins) {
       plugin.onClientMessage(message);

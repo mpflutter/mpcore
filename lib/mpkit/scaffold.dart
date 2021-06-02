@@ -15,6 +15,7 @@ class MPScaffold extends StatefulWidget {
   final Widget? floatingBody;
   final Color? backgroundColor;
   final bool? isListBody;
+  final bool? isFragmentMode;
 
   MPScaffold({
     this.name,
@@ -27,6 +28,7 @@ class MPScaffold extends StatefulWidget {
     this.floatingBody,
     this.backgroundColor,
     this.isListBody,
+    this.isFragmentMode,
   });
 
   @override

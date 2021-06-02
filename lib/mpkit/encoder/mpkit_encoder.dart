@@ -9,6 +9,7 @@ part './page_view.dart';
 part './video_view.dart';
 part './main_tab.dart';
 part './open_button.dart';
+part './fragment_widget.dart';
 
 class MPKitEncoder {
   static MPElement? fromFlutterElement(Element element) {
@@ -24,6 +25,8 @@ class MPKitEncoder {
       return _encodeMPMainTab(element);
     } else if (element.widget is MPOpenButton) {
       return _encodeMPOpenButton(element);
+    } else if (element.widget is MPFragmentWidget) {
+      return _encodeMPFragmentWidget(element);
     } else {
       return null;
     }

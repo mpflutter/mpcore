@@ -92,6 +92,7 @@ MPElement _encodeMPScaffold(Element element) {
           : null,
       'isListBody': isListBody,
       'isTabBody': isTabBody,
+      'isFragmentMode': widget.isFragmentMode,
     },
   );
 }
