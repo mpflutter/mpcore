@@ -252,23 +252,20 @@ class MPCore {
     final scaffoldElements = <Element>[];
     final overlays = <MPElement>[];
     ModalRoute? activeOverlayParentRoute;
-    scaffoldKeys.forEach((element) {
-      if (element.currentContext?.owner != null &&
-          ModalRoute.of(element.currentContext!)?.isCurrent == true) {
-        final el = element.currentContext as Element;
-        if (el.widget is MPOverlayScaffold) {
+    scaffoldStates.forEach((state) {
+      if (state.mounted && ModalRoute.of(state.context)?.isCurrent == true) {
+        if (state.widget is MPOverlayScaffold) {
           activeOverlayParentRoute =
-              (el.widget as MPOverlayScaffold).parentRoute;
+              (state.widget as MPOverlayScaffold).parentRoute;
         }
-        scaffoldElements.add(el);
+        scaffoldElements.add(state.context as Element);
       }
     });
     if (activeOverlayParentRoute != null) {
-      scaffoldKeys.forEach((element) {
-        if (element.currentContext?.owner != null &&
-            ModalRoute.of(element.currentContext!) ==
-                activeOverlayParentRoute) {
-          final el = element.currentContext as Element;
+      scaffoldStates.forEach((state) {
+        if (state.mounted &&
+            ModalRoute.of(state.context) == activeOverlayParentRoute) {
+          final el = state.context as Element;
           scaffoldElements.add(el);
         }
       });

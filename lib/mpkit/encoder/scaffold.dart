@@ -4,6 +4,7 @@ MPElement _encodeMPScaffold(Element element) {
   final stackedScaffold =
       element.findAncestorWidgetOfExactType<MPScaffold>() != null;
   final widget = element.widget as MPScaffold;
+  final widgetState = (element as StatefulElement).state as MPScaffoldState;
   final name = widget.name;
   final tabBodyElement = MPCore.findTarget<MPTabBody>(
     element,
@@ -13,10 +14,11 @@ MPElement _encodeMPScaffold(Element element) {
   Element? tabBarElement;
   var isTabBody = false;
   var isListBody = widget.isListBody;
-  final appBarElement = widget.appBarKey.currentContext as Element?;
-  var bodyElement = widget.bodyKey.currentContext as Element?;
-  var bottomBarElement = widget.bottomBarKey.currentContext as Element?;
-  final floatingBodyElement = widget.floatingBodyKey.currentContext as Element?;
+  final appBarElement = widgetState.appBarKey.currentContext as Element?;
+  var bodyElement = widgetState.bodyKey.currentContext as Element?;
+  var bottomBarElement = widgetState.bottomBarKey.currentContext as Element?;
+  final floatingBodyElement =
+      widgetState.floatingBodyKey.currentContext as Element?;
   final bodyBackgroundColor = widget.backgroundColor;
   if (tabBodyElement != null) {
     final tabBody = tabBodyElement.widget as MPTabBody;

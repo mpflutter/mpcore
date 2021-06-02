@@ -2,21 +2,17 @@ import 'package:flutter/widgets.dart';
 
 import '../mpcore.dart';
 
-final List<GlobalKey> scaffoldKeys = [];
+final List<MPScaffoldState> scaffoldStates = [];
 
-class MPScaffold extends StatelessWidget {
+class MPScaffold extends StatefulWidget {
   final String? name;
   final Map<String, String>? metaData;
   final Color? appBarColor; // Taro use only
   final Color? appBarTintColor; // Taro use only
   final Widget? body;
-  final bodyKey = GlobalKey();
   final PreferredSizeWidget? appBar;
-  final appBarKey = GlobalKey();
   final Widget? bottomBar;
-  final bottomBarKey = GlobalKey();
   final Widget? floatingBody;
-  final floatingBodyKey = GlobalKey();
   final Color? backgroundColor;
   final bool? isListBody;
 
@@ -31,13 +27,23 @@ class MPScaffold extends StatelessWidget {
     this.floatingBody,
     this.backgroundColor,
     this.isListBody,
-  }) : super(key: (() {
-          scaffoldKeys
-              .removeWhere((element) => element.currentContext?.owner == null);
-          final key = GlobalKey();
-          scaffoldKeys.add(key);
-          return key;
-        })());
+  });
+
+  @override
+  MPScaffoldState createState() => MPScaffoldState();
+}
+
+class MPScaffoldState extends State<MPScaffold> {
+  final bodyKey = GlobalKey();
+  final appBarKey = GlobalKey();
+  final bottomBarKey = GlobalKey();
+  final floatingBodyKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    scaffoldStates.add(this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,22 +53,24 @@ class MPScaffold extends StatelessWidget {
     }
     Widget child = Stack(
       children: [
-        appBar != null
-            ? MPScaffoldAppBar(key: appBarKey, child: appBar)
+        widget.appBar != null
+            ? MPScaffoldAppBar(key: appBarKey, child: widget.appBar)
             : Container(),
-        body != null
+        widget.body != null
             ? MPScaffoldBody(
                 key: bodyKey,
-                child: body,
-                appBarHeight:
-                    appBar != null ? appBar?.preferredSize.height : null,
+                child: widget.body,
+                appBarHeight: widget.appBar != null
+                    ? widget.appBar?.preferredSize.height
+                    : null,
               )
             : Container(),
-        bottomBar != null
-            ? MPScaffoldBottomBar(key: bottomBarKey, child: bottomBar)
+        widget.bottomBar != null
+            ? MPScaffoldBottomBar(key: bottomBarKey, child: widget.bottomBar)
             : Container(),
-        floatingBody != null
-            ? MPScaffoldFloatingBody(key: floatingBodyKey, child: floatingBody)
+        widget.floatingBody != null
+            ? MPScaffoldFloatingBody(
+                key: floatingBodyKey, child: widget.floatingBody)
             : Container(),
       ],
     );
