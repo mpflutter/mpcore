@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/widgets.dart';
 import 'package:mpcore/mpcore.dart';
 import 'package:mpcore/channel/channel_io.dart'
@@ -232,6 +236,49 @@ class __FragmentGroupState extends State<_FragmentGroup> {
       isFragmentMode: true,
       isListBody: false,
     );
+  }
+}
+
+class MPFragmentMethodChannel {
+  static Map<String, Completer> handlers = {};
+
+  final BuildContext context;
+
+  MPFragmentMethodChannel(this.context);
+
+  Future<dynamic> invoke(String method, [Map? params]) async {
+    final fragmentWidget =
+        context.findAncestorWidgetOfExactType<MPFragmentWidget>();
+    if (fragmentWidget == null) return;
+    final fragmentKey = (fragmentWidget.key as ValueKey).value as String;
+    final completer = Completer();
+    final requestId = Random().nextDouble().toString();
+    handlers[requestId] = completer;
+    MPChannel.postMesssage(
+      json.encode({
+        'type': 'fragment',
+        'message': {
+          'event': 'onMethodCall',
+          'data': {
+            'key': fragmentKey,
+            'requestId': requestId,
+            'method': method,
+            'params': params ?? {},
+          },
+        },
+      }),
+      forLastConnection: true,
+    );
+    return completer.future;
+  }
+
+  static void receivedInvokeResponse(Map message) {
+    if (!(message is Map)) return;
+    if (message['requestId'] != null) {
+      final String requestId = message['requestId'];
+      handlers[requestId]?.complete(message['result']);
+      handlers.remove(requestId);
+    }
   }
 }
 

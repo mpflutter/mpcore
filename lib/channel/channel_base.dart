@@ -182,6 +182,8 @@ class MPChannelBase {
         FragmentEventHub.instance.onUpdate(message['data']);
       } else if (message['event'] == 'dispose') {
         FragmentEventHub.instance.onDispose(message['data']);
+      } else if (message['event'] == 'onMethodCallResult') {
+        MPFragmentMethodChannel.receivedInvokeResponse(message['data']);
       }
     } catch (e) {
       print(e);
