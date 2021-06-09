@@ -150,8 +150,25 @@ class MPElement {
   }
 
   Map? _encodeConstraints() {
+    double? x, y, w, h;
+    final renderBox = flutterElement?.renderObject;
+    if (renderBox != null && renderBox is RenderBox) {
+      if (renderBox.parentData is BoxParentData) {
+        x = (renderBox.parentData as BoxParentData).offset.dx;
+        y = (renderBox.parentData as BoxParentData).offset.dy;
+      } else {
+        x = 0.0;
+        y = 0.0;
+      }
+      w = renderBox.size.width;
+      h = renderBox.size.height;
+    }
     if (constraints != null && constraints is BoxConstraints) {
       return {
+        'x': x,
+        'y': y,
+        'w': w,
+        'h': h,
         'minWidth': (constraints as BoxConstraints).minWidth.toString(),
         'minHeight': (constraints as BoxConstraints).minHeight.toString(),
         'maxWidth': (constraints as BoxConstraints).maxWidth.toString(),
@@ -159,7 +176,7 @@ class MPElement {
         'hasTightWidth': (constraints as BoxConstraints).hasTightWidth,
         'hasTightHeight': (constraints as BoxConstraints).hasTightHeight,
         'isTight': (constraints as BoxConstraints).isTight,
-      };
+      }..removeWhere((key, value) => value == null);
     } else {
       return null;
     }

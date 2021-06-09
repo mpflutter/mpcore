@@ -7,6 +7,7 @@ MPElement _encodeConstrainedBox(Element element) {
   if (childElements.isEmpty) {
     final renderBox = element.findRenderObject();
     if (renderBox is RenderConstrainedBox) {
+      // ignore: invalid_use_of_protected_member
       constraints = renderBox.additionalConstraints;
       if (constraints.hasInfiniteWidth && constraints.hasInfiniteHeight) {
         constraints = BoxConstraints(
@@ -27,7 +28,6 @@ MPElement _encodeConstrainedBox(Element element) {
   } else {
     final renderBox = element.findRenderObject();
     if (renderBox is RenderBox) {
-      // ignore: invalid_use_of_protected_member
       constraints = renderBox.constraints;
     }
   }

@@ -7,6 +7,8 @@ MPElement _encodeClipRRect(Element element) {
     flutterElement: element,
     name: 'clip_r_rect',
     children: MPElement.childrenFromFlutterElement(element),
+    // ignore: invalid_use_of_protected_member
+    constraints: element.findRenderObject()?.constraints,
     attributes: {
       'borderRadius': widget.borderRadius.toString(),
     },
@@ -19,6 +21,8 @@ MPElement _encodeClipRect(Element element) {
     flutterElement: element,
     name: 'clip_r_rect',
     children: MPElement.childrenFromFlutterElement(element),
+    // ignore: invalid_use_of_protected_member
+    constraints: element.findRenderObject()?.constraints,
     attributes: {
       'borderRadius': '',
     },

@@ -7,6 +7,8 @@ MPElement _encodeOffstage(Element element) {
     flutterElement: element,
     name: 'offstage',
     children: MPElement.childrenFromFlutterElement(element),
+    // ignore: invalid_use_of_protected_member
+    constraints: element.findRenderObject()?.constraints,
     attributes: {
       'offstage': widget.offstage,
     },
@@ -20,6 +22,8 @@ MPElement _encodeSliverOffstage(Element element) {
     flutterElement: element,
     name: 'offstage',
     children: MPElement.childrenFromFlutterElement(element),
+    // ignore: invalid_use_of_protected_member
+    constraints: element.findRenderObject()?.constraints,
     attributes: {
       'offstage': widget.offstage,
     },

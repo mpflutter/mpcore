@@ -7,6 +7,8 @@ MPElement _encodeVisibility(Element element) {
     flutterElement: element,
     name: 'visibility',
     children: MPElement.childrenFromFlutterElement(element),
+    // ignore: invalid_use_of_protected_member
+    constraints: element.findRenderObject()?.constraints,
     attributes: {
       'visible': widget.visible,
     },
@@ -20,6 +22,8 @@ MPElement _encodeSliverVisibility(Element element) {
     flutterElement: element,
     name: 'visibility',
     children: MPElement.childrenFromFlutterElement(element),
+    // ignore: invalid_use_of_protected_member
+    constraints: element.findRenderObject()?.constraints,
     attributes: {
       'visible': widget.visible,
     },

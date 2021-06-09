@@ -186,8 +186,18 @@ class MPCore {
     }).toList();
     _Document? diffDoc;
     if (recentDirtyElements.isNotEmpty && lastFrameData != null) {
-      if (recentDirtyElements.every((element) =>
-          lastFrameData!.contains('"hashCode":${element.hashCode}'))) {
+      if (recentDirtyElements.every((element) {
+        final found = lastFrameData!.contains('"hashCode":${element.hashCode}');
+        if (!found && element is StatefulElement) {
+          final firstChildElement = findFirstChild(element);
+          if (firstChildElement != null &&
+              lastFrameData!
+                  .contains('"hashCode":${firstChildElement.hashCode}')) {
+            return true;
+          }
+        }
+        return found;
+      })) {
         diffDoc = toDiffDocument(recentDirtyElements);
       }
     }
