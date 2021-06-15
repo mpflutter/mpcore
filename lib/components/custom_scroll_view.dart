@@ -36,6 +36,8 @@ MPElement _encodeCustomScrollView(Element element) {
           return false;
         }
       })(),
+      'scrollDirection':
+          (element.widget as CustomScrollView).scrollDirection.toString(),
     },
   );
 }
