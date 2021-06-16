@@ -26,6 +26,7 @@ MPElement _encodeSliverPadding(Element element) {
     constraints: element.findRenderObject()?.constraints,
     attributes: {
       'padding': widget.padding.toString(),
+      'sliver': '1',
     },
   );
 }
