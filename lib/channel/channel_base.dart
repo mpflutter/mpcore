@@ -167,12 +167,21 @@ class MPChannelBase {
         }
         MPNavigatorObserver.doBacking = false;
       } else if (message['event'] == 'doPush') {
-        MPNavigatorObserver.instance.navigator?.pushNamed(message['name']);
+        MPNavigatorObserver.instance.navigator?.pushNamed(
+          message['name'],
+          arguments: message['arguments'],
+        );
       } else if (message['event'] == 'doReplace') {
-        MPNavigatorObserver.instance.navigator?.pushNamed(message['name']);
+        MPNavigatorObserver.instance.navigator?.pushNamed(
+          message['name'],
+          arguments: message['arguments'],
+        );
       } else if (message['event'] == 'doRestart') {
         MPNavigatorObserver.instance.navigator?.popUntil((route) => false);
-        MPNavigatorObserver.instance.navigator?.pushNamed(message['name']);
+        MPNavigatorObserver.instance.navigator?.pushNamed(
+          message['name'],
+          arguments: message['arguments'],
+        );
       }
     } catch (e) {
       print(e);

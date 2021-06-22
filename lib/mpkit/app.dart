@@ -191,13 +191,14 @@ class __FragmentGroupState extends State<_FragmentGroup> {
 
   void _listenEvents() {
     FragmentEventHub.instance._initCallback = _onInit;
-    FragmentEventHub.instance._updateCallback = (params) {};
+    FragmentEventHub.instance._updateCallback = _onUpdate;
     FragmentEventHub.instance._disposeCallback = _onDispose;
   }
 
   void _onInit(Map params) {
     final fragmentKey = params['key'] as String;
     final fragmentRoute = params['route'] as String;
+    final fragmentParams = params['params'] as Map?;
     final fragmentSize = Size(
       (params['width'] as num).toDouble(),
       (params['height'] as num).toDouble(),
@@ -207,10 +208,38 @@ class __FragmentGroupState extends State<_FragmentGroup> {
         MPFragmentWidget(
           key: Key(fragmentKey),
           route: fragmentRoute,
+          params: fragmentParams,
           size: fragmentSize,
         ),
       );
     });
+  }
+
+  void _onUpdate(Map params) {
+    final fragmentKey = params['key'] as String;
+    final fragmentRoute = params['route'] as String;
+    final fragmentParams = params['params'] as Map?;
+    final fragmentSize = Size(
+      (params['width'] as num).toDouble(),
+      (params['height'] as num).toDouble(),
+    );
+    final targetIndex = children.indexWhere((element) {
+      final key = element.key;
+      if (key is ValueKey && key.value == fragmentKey) {
+        return true;
+      }
+      return false;
+    });
+    if (targetIndex >= 0) {
+      setState(() {
+        children[targetIndex] = MPFragmentWidget(
+          key: Key(fragmentKey),
+          route: fragmentRoute,
+          params: fragmentParams,
+          size: fragmentSize,
+        );
+      });
+    }
   }
 
   void _onDispose(Map params) {
@@ -284,13 +313,25 @@ class MPFragmentMethodChannel {
 
 class MPFragmentWidget extends StatefulWidget {
   final String route;
+  final Map? params;
   final Size size;
 
   MPFragmentWidget({
     required Key key,
     required this.route,
+    required this.params,
     required this.size,
   }) : super(key: key);
+
+  static Map getParams(BuildContext context) {
+    return context.findAncestorWidgetOfExactType<MPFragmentWidget>()?.params ??
+        {};
+  }
+
+  static Future<dynamic> invokeMethod(BuildContext context, String method,
+      [Map? params]) {
+    return MPFragmentMethodChannel(context).invoke(method, params);
+  }
 
   @override
   _MPFragmentWidgetState createState() => _MPFragmentWidgetState();
@@ -303,6 +344,14 @@ class _MPFragmentWidgetState extends State<MPFragmentWidget> {
   void initState() {
     super.initState();
     _buildChild();
+  }
+
+  @override
+  void didUpdateWidget(covariant MPFragmentWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    setState(() {
+      _buildChild();
+    });
   }
 
   void _buildChild() {
