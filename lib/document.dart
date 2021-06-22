@@ -153,15 +153,20 @@ class MPElement {
     double? x, y, w, h;
     final renderBox = flutterElement?.renderObject;
     if (renderBox != null && renderBox is RenderBox) {
-      if (renderBox.parentData is BoxParentData) {
-        x = (renderBox.parentData as BoxParentData).offset.dx;
-        y = (renderBox.parentData as BoxParentData).offset.dy;
-      } else {
-        x = 0.0;
-        y = 0.0;
+      if (!renderBox.hasSize) {
+        renderBox.layout(renderBox.constraints);
       }
-      w = renderBox.size.width;
-      h = renderBox.size.height;
+      if (renderBox.hasSize) {
+        if (renderBox.parentData is BoxParentData) {
+          x = (renderBox.parentData as BoxParentData).offset.dx;
+          y = (renderBox.parentData as BoxParentData).offset.dy;
+        } else {
+          x = 0.0;
+          y = 0.0;
+        }
+        w = renderBox.size.width;
+        h = renderBox.size.height;
+      }
     }
     if (constraints != null && constraints is BoxConstraints) {
       return {

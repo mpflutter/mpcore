@@ -5,9 +5,14 @@ class MPNavigatorObserver extends NavigatorObserver {
 
   static bool doBacking = false;
 
+  static bool initialPushed = false;
+
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    if (previousRoute == null) return;
+    if (!initialPushed && previousRoute == null) {
+      initialPushed = true;
+      return;
+    }
     if (route.settings.name?.startsWith('/mp_dialog/') == true) {
       return;
     }
