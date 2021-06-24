@@ -1,6 +1,10 @@
+import 'package:mpcore/mpjs/mpjs.dart' as mpjs;
+
 class Taro {
-  static const bool isTaro = bool.fromEnvironment(
-    'mpcore.env.taro',
-    defaultValue: false,
-  );
+  static bool? isTaroValue;
+
+  static Future<bool> isTaro() async {
+    isTaroValue ??= await mpjs.context.hasProperty('Taro');
+    return isTaroValue!;
+  }
 }

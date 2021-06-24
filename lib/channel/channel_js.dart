@@ -18,7 +18,7 @@ class MPChannel {
   }
 
   static void _checkClientAttached() {
-    if (Taro.isTaro) {
+    if (js.context.hasProperty('Taro')) {
       _isClientAttached = true;
       _flushMessageQueue();
     } else if (js.context['mpClientAttached'] == true) {
@@ -86,7 +86,7 @@ class MPChannel {
 
   static String getInitialRoute() {
     try {
-      if (Taro.isTaro) {
+      if (js.context.hasProperty('Taro')) {
         try {
           return Uri.decodeFull(js.context['location']['href'] ?? '/');
         } catch (e) {
@@ -108,7 +108,7 @@ class MPChannel {
     if (pkgName == 'main') {
       pkgName = 'index';
     }
-    if (Taro.isTaro) {
+    if (js.context.hasProperty('Taro')) {
       js.context.callMethod('locationToSubPackage', [pkgName, routeName]);
     } else {
       js.context['location']['href'] =

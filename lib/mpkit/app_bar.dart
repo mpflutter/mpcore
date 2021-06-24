@@ -75,9 +75,9 @@ class MPAppBar extends StatelessWidget implements PreferredSizeWidget {
     } else {
       if (Navigator.of(context).canPop()) {
         return GestureDetector(
-          onTap: () {
-            if (Taro.isTaro) {
-              mpjs.context['Taro'].callMethod('navigateBack');
+          onTap: () async {
+            if (await Taro.isTaro()) {
+              await mpjs.context['Taro'].callMethod('navigateBack');
             } else if (Navigator.of(context).canPop()) {
               Navigator.of(context).pop();
             }
@@ -108,9 +108,7 @@ class MPAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _renderTrailing(BuildContext context) {
-    if (Taro.isTaro) {
-      return SizedBox(width: 120);
-    } else if (trailing != null) {
+    if (trailing != null) {
       return trailing!;
     } else {
       return Container();

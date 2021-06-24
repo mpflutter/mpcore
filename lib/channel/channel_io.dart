@@ -50,20 +50,10 @@ class MPChannel {
     try {
       server = await HttpServer.bind('0.0.0.0', 9898, shared: false);
       print('Serve on 0.0.0.0:9898');
-      if (Taro.isTaro) {
-        print('Use MiniProgram Developer Tools import ./dist/weapp for dev.');
-      } else {
-        print('Use browser open http://0.0.0.0:9898/index.html for dev.');
-      }
+      print(
+          'Use browser open http://0.0.0.0:9898/index.html or use MiniProgram Developer Tools import \'./dist/weapp\' for dev.');
       await for (var req in server) {
         if (req.uri.path == '/ws') {
-          final clientType = req.uri.queryParameters['clientType'];
-          if (clientType != null) {
-            if (Taro.isTaro && clientType != 'taro') {
-              final _ = req.response.close();
-              return;
-            }
-          }
           final socket = await WebSocketTransformer.upgrade(req);
           sockets.add(socket);
           socket.listen(handleClientMessage)
