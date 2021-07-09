@@ -6,6 +6,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/ui/ui.dart' as ui;
 import 'package:flutter/widgets.dart';
 import 'package:flutter/rendering.dart';
@@ -13,6 +14,7 @@ import 'channel/channel_io.dart'
     if (dart.library.js) './channel/channel_js.dart';
 import './mpkit/mpkit.dart';
 import 'mpkit/encoder/mpkit_encoder.dart';
+import './mpjs/mpjs.dart' as mpjs;
 
 export './mpkit/mpkit.dart';
 export './taro/taro.dart';
@@ -87,6 +89,7 @@ class MPCore {
   void connectToHostChannel() async {
     if (kReleaseMode) {
       injectErrorWidget();
+      injectMethodChannelHandler();
       final _ = MPChannel.setupHotReload(this);
       var pass = false;
       while (!pass) {
@@ -108,6 +111,7 @@ class MPCore {
     } else {
       await runZonedGuarded(() async {
         injectErrorWidget();
+        injectMethodChannelHandler();
         final _ = MPChannel.setupHotReload(this);
         var pass = false;
         while (!pass) {
@@ -150,6 +154,54 @@ class MPCore {
           ],
         ),
       );
+    };
+  }
+
+  void injectMethodChannelHandler() {
+    ui.pluginMessageCallHandler = (method, data, callback) async {
+      final uint8Data = data?.buffer.asUint8List();
+      final base64Data = uint8Data != null ? base64.encode(uint8Data) : null;
+      if (await mpjs.context
+          .hasProperty('mp_core_methodChannelHandlerWebOnly')) {
+        if (data != null) {
+          final methodMessage = StandardMethodCodec().decodeMethodCall(data);
+          await mpjs.context.callMethod('mp_core_methodChannelHandlerWebOnly', [
+            method,
+            methodMessage.method,
+            methodMessage.arguments,
+            (response) {
+              if (callback != null && response is String) {
+                if (response == 'NOTIMPLEMENTED' ||
+                    response.startsWith('ERROR:')) {
+                  callback(
+                    StandardMethodCodec().encodeErrorEnvelope(
+                      code: response,
+                      message: response,
+                    ),
+                  );
+                } else {
+                  callback(
+                    StandardMethodCodec()
+                        .encodeSuccessEnvelope(json.decode(response)),
+                  );
+                }
+              }
+            }
+          ]);
+        } else {
+          callback?.call(null);
+        }
+      } else {
+        await mpjs.context.callMethod('mp_core_methodChannelHandler', [
+          method,
+          base64Data,
+          (response) {
+            if (callback != null && response is String) {
+              callback(base64.decode(response).buffer.asByteData());
+            }
+          }
+        ]);
+      }
     };
   }
 
