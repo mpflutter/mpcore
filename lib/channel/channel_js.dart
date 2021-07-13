@@ -1,106 +1,52 @@
 // ignore: avoid_web_libraries_in_flutter
 
-import 'dart:convert';
 import 'dart:js' as js;
-import 'package:mpcore/mpjs/mpjs.dart';
 
 import '../mpcore.dart';
 
+js.JsObject engineScope = js.context['engineScope'];
+
 class MPChannel {
-  static bool _messageHandlerSetted = false;
   static bool _isClientAttached = false;
 
   static void setupHotReload(MPCore minip) async {
-    while (!_isClientAttached) {
-      _checkClientAttached();
-      await Future.delayed(Duration(milliseconds: 10));
-    }
+    _setupLocalServer();
   }
 
-  static void _checkClientAttached() {
-    if (js.context.hasProperty('Taro')) {
-      _isClientAttached = true;
-      _flushMessageQueue();
-    } else if (js.context['mpClientAttached'] == true) {
-      _isClientAttached = true;
-      _flushMessageQueue();
-    }
+  static void _setupLocalServer() async {
+    _isClientAttached = true;
+    engineScope['postMessage'] = (String message) {
+      MPChannelBase.handleClientMessage(message);
+    };
+    _flushMessageQueue();
+    MPChannelBase.updateWindowSize();
   }
 
   static void postMesssage(String message, {bool? forLastConnection}) {
-    if (!_messageHandlerSetted) {
-      _messageHandlerSetted = true;
-      js.context.callMethod('addEventListener', [
-        'message',
-        (event) {
-          final data = (() {
-            if (event is js.JsObject) {
-              return event['data'];
-            } else {
-              try {
-                return event.data;
-              } catch (e) {
-                return '';
-              }
-            }
-          })();
-          final obj = json.decode(data);
-          if (obj['type'] == 'gesture_detector') {
-            MPChannelBase.onGestureDetectorTrigger(obj['message']);
-          } else if (obj['type'] == 'overlay') {
-            MPChannelBase.onOverlayTrigger(obj['message']);
-          } else if (obj['type'] == 'rich_text') {
-            MPChannelBase.onRichTextTrigger(obj['message']);
-          } else if (obj['type'] == 'scroller') {
-            MPChannelBase.onScrollerTrigger(obj['message']);
-          } else if (obj['type'] == 'decode_drawable') {
-            MPChannelBase.onDecodeDrawable(obj['message']);
-          } else if (obj['type'] == 'router') {
-            MPChannelBase.onRouterTrigger(obj['message']);
-          } else if (obj['type'] == 'editable_text') {
-            MPChannelBase.onEditableTextTrigger(obj['message']);
-          } else if (obj['type'] == 'action') {
-            MPChannelBase.onActionTrigger(obj['message']);
-          } else if (obj['type'] == 'mpjs' && obj['flow'] != 'request') {
-            JsBridgeInvoker.instance.makeResponse(obj['message']);
-          } else if (obj['type'] == 'fragment') {
-            MPChannelBase.onFragment(obj['message']);
-          } else {
-            MPChannelBase.onPluginMessage(obj);
-          }
-        }
-      ]);
-    }
     if (!_isClientAttached) {
       _addMessageToQueue(message);
-      _checkClientAttached();
       return;
     }
-    try {
-      (js.context['top'] as js.JsObject)
-          .callMethod('postMessage', [message, '*']);
-    } catch (e) {
-      js.context.callMethod('postMessage', [message, '*']);
-    }
+    engineScope.callMethod('onMessage', [message]);
   }
 
   static String getInitialRoute() {
-    try {
-      if (js.context.hasProperty('Taro')) {
-        try {
-          return Uri.decodeFull(js.context['location']['href'] ?? '/');
-        } catch (e) {
-          return js.context['location']['href'] ?? '/';
-        }
-      }
-      final uri = Uri.parse(js.context['location']['href']);
-      final uriRoute = uri.queryParameters['route'];
-      if (uriRoute != null) {
-        return uriRoute;
-      }
-    } catch (e) {
-      print(e);
-    }
+    // try {
+    //   if (js.context.hasProperty('Taro')) {
+    //     try {
+    //       return Uri.decodeFull(js.context['location']['href'] ?? '/');
+    //     } catch (e) {
+    //       return js.context['location']['href'] ?? '/';
+    //     }
+    //   }
+    //   final uri = Uri.parse(js.context['location']['href']);
+    //   final uriRoute = uri.queryParameters['route'];
+    //   if (uriRoute != null) {
+    //     return uriRoute;
+    //   }
+    // } catch (e) {
+    //   print(e);
+    // }
     return '/';
   }
 
@@ -108,12 +54,12 @@ class MPChannel {
     if (pkgName == 'main') {
       pkgName = 'index';
     }
-    if (js.context.hasProperty('Taro')) {
-      js.context.callMethod('locationToSubPackage', [pkgName, routeName]);
-    } else {
-      js.context['location']['href'] =
-          '${pkgName}.html?route=${Uri.encodeFull(routeName)}';
-    }
+    // if (js.context.hasProperty('Taro')) {
+    //   js.context.callMethod('locationToSubPackage', [pkgName, routeName]);
+    // } else {
+    //   js.context['location']['href'] =
+    //       '${pkgName}.html?route=${Uri.encodeFull(routeName)}';
+    // }
   }
 
   static final List<String> _messageQueue = [];
@@ -124,12 +70,7 @@ class MPChannel {
 
   static void _flushMessageQueue() {
     for (var item in _messageQueue) {
-      try {
-        (js.context['top'] as js.JsObject)
-            .callMethod('postMessage', [item, '*']);
-      } catch (e) {
-        js.context.callMethod('postMessage', [item, '*']);
-      }
+      engineScope.callMethod('onMessage', [item]);
     }
     _messageQueue.clear();
   }

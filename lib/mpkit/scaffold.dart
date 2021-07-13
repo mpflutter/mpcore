@@ -55,21 +55,30 @@ class MPScaffoldState extends State<MPScaffold> {
     }
     Widget child = Stack(
       children: [
-        widget.appBar != null
-            ? MPScaffoldAppBar(key: appBarKey, child: widget.appBar)
-            : Container(),
-        widget.body != null
-            ? MPScaffoldBody(
-                key: bodyKey,
-                child: widget.body,
-                appBarHeight: widget.appBar != null
-                    ? widget.appBar?.preferredSize.height
-                    : null,
-              )
-            : Container(),
-        widget.bottomBar != null
-            ? MPScaffoldBottomBar(key: bottomBarKey, child: widget.bottomBar)
-            : Container(),
+        Positioned.fill(
+          child: Column(
+            children: [
+              widget.appBar != null
+                  ? MPScaffoldAppBar(key: appBarKey, child: widget.appBar)
+                  : Container(),
+              widget.body != null
+                  ? Expanded(
+                      child: MPScaffoldBody(
+                        key: bodyKey,
+                        child: widget.body,
+                        appBarHeight: widget.appBar != null
+                            ? widget.appBar?.preferredSize.height
+                            : null,
+                      ),
+                    )
+                  : Expanded(child: Container()),
+              widget.bottomBar != null
+                  ? MPScaffoldBottomBar(
+                      key: bottomBarKey, child: widget.bottomBar)
+                  : Container(),
+            ],
+          ),
+        ),
         widget.floatingBody != null
             ? MPScaffoldFloatingBody(
                 key: floatingBodyKey, child: widget.floatingBody)
@@ -117,11 +126,7 @@ class MPScaffoldBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height - (appBarHeight ?? 0.0),
-      child: child,
-    );
+    return child ?? Container();
   }
 }
 

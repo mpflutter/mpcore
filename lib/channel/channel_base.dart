@@ -62,6 +62,72 @@ class MPNavigatorObserver extends NavigatorObserver {
 }
 
 class MPChannelBase {
+  static void handleClientMessage(msg) {
+    try {
+      final obj = json.decode(msg);
+      if (obj['type'] == 'gesture_detector') {
+        MPChannelBase.onGestureDetectorTrigger(obj['message']);
+      } else if (obj['type'] == 'overlay') {
+        MPChannelBase.onOverlayTrigger(obj['message']);
+      } else if (obj['type'] == 'rich_text') {
+        MPChannelBase.onRichTextTrigger(obj['message']);
+      } else if (obj['type'] == 'scroller') {
+        MPChannelBase.onScrollerTrigger(obj['message']);
+      } else if (obj['type'] == 'decode_drawable') {
+        MPChannelBase.onDecodeDrawable(obj['message']);
+      } else if (obj['type'] == 'router') {
+        MPChannelBase.onRouterTrigger(obj['message']);
+      } else if (obj['type'] == 'editable_text') {
+        MPChannelBase.onEditableTextTrigger(obj['message']);
+      } else if (obj['type'] == 'action') {
+        MPChannelBase.onActionTrigger(obj['message']);
+      } else if (obj['type'] == 'mpjs') {
+        mpjs.JsBridgeInvoker.instance.makeResponse(obj['message']);
+      } else if (obj['type'] == 'fragment') {
+        MPChannelBase.onFragment(obj['message']);
+      } else {
+        MPChannelBase.onPluginMessage(obj);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static void updateWindowSize() async {
+    final num clientWidth;
+    final num clientHeight;
+    if (await mpjs.context['engineScope'].hasProperty('viewSize')) {
+      clientWidth = await mpjs.context['engineScope']['viewSize']
+          .getPropertyValue('width');
+      clientHeight = await mpjs.context['engineScope']['viewSize']
+          .getPropertyValue('height');
+    } else {
+      clientWidth = await mpjs.context['document']['body']
+          .getPropertyValue('clientWidth');
+      clientHeight = await mpjs.context['document']['body']
+          .getPropertyValue('clientHeight');
+    }
+    final dynamic safeAreaTopHeight = await mpjs.context['document']['body']
+        .getPropertyValue('windowPaddingTop');
+    final dynamic safeAreaBottomHeight = await mpjs.context['document']['body']
+        .getPropertyValue('windowPaddingBottom');
+    final num devicePixelRatio =
+        await mpjs.context.getPropertyValue('devicePixelRatio');
+    DeviceInfo.physicalSizeWidth =
+        clientWidth.toDouble() * devicePixelRatio.toDouble();
+    DeviceInfo.physicalSizeHeight =
+        clientHeight.toDouble() * devicePixelRatio.toDouble();
+    DeviceInfo.devicePixelRatio = devicePixelRatio.toDouble();
+    DeviceInfo.windowPadding = ui.MockWindowPadding(
+      left: 0.0,
+      top: safeAreaTopHeight is num ? safeAreaTopHeight.toDouble() : 0.0,
+      right: 0.0,
+      bottom:
+          safeAreaBottomHeight is num ? safeAreaBottomHeight.toDouble() : 0.0,
+    );
+    DeviceInfo.deviceSizeChangeCallback?.call();
+  }
+
   static void onGestureDetectorTrigger(Map message) {
     try {
       final widget = MPCore.findTargetHashCode(message['target'])?.widget;

@@ -28,6 +28,18 @@ MPElement _encodeGridView(Element element) {
     constraints: element.findRenderObject()?.constraints,
     attributes: {
       'scrollDirection': widget.scrollDirection.toString(),
+      'isRoot': (() {
+        if (widget.primary == false) {
+          return false;
+        } else if (widget.scrollDirection == Axis.vertical &&
+            element.findAncestorWidgetOfExactType<Scrollable>() == null &&
+            element.findAncestorWidgetOfExactType<Align>() == null &&
+            element.findAncestorWidgetOfExactType<Center>() == null) {
+          return true;
+        } else {
+          return false;
+        }
+      })(),
       'padding': widget.padding?.toString(),
       'width':
           // ignore: invalid_use_of_protected_member

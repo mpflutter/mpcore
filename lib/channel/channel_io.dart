@@ -2,17 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:developer' as dev;
 
-import 'package:flutter/ui/src/mock_engine/device_info_io.dart';
-import 'package:flutter/ui/ui.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mime_type/mime_type.dart';
-import 'package:mpcore/mpjs/mpjs.dart';
 
 import '../mpcore.dart';
 
 import 'package:path/path.dart' as path;
 import '../hot_reloader.dart';
-import '../mpjs/mpjs.dart' as mpjs;
 
 class MPChannel {
   static bool _serverSetupped = false;
@@ -56,7 +52,7 @@ class MPChannel {
         if (req.uri.path == '/ws') {
           final socket = await WebSocketTransformer.upgrade(req);
           sockets.add(socket);
-          socket.listen(handleClientMessage)
+          socket.listen(MPChannelBase.handleClientMessage)
             ..onDone(
               () {
                 sockets.remove(socket);
@@ -65,7 +61,7 @@ class MPChannel {
           MPCore.clearOldFrameObject();
           WidgetsBinding.instance?.scheduleFrame();
           _flushMessageQueue();
-          _updateWindowSize();
+          MPChannelBase.updateWindowSize();
         } else if (req.uri.path.startsWith('/assets/packages/')) {
           handlePackageAssetsRequest(req);
         } else if (req.uri.path.startsWith('/assets/')) {
@@ -84,33 +80,6 @@ class MPChannel {
     } catch (e) {
       print(e);
     }
-  }
-
-  static void _updateWindowSize() async {
-    final num clientWidth =
-        await mpjs.context['document']['body'].getPropertyValue('clientWidth');
-    final num clientHeight =
-        await mpjs.context['document']['body'].getPropertyValue('clientHeight');
-    final dynamic safeAreaTopHeight = await mpjs.context['document']['body']
-        .getPropertyValue('windowPaddingTop');
-    final dynamic safeAreaBottomHeight = await mpjs.context['document']['body']
-        .getPropertyValue('windowPaddingBottom');
-    final num devicePixelRatio =
-        await mpjs.context.getPropertyValue('devicePixelRatio');
-    DeviceInfo.physicalSizeWidth =
-        clientWidth.toDouble() * devicePixelRatio.toDouble();
-    DeviceInfo.physicalSizeHeight =
-        clientHeight.toDouble() * devicePixelRatio.toDouble();
-    DeviceInfo.devicePixelRatio = devicePixelRatio.toDouble();
-    DeviceInfo.windowPadding = MockWindowPadding(
-      left: 0.0,
-      top: safeAreaTopHeight is num ? safeAreaTopHeight.toDouble() : 0.0,
-      right: 0.0,
-      bottom:
-          safeAreaBottomHeight is num ? safeAreaBottomHeight.toDouble() : 0.0,
-    );
-    ;
-    DeviceInfo.deviceSizeChangeCallback?.call();
   }
 
   static void handlePackageAssetsRequest(HttpRequest request) {
@@ -262,37 +231,6 @@ class MPChannel {
       request.response
         ..statusCode = 404
         ..close();
-    }
-  }
-
-  static void handleClientMessage(msg) {
-    try {
-      final obj = json.decode(msg);
-      if (obj['type'] == 'gesture_detector') {
-        MPChannelBase.onGestureDetectorTrigger(obj['message']);
-      } else if (obj['type'] == 'overlay') {
-        MPChannelBase.onOverlayTrigger(obj['message']);
-      } else if (obj['type'] == 'rich_text') {
-        MPChannelBase.onRichTextTrigger(obj['message']);
-      } else if (obj['type'] == 'scroller') {
-        MPChannelBase.onScrollerTrigger(obj['message']);
-      } else if (obj['type'] == 'decode_drawable') {
-        MPChannelBase.onDecodeDrawable(obj['message']);
-      } else if (obj['type'] == 'router') {
-        MPChannelBase.onRouterTrigger(obj['message']);
-      } else if (obj['type'] == 'editable_text') {
-        MPChannelBase.onEditableTextTrigger(obj['message']);
-      } else if (obj['type'] == 'action') {
-        MPChannelBase.onActionTrigger(obj['message']);
-      } else if (obj['type'] == 'mpjs') {
-        JsBridgeInvoker.instance.makeResponse(obj['message']);
-      } else if (obj['type'] == 'fragment') {
-        MPChannelBase.onFragment(obj['message']);
-      } else {
-        MPChannelBase.onPluginMessage(obj);
-      }
-    } catch (e) {
-      print(e);
     }
   }
 

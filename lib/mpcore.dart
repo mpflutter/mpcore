@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/ui/src/mock_engine/device_info.dart';
 import 'package:flutter/ui/ui.dart' as ui;
 import 'package:flutter/widgets.dart';
 import 'package:flutter/rendering.dart';
