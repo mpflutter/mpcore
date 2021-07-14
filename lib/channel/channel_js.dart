@@ -30,38 +30,6 @@ class MPChannel {
     engineScope.callMethod('onMessage', [message]);
   }
 
-  static String getInitialRoute() {
-    // try {
-    //   if (js.context.hasProperty('Taro')) {
-    //     try {
-    //       return Uri.decodeFull(js.context['location']['href'] ?? '/');
-    //     } catch (e) {
-    //       return js.context['location']['href'] ?? '/';
-    //     }
-    //   }
-    //   final uri = Uri.parse(js.context['location']['href']);
-    //   final uriRoute = uri.queryParameters['route'];
-    //   if (uriRoute != null) {
-    //     return uriRoute;
-    //   }
-    // } catch (e) {
-    //   print(e);
-    // }
-    return '/';
-  }
-
-  static void onSubPackageNavigate(String pkgName, String routeName) {
-    if (pkgName == 'main') {
-      pkgName = 'index';
-    }
-    // if (js.context.hasProperty('Taro')) {
-    //   js.context.callMethod('locationToSubPackage', [pkgName, routeName]);
-    // } else {
-    //   js.context['location']['href'] =
-    //       '${pkgName}.html?route=${Uri.encodeFull(routeName)}';
-    // }
-  }
-
   static final List<String> _messageQueue = [];
 
   static void _addMessageToQueue(String message) {

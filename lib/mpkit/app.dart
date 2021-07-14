@@ -14,7 +14,6 @@ class MPApp extends StatelessWidget {
   final String? title;
   final Color? color;
   final Map<String, WidgetBuilder> routes;
-  final String initialRoute;
   final RouteFactory? onGenerateRoute;
   final List<NavigatorObserver> navigatorObservers;
   final double? maxWidth;
@@ -25,7 +24,6 @@ class MPApp extends StatelessWidget {
     this.title,
     this.color,
     required this.routes,
-    required this.initialRoute,
     this.onGenerateRoute,
     required this.navigatorObservers,
     this.maxWidth,
@@ -86,24 +84,6 @@ class MPApp extends StatelessWidget {
         return MPPageRoute<T>(settings: settings, builder: builder);
       },
       onGenerateRoute: (settings) {
-        final routeMapSubPackages = MPCore.routeMapSubPackages;
-        if (routeMapSubPackages != null) {
-          var targetPackage = 'main';
-          for (final key in routeMapSubPackages.keys) {
-            if (settings.name?.startsWith(key) == true) {
-              targetPackage = routeMapSubPackages[key] ?? 'main';
-            }
-          }
-          if (targetPackage != currentPackage) {
-            MPChannel.onSubPackageNavigate(targetPackage, settings.name ?? '');
-            return MPPageRoute(
-              builder: (context) => Container(),
-              settings: RouteSettings(
-                arguments: {'\$mpcore.package.prevent': true},
-              ),
-            );
-          }
-        }
         return onGenerateRoute?.call(settings) ??
             MPPageRoute(builder: (context) {
               final routeBuilder = routes[settings.name];
@@ -115,30 +95,11 @@ class MPApp extends StatelessWidget {
             });
       },
       onGenerateInitialRoutes: (_) {
-        final routeName = initialRoute;
-        final routeMapSubPackages = MPCore.routeMapSubPackages;
-        if (routeMapSubPackages != null) {
-          var targetPackage = 'main';
-
-          for (final key in routeMapSubPackages.keys) {
-            if (routeName.startsWith(key)) {
-              targetPackage = routeMapSubPackages[key] ?? 'main';
-            }
-          }
-          if (targetPackage != currentPackage) {
-            MPChannel.onSubPackageNavigate(targetPackage, routeName);
-            return [
-              MPPageRoute(
-                builder: (context) => Container(),
-                settings: RouteSettings(
-                  arguments: {'\$mpcore.package.prevent': true},
-                ),
-              )
-            ];
-          }
-        }
+        final routeName = MPNavigatorObserver.instance.initialRoute;
+        final routeParams = MPNavigatorObserver.instance.initialParams;
         return [
-          onGenerateRoute?.call(RouteSettings(name: routeName)) ??
+          onGenerateRoute?.call(
+                  RouteSettings(name: routeName, arguments: routeParams)) ??
               MPPageRoute(builder: (context) {
                 final routeBuilder = routes[routeName];
                 if (routeBuilder != null) {

@@ -62,12 +62,6 @@ part './components/custom_paint.dart';
 part './channel/channel_base.dart';
 
 class MPCore {
-  static Map<String, String>? routeMapSubPackages;
-
-  static String getInitialRoute() {
-    return MPChannel.getInitialRoute();
-  }
-
   static NavigatorObserver getNavigationObserver() {
     return MPNavigatorObserver.instance;
   }

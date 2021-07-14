@@ -2,10 +2,11 @@ part of '../mpcore.dart';
 
 class MPNavigatorObserver extends NavigatorObserver {
   static final instance = MPNavigatorObserver();
-
   static bool doBacking = false;
-
   static bool initialPushed = false;
+
+  String initialRoute = '/';
+  Map initialParams = {};
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
@@ -243,6 +244,13 @@ class MPChannelBase {
           arguments: message['arguments'],
         );
       } else if (message['event'] == 'doRestart') {
+        if (MPNavigatorObserver.instance.navigator?.mounted != true) {
+          MPNavigatorObserver.instance.initialRoute = message['name'];
+          if (message['arguments'] is Map) {
+            MPNavigatorObserver.instance.initialParams = message['arguments'];
+          }
+          return;
+        }
         MPNavigatorObserver.instance.navigator?.popUntil((route) => false);
         MPNavigatorObserver.instance.navigator?.pushNamed(
           message['name'],
@@ -275,6 +283,4 @@ class MPChannelBase {
       plugin.onClientMessage(message);
     }
   }
-
-  static void onSubPackageNavigate(String pkgName, String routeName) {}
 }
